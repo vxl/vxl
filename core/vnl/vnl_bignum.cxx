@@ -973,8 +973,8 @@ vnl_bignum::trim()
 void
 add(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & sum)
 {
-  const vnl_bignum * bmax;
-  const vnl_bignum * bmin; // Determine which of the two
+  const vnl_bignum * bmax = nullptr;
+  const vnl_bignum * bmin = nullptr; // Determine which of the two
   if (b1.count >= b2.count)
   {             //   addends has the most
     bmax = &b1; //   data.
@@ -986,7 +986,7 @@ add(const vnl_bignum & b1, const vnl_bignum & b2, vnl_bignum & sum)
     bmin = &b1;
   }
   sum.resize(bmax->count); // Allocate data for their sum
-  unsigned long temp;
+  unsigned long temp = 0;
   unsigned long carry = 0;
   Counter i = 0;
   if (b1.data)
@@ -1044,7 +1044,7 @@ void
 subtract(const vnl_bignum & bmax, const vnl_bignum & bmin, vnl_bignum & diff)
 {
   diff.resize(bmax.count); // Allocate data for difference
-  unsigned long temp;
+  unsigned long temp = 0;
   int borrow = 0;
   Counter i = 0;
   for (; i < bmin.count; i++)
@@ -1203,7 +1203,7 @@ divide_aux(const vnl_bignum & b1, Data d, vnl_bignum & q, Data & r)
 Data
 estimate_q_hat(const vnl_bignum & u, const vnl_bignum & v, Counter j)
 {
-  Data q_hat;
+  Data q_hat = 0;
   const Data & v1 = v.data[v.count - 1]; // localize frequent data
   const Data & v2 = v.data[v.count - 2];
   const Data & u0 = u.data[u.count - 1 - j];
@@ -1268,7 +1268,7 @@ multiply_subtract(vnl_bignum & u, const vnl_bignum & v, Data q_hat, Counter j)
   rslt.resize(v.count + 1u); // allocate data for it
 
   // simultaneous computation of u - v*q_hat
-  unsigned long diff;
+  unsigned long diff = 0;
   Data carry = 0;
   Data borrow = 0;
   Counter i = 0;

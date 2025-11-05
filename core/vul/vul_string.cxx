@@ -1,4 +1,6 @@
 // This is core/vul/vul_string.cxx
+#include <cmath>
+
 #include <cstdlib>
 #include <cstring>
 #include <cctype>
@@ -74,11 +76,11 @@ vul_string_c_trim(char * str, const char * rem) // Trim characters from string
 {
   char * s = str;
   char * result = str;
-  char c;
+  char c = 0;
   while ((c = *s++) != END_OF_STRING)
   {
     const char * r = rem;
-    char t;
+    char t = 0;
     while ((t = *r++) != END_OF_STRING && t != c)
       ;                     // Scan for match
     if (t == END_OF_STRING) // If no match found
@@ -94,12 +96,12 @@ char *
 vul_string_c_left_trim(char * str, const char * rem) // Trim prefix from string
 {
   char * result = str;
-  char * s;
-  char c;
+  char * s = nullptr;
+  char c = 0;
   for (s = str; (c = *s) != END_OF_STRING; s++)
   {
     const char * r = rem;
-    char t;
+    char t = 0;
     while ((t = *r++) != END_OF_STRING && t != c)
       ;                     // Scan for match
     if (t == END_OF_STRING) // If no match found
@@ -120,7 +122,7 @@ vul_string_c_right_trim(char * str, const char * rem) // Trim suffix from string
   for (; s >= str; s--)
   {
     const char * r = rem;
-    char t;
+    char t = 0;
     char c = *s;
     while ((t = *r++) != END_OF_STRING && t != c)
       ;                     // Scan for match
@@ -136,7 +138,7 @@ char *
 vul_string_c_reverse(char * c) // Reverse the order of characters
 {
   int length = (int)std::strlen(c); // Number of characters in string
-  char temp;
+  char temp = 0;
 
   for (int i = 0, j = length - 1; // Counting from front and rear
        i < j;
@@ -289,7 +291,7 @@ double
 vul_string_atof_withsuffix(const std::string & s)
 {
   std::istringstream ss(s);
-  double d;
+  double d = NAN;
   ss >> d;
   if (!ss)
     return 0.0;

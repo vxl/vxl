@@ -6,6 +6,7 @@
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
 #endif
+#include <cmath>
 #include <vcl_compiler.h>
 
 vpgl_invmap_cost_function::vpgl_invmap_cost_function(const vnl_vector_fixed<double, 2> & image_point,
@@ -38,7 +39,7 @@ vpgl_invmap_cost_function::f(const vnl_vector<double> & x)
   this->point_3d(vnl_vector_fixed<double, 2>(x[0], x[1]), p_3d);
 
   // project the current point estimate onto the image
-  double u, v, X = p_3d[0], Y = p_3d[1], Z = p_3d[2];
+  double u = NAN, v = NAN, X = p_3d[0], Y = p_3d[1], Z = p_3d[2];
   cam_.project(X, Y, Z, u, v);
   vnl_vector_fixed<double, 2> p_2d;
   p_2d[0] = u;

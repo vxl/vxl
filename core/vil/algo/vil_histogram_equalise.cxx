@@ -4,6 +4,7 @@
 //  \brief Apply histogram equalisation to given image
 //  \author Tim Cootes
 
+#include <cmath>
 #include <vil/algo/vil_histogram.h>
 #include "vil/vil_math.h"
 
@@ -61,7 +62,7 @@ vil_histogram_equalise(vil_image_view<float> & image)
   std::vector<double> histo(n_bins);
 
   // Find smallest and largest values in image
-  float min_v, max_v;
+  float min_v = NAN, max_v = NAN;
   vil_math_value_range(image, min_v, max_v);
 
   // Generate histogram

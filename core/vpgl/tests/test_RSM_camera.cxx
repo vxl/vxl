@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <iomanip>
 #include <iostream>
 #include <vector>
@@ -99,7 +101,7 @@ _test_ground_domain(vpgl_ground_domain<double> gd,
   double lon = lon_lat_elev[0], lat = lon_lat_elev[1], elev = lon_lat_elev[2];
   double x = xyz[0], y = xyz[1], z = xyz[2];
 
-  double _x, _y, _z;
+  double _x = NAN, _y = NAN, _z = NAN;
   gd.world_to_ground(lon, lat, elev, _x, _y, _z);
 
   std::cout << "(" << lon << "," << lat << "," << elev << ") -> "
@@ -117,7 +119,7 @@ test_ground_domain(std::string ground_domain_id)
 {
   // tolerance
   double rtol = 1e-8, mtol = 1e-4;
-  double xtol, ytol, ztol;
+  double xtol = NAN, ytol = NAN, ztol = NAN;
   if (ground_domain_id.substr(0, 1) == "R")
     xtol = ytol = ztol = mtol;
   else
@@ -126,7 +128,7 @@ test_ground_domain(std::string ground_domain_id)
 
   // test coordinates
   auto coords = create_ground_domain_coords();
-  size_t result_idx;
+  size_t result_idx = 0;
   if (ground_domain_id == "R-transform")
     result_idx = 4;
   else if (ground_domain_id == "R-identity")
@@ -156,7 +158,7 @@ _test_region_selector(vpgl_region_selector<double> selector, std::array<double, 
   double x = xyz[0], y = xyz[1], z = xyz[2];
   size_t r = rc[0], c = rc[1];
 
-  size_t _r, _c;
+  size_t _r = 0, _c = 0;
   selector.select(x, y, z, _r, _c);
 
   std::cout << "(" << x << "," << y << "," << z << ") -> "
@@ -502,7 +504,7 @@ _test_polycam(vpgl_polycam<double> cam, std::vector<double> xyz, std::vector<dou
   double x = xyz[0], y = xyz[1], z = xyz[2];
   size_t u = uv[0], v = uv[1];
 
-  double _u, _v;
+  double _u = NAN, _v = NAN;
   cam.project(x, y, z, _u, _v);
 
   std::cout << "(" << x << "," << y << "," << z << ") -> "
@@ -551,7 +553,7 @@ _test_camera(vpgl_RSM_camera<double> cam, std::vector<double> lon_lat_elev, std:
   double lon = lon_lat_elev[0], lat = lon_lat_elev[1], elev = lon_lat_elev[2];
   size_t u = uv[0], v = uv[1];
 
-  double _u, _v;
+  double _u = NAN, _v = NAN;
   cam.project(lon, lat, elev, _u, _v);
 
   std::cout << "(" << lon << "," << lat << "," << elev << ") -> "

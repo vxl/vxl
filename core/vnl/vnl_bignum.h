@@ -231,9 +231,9 @@ public:
       constexpr int maxbits = sizeof(l) * 8;
       int shift = std::min(16, maxbits);
       if (shift >= maxbits)
-          l = 0;  // Shifting by >= number of bits is UB, set explicitly to 0
+        l = 0; // Shifting by >= number of bits is UB, set explicitly to 0
       else
-          l >>= shift; // Shift next bits into place
+        l >>= shift; // Shift next bits into place
       i++;
     }
     if (i > 0)

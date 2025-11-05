@@ -1026,7 +1026,7 @@ test_algo_cartesian_differential_invariants()
   assert(dest.is_contiguous());
   assert(dest.istep() == 1);
   const float *p_dest = dest.begin(), *p_golden = golden_data;
-  unsigned i;
+  unsigned i = 0;
   for (i = 0; i < dest.size(); ++i)
   {
     if (std::fabs(*p_dest - *p_golden) > std::fabs(*p_golden) * 1e-6)

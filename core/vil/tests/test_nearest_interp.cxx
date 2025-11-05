@@ -1,4 +1,6 @@
 // This is core/vil/tests/test_nearest_interp.cxx
+#include <cmath>
+
 #include <iostream>
 #include "testlib/testlib_test.h"
 #ifdef _MSC_VER
@@ -22,7 +24,7 @@ test_nearest_interp_byte()
     for (unsigned int i = 0; i < image0.ni(); ++i)
       image0(i, j) = vxl_byte(i + j * 10);
 
-  double v;
+  double v = NAN;
 
   v = vil_nearest_interp(image0, 3, 3);
   TEST("vil_nearest_interp at grid point", v, 33);

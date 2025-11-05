@@ -14,8 +14,8 @@
 static std::string
 date_and_time()
 {
-  std::time_t clock;
-  struct std::tm * t_m;
+  std::time_t clock = 0;
+  struct std::tm * t_m = nullptr;
   clock = std::time(nullptr);
   t_m = std::localtime(&clock);
   char tmp[20];
@@ -240,8 +240,8 @@ vil_tiff_header::read_header()
       std::cout << "TBC[" << i << "]=" << tile_byte_counts[i] << '\n';
   }
 #endif
-  uint32_t count, f;
-  char * data;
+  uint32_t count = 0, f = 0;
+  char * data = nullptr;
   f = TIFFGetField(tif_, 42113, &count, &data);
   if (f)
   {
@@ -289,8 +289,8 @@ vil_tiff_header::is_striped() const
 bool
 vil_tiff_header::is_GEOTIFF() const
 {
-  short * data;
-  short count;
+  short * data = nullptr;
+  short count = 0;
   return TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data) != 0;
 }
 #endif

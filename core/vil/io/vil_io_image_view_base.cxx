@@ -117,12 +117,12 @@ vsl_b_read(vsl_b_istream & is, vil_image_view_base_sptr & view_base)
   if (!is)
     return;
 
-  unsigned ni, nj, np;
-  std::ptrdiff_t istep, jstep, pstep;
+  unsigned ni = 0, nj = 0, np = 0;
+  std::ptrdiff_t istep = 0, jstep = 0, pstep = 0;
   vil_memory_chunk_sptr chunk;
-  std::ptrdiff_t offset;
+  std::ptrdiff_t offset = 0;
 
-  short w;
+  short w = 0;
   vsl_b_read(is, w);
   if (w != 1)
   {

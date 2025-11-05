@@ -1,4 +1,6 @@
 // This is core/vrel/vrel_mlesac_obj.cxx
+#include <cmath>
+
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
@@ -34,7 +36,7 @@ vrel_mlesac_obj::fcn(vect_const_iter begin,
                      vnl_vector<double> * /* param_vector */) const
 {
   double value = 0;
-  double pi, p0, zi;
+  double pi = NAN, p0 = NAN, zi = NAN;
   auto begin0 = begin;
   unsigned long num_residual = end - begin;
   double mult1 = vnl_math::one_over_sqrt2pi;
@@ -78,7 +80,7 @@ double
 vrel_mlesac_obj::fcn(vect_const_iter begin, vect_const_iter end, double scale, vnl_vector<double> *) const
 {
   double value = 0;
-  double pi, p0, zi;
+  double pi = NAN, p0 = NAN, zi = NAN;
   auto begin0 = begin;
   unsigned long num_residual = end - begin;
 

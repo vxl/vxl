@@ -61,7 +61,7 @@ public:
   bool
   operator()(vil_nitf2_field_sequence * record, const vil_nitf2_index_vector & indexes, T & value) override
   {
-    int value1, value2;
+    int value1 = 0, value2 = 0;
     bool success = record->get_value(tag1, indexes, value1, true);
     success = success && record->get_value(tag2, indexes, value2, true);
 

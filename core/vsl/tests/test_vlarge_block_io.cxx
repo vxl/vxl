@@ -49,7 +49,7 @@ test_vlarge_block(void * block, std::size_t s, T scale)
 
   vsl_b_ifstream bfs_in("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Opened vsl_vlarge_block_io_test.bvl.tmp for reading", (!bfs_in), false);
-  unsigned sentinel;
+  unsigned sentinel = 0;
   try
   {
     vsl_block_binary_read(bfs_in, numbers, n);

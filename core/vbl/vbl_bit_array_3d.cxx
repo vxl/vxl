@@ -20,8 +20,8 @@
 void
 vbl_bit_array_3d::put(unsigned int i1, unsigned int i2, unsigned int i3, bool v)
 {
-  unsigned long byteindex;
-  unsigned char bitindex;
+  unsigned long byteindex = 0;
+  unsigned char bitindex = 0;
 
   index(i1, i2, i3, byteindex, bitindex);
 
@@ -34,8 +34,8 @@ vbl_bit_array_3d::put(unsigned int i1, unsigned int i2, unsigned int i3, bool v)
 void
 vbl_bit_array_3d::flip(unsigned int i1, unsigned int i2, unsigned int i3)
 {
-  unsigned long byteindex;
-  unsigned char bitindex;
+  unsigned long byteindex = 0;
+  unsigned char bitindex = 0;
 
   index(i1, i2, i3, byteindex, bitindex);
 
@@ -55,8 +55,8 @@ vbl_bit_array_3d::fill(bool v)
 bool
 vbl_bit_array_3d::operator()(unsigned int i1, unsigned int i2, unsigned int i3) const
 {
-  unsigned long byteindex;
-  unsigned char bitindex;
+  unsigned long byteindex = 0;
+  unsigned char bitindex = 0;
 
   index(i1, i2, i3, byteindex, bitindex);
   auto mask = (unsigned char)(1 << bitindex);

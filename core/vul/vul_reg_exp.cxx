@@ -128,7 +128,7 @@
 
 vul_reg_exp::vul_reg_exp(const vul_reg_exp & rxp)
 {
-  int ind;
+  int ind = 0;
   this->progsize = rxp.progsize;            // Copy regular expression size
   this->program = new char[this->progsize]; // Allocate storage
   for (ind = this->progsize; ind-- != 0;)   // Copy regular expression
@@ -423,10 +423,10 @@ regoptail(char *, const char *);
 void
 vul_reg_exp::compile(const char * exp)
 {
-  const char * scan;
-  const char * longest;
-  unsigned long len;
-  int flags;
+  const char * scan = nullptr;
+  const char * longest = nullptr;
+  unsigned long len = 0;
+  int flags = 0;
 
   if (exp == nullptr)
   {
@@ -530,11 +530,11 @@ vul_reg_exp::compile(const char * exp)
 static char *
 reg(int paren, int * flagp)
 {
-  char * ret;
-  char * br;
-  char * ender;
+  char * ret = nullptr;
+  char * br = nullptr;
+  char * ender = nullptr;
   int parno = 0;
-  int flags;
+  int flags = 0;
 
   *flagp = HASWIDTH; // Tentatively.
 
@@ -619,10 +619,10 @@ reg(int paren, int * flagp)
 static char *
 regbranch(int * flagp)
 {
-  char * ret;
-  char * chain;
-  char * latest;
-  int flags;
+  char * ret = nullptr;
+  char * chain = nullptr;
+  char * latest = nullptr;
+  int flags = 0;
 
   *flagp = WORST; // Tentatively.
 
@@ -659,10 +659,10 @@ regbranch(int * flagp)
 static char *
 regpiece(int * flagp)
 {
-  char * ret;
-  char op;
-  char * next;
-  int flags;
+  char * ret = nullptr;
+  char op = 0;
+  char * next = nullptr;
+  int flags = 0;
 
   ret = regatom(&flags);
   if (ret == nullptr)
@@ -735,8 +735,8 @@ regpiece(int * flagp)
 static char *
 regatom(int * flagp)
 {
-  char * ret;
-  int flags;
+  char * ret = nullptr;
+  int flags = 0;
 
   *flagp = WORST; // Tentatively.
 
@@ -754,8 +754,8 @@ regatom(int * flagp)
       break;
     case '[':
     {
-      int rxpclass;
-      int rxpclassend;
+      int rxpclass = 0;
+      int rxpclassend = 0;
 
       if (*regparse == '^')
       { // Complement of range.
@@ -834,8 +834,8 @@ regatom(int * flagp)
       break;
     default:
     {
-      int len;
-      char ender;
+      int len = 0;
+      char ender = 0;
 
       regparse--;
       len = (int)std::strcspn(regparse, META);
@@ -871,8 +871,8 @@ regatom(int * flagp)
 static char *
 regnode(char op)
 {
-  char * ret;
-  char * ptr;
+  char * ret = nullptr;
+  char * ptr = nullptr;
 
   ret = regcode;
   if (ret == &regdummy)
@@ -910,9 +910,9 @@ regc(unsigned char b)
 static void
 reginsert(char op, char * opnd)
 {
-  char * src;
-  char * dst;
-  char * place;
+  char * src = nullptr;
+  char * dst = nullptr;
+  char * place = nullptr;
 
   if (regcode == &regdummy)
   {
@@ -938,9 +938,9 @@ reginsert(char op, char * opnd)
 static void
 regtail(char * p, const char * val)
 {
-  char * scan;
-  char * temp;
-  std::ptrdiff_t offset;
+  char * scan = nullptr;
+  char * temp = nullptr;
+  std::ptrdiff_t offset = 0;
 
   if (p == &regdummy)
     return;
@@ -1022,7 +1022,7 @@ vul_reg_exp::find(std::string const & s)
 bool
 vul_reg_exp::find(const char * string)
 {
-  const char * s;
+  const char * s = nullptr;
 
   this->searchstring = string;
 
@@ -1084,9 +1084,9 @@ vul_reg_exp::find(const char * string)
 static int
 regtry(const char * string, const char ** start, const char ** end, const char * prog)
 {
-  int i;
-  const char ** sp1;
-  const char ** ep;
+  int i = 0;
+  const char ** sp1 = nullptr;
+  const char ** ep = nullptr;
 
   reginput = string;
   regstartp = start;
@@ -1123,8 +1123,8 @@ regtry(const char * string, const char ** start, const char ** end, const char *
 static int
 regmatch(const char * prog)
 {
-  const char * scan; // Current node.
-  const char * next; // Next node.
+  const char * scan = nullptr; // Current node.
+  const char * next = nullptr; // Next node.
 
   scan = prog;
 
@@ -1149,8 +1149,8 @@ regmatch(const char * prog)
         break;
       case EXACTLY:
       {
-        int len;
-        const char * opnd;
+        int len = 0;
+        const char * opnd = nullptr;
 
         opnd = OPERAND(scan);
         // Inline the first character, for speed.
@@ -1186,8 +1186,8 @@ regmatch(const char * prog)
       case OPEN + 8:
       case OPEN + 9:
       {
-        int no;
-        const char * save;
+        int no = 0;
+        const char * save = nullptr;
 
         no = OP(scan) - OPEN;
         save = reginput;
@@ -1215,8 +1215,8 @@ regmatch(const char * prog)
       case CLOSE + 8:
       case CLOSE + 9:
       {
-        int no;
-        const char * save;
+        int no = 0;
+        const char * save = nullptr;
 
         no = OP(scan) - CLOSE;
         save = reginput;
@@ -1236,7 +1236,7 @@ regmatch(const char * prog)
       }
       case BRANCH:
       {
-        const char * save;
+        const char * save = nullptr;
 
         if (OP(next) != BRANCH) // No choice.
           next = OPERAND(scan); // Avoid recursion.
@@ -1258,10 +1258,10 @@ regmatch(const char * prog)
       case STAR:
       case PLUS:
       {
-        char nextch;
-        int no;
-        const char * save;
-        int min_no;
+        char nextch = 0;
+        int no = 0;
+        const char * save = nullptr;
+        int min_no = 0;
 
         //
         // Lookahead to avoid useless match attempts when we know
@@ -1312,8 +1312,8 @@ static int
 regrepeat(const char * p)
 {
   int count = 0;
-  const char * scan;
-  const char * opnd;
+  const char * scan = nullptr;
+  const char * opnd = nullptr;
 
   scan = reginput;
   opnd = OPERAND(p);
@@ -1359,7 +1359,7 @@ regrepeat(const char * p)
 static const char *
 regnext(const char * p)
 {
-  int offset;
+  int offset = 0;
 
   if (p == &regdummy)
     return nullptr;
@@ -1378,7 +1378,7 @@ regnext(const char * p)
 static char *
 regnext(char * p)
 {
-  int offset;
+  int offset = 0;
 
   if (p == &regdummy)
     return nullptr;

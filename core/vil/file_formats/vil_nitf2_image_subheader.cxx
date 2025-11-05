@@ -1,6 +1,8 @@
 // vil_nitf2: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
+#include <cmath>
+
 #include <sstream>
 #include <cstdlib>
 #include "vil_nitf2_image_subheader.h"
@@ -541,7 +543,7 @@ vil_nitf2_image_subheader::nplanes() const
   // the number of image bands is stored in NBANDS unless NBANDS=0.
   // in that case, then it's stored under XBANDS.  That's why we have
   // to potentially try both
-  int numBands;
+  int numBands = 0;
   if (get_property("NBANDS", numBands))
   {
     if (numBands > 0 || get_property("XBANDS", numBands))
@@ -555,7 +557,7 @@ vil_nitf2_image_subheader::nplanes() const
 unsigned int
 vil_nitf2_image_subheader::get_pixels_per_block_x() const
 {
-  int pixels_per_block;
+  int pixels_per_block = 0;
   if (get_property("NPPBH", pixels_per_block))
   {
 
@@ -584,7 +586,7 @@ vil_nitf2_image_subheader::get_pixels_per_block_x() const
 unsigned int
 vil_nitf2_image_subheader::get_pixels_per_block_y() const
 {
-  int pixels_per_block;
+  int pixels_per_block = 0;
   if (get_property("NPPBV", pixels_per_block))
   {
 
@@ -613,7 +615,7 @@ vil_nitf2_image_subheader::get_pixels_per_block_y() const
 unsigned int
 vil_nitf2_image_subheader::get_num_blocks_x() const
 {
-  int blocks_per_row;
+  int blocks_per_row = 0;
   if (get_property("NBPR", blocks_per_row))
   {
     return blocks_per_row;
@@ -624,7 +626,7 @@ vil_nitf2_image_subheader::get_num_blocks_x() const
 unsigned int
 vil_nitf2_image_subheader::get_num_blocks_y() const
 {
-  int blocks_per_col;
+  int blocks_per_col = 0;
   if (get_property("NBPC", blocks_per_col))
   {
     return blocks_per_col;
@@ -635,7 +637,7 @@ vil_nitf2_image_subheader::get_num_blocks_y() const
 unsigned int
 vil_nitf2_image_subheader::get_number_of_bits_per_pixel() const
 {
-  int bits_per_pixel;
+  int bits_per_pixel = 0;
   if (get_property("ABPP", bits_per_pixel))
   {
     return bits_per_pixel;
@@ -678,7 +680,7 @@ vil_nitf2_image_subheader::get_lut_info(unsigned int band,
   }
   lut_d.clear();
   lut_d.resize(n_luts);
-  void * raw_lut_data;
+  void * raw_lut_data = nullptr;
   for (int lut_index = 0; lut_index < n_luts; lut_index++)
   {
     lut_d[lut_index].resize(ne_lut);
@@ -1142,7 +1144,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       rpc_type = type;
 
       // get offsets and scales, print a couple to make sure values are correct
-      int line_off;
+      int line_off = 0;
       success = (*tres_itr)->get_value("LINE_OFF", line_off);
       if (!success)
       {
@@ -1151,7 +1153,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[80] = line_off;
 
-      int samp_off;
+      int samp_off = 0;
       success = (*tres_itr)->get_value("SAMP_OFF", samp_off);
       if (!success)
       {
@@ -1160,7 +1162,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[81] = samp_off;
 
-      double lat_off;
+      double lat_off = NAN;
       success = (*tres_itr)->get_value("LAT_OFF", lat_off);
       if (!success)
       {
@@ -1169,7 +1171,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[82] = lat_off;
 
-      double lon_off;
+      double lon_off = NAN;
       success = (*tres_itr)->get_value("LON_OFF", lon_off);
       if (!success)
       {
@@ -1178,7 +1180,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[83] = lon_off;
 
-      int height_off;
+      int height_off = 0;
       success = (*tres_itr)->get_value("HEIGHT_OFF", height_off);
       if (!success)
       {
@@ -1187,7 +1189,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[84] = height_off;
 
-      int line_scale;
+      int line_scale = 0;
       success = (*tres_itr)->get_value("LINE_SCALE", line_scale);
       if (!success)
       {
@@ -1196,7 +1198,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[85] = line_scale;
 
-      int samp_scale;
+      int samp_scale = 0;
       success = (*tres_itr)->get_value("SAMP_SCALE", samp_scale);
       if (!success)
       {
@@ -1205,7 +1207,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[86] = samp_scale;
 
-      double lat_scale;
+      double lat_scale = NAN;
       success = (*tres_itr)->get_value("LAT_SCALE", lat_scale);
       if (!success)
       {
@@ -1214,7 +1216,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[87] = lat_scale;
 
-      double lon_scale;
+      double lon_scale = NAN;
       success = (*tres_itr)->get_value("LON_SCALE", lon_scale);
       if (!success)
       {
@@ -1223,7 +1225,7 @@ vil_nitf2_image_subheader::get_rpc_params(std::string & rpc_type,
       }
       rpc_data[88] = lon_scale;
 
-      int height_scale;
+      int height_scale = 0;
       success = (*tres_itr)->get_value("HEIGHT_SCALE", height_scale);
       if (!success)
       {
@@ -1308,7 +1310,7 @@ vil_nitf2_image_subheader::get_ichipb_info(std::pair<double, double> & translati
     std::string type = (*tres_itr)->name();
     if (type == "ICHIPB")
     {
-      int anacor;
+      int anacor = 0;
       if ((*tres_itr)->get_value("ANAMRPH_CORR", anacor))
         anamorphic_corr = anacor > 0;
       else

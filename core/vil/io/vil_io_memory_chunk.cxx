@@ -103,11 +103,11 @@ vsl_b_read(vsl_b_istream & is, vil_memory_chunk & chunk)
   if (!is)
     return;
 
-  short w;
+  short w = 0;
   vsl_b_read(is, w);
-  int format;
+  int format = 0;
   vil_pixel_format pixel_format;
-  unsigned n;
+  unsigned n = 0;
   switch (w)
   {
     case 1:
@@ -295,7 +295,7 @@ void
 vsl_b_read(vsl_b_istream & is, vil_memory_chunk *& p)
 {
   delete p;
-  bool not_null_ptr;
+  bool not_null_ptr = false;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
   {

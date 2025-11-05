@@ -10,6 +10,7 @@
 
 #include "vnl/vnl_cost_function.h"
 #include "vnl/vnl_vector_ref.h"
+#include <cmath>
 #include <vnl/algo/vnl_netlib.h>
 
 /////////////////////////////////////
@@ -81,13 +82,13 @@ bool
 vnl_conjugate_gradient::minimize(vnl_vector<double> & x)
 {
   double * xp = x.data_block();
-  double max_norm_of_gradient;
-  long number_of_iterations;
+  double max_norm_of_gradient = NAN;
+  long number_of_iterations = 0;
   final_step_size_ = 0;
   const double gradient_tolerance = gtol;
   vnl_vector<double> workspace(f_->get_number_of_unknowns() * 3);
   long number_of_unknowns = f_->get_number_of_unknowns();
-  long error_code;
+  long error_code = 0;
 
   // Compute the initial value.
   start_error_ = valuecomputer_(xp, this);

@@ -1,5 +1,6 @@
 #include "testlib/testlib_test.h"
 
+#include <cmath>
 #include <vpgl/algo/vpgl_triangulate_points.h>
 #include "vpgl/vpgl_calibration_matrix.h"
 
@@ -25,7 +26,7 @@ add_pt_and_cam(vgl_homg_point_3d<double> pt,
 
   cameras.push_back(cam);
 
-  double x, y;
+  double x = NAN, y = NAN;
   cam.project(GOAL.x(), GOAL.y(), GOAL.z(), x, y);
 
   points.emplace_back(x, y);

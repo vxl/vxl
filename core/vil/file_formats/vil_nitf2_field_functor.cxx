@@ -61,7 +61,7 @@ vil_nitf2_multiply_field_values::operator()(vil_nitf2_field_sequence * record,
                                             const vil_nitf2_index_vector & indexes,
                                             int & value)
 {
-  int value1, value2;
+  int value1 = 0, value2 = 0;
   bool found = record->get_value(tag_1, indexes, value1, true);
   found &= record->get_value(tag_2, indexes, value2, true);
   if (found)

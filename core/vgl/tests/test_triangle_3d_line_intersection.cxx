@@ -1,5 +1,7 @@
 // Some tests for vgl_triangle_3d_line_intersection
 
+#include <cmath>
+
 #include <iostream>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -29,7 +31,7 @@ test_point_inside()
   vgl_point_3d<double> o(0, 0, 0);
 
   vgl_point_3d<double> q;
-  double a1, a2, a3;
+  double a1 = NAN, a2 = NAN, a3 = NAN;
 
   // test centroid
   {

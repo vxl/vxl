@@ -7,6 +7,7 @@
 #include "vgl/vgl_homg_point_2d.h"
 #include "vnl/vnl_vector.h"
 #include "vnl/vnl_math.h"
+#include <cmath>
 #include <vnl/algo/vnl_svd.h>
 
 #include <cassert>
@@ -107,7 +108,7 @@ void
 vrel_homography2d_est ::compute_residuals(const vnl_vector<double> & params, std::vector<double> & residuals) const
 {
   vnl_matrix<double> H(3, 3);
-  int r, c;
+  int r = 0, c = 0;
   for (r = 0; r < 3; ++r)
     for (c = 0; c < 3; ++c)
       H(r, c) = params[3 * r + c];
@@ -121,7 +122,7 @@ vrel_homography2d_est ::compute_residuals(const vnl_vector<double> & params, std
     residuals.resize(from_pts_.size());
 
   vnl_vector<double> trans_pt(3), inv_trans_pt(3);
-  double del_x, del_y, inv_del_x, inv_del_y;
+  double del_x = NAN, del_y = NAN, inv_del_x = NAN, inv_del_y = NAN;
 
   for (unsigned int i = 0; i < from_pts_.size(); ++i)
   {
@@ -150,7 +151,7 @@ vrel_homography2d_est ::weighted_least_squares_fit(vnl_vector<double> & params,
                                                    vnl_matrix<double> & /* norm_covar */,
                                                    const std::vector<double> * weights) const
 {
-  const std::vector<double> * w;
+  const std::vector<double> * w = nullptr;
   if (weights)
     w = weights;
   else
@@ -242,7 +243,7 @@ vrel_homography2d_est ::normalize(const std::vector<vnl_vector<double>> & pts,
 
   vnl_vector<double> center(2, 0.0);
   double sum_wgt = 0;
-  unsigned int i;
+  unsigned int i = 0;
 
   for (i = 0; i < pts.size(); ++i)
   {

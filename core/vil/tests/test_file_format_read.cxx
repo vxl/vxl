@@ -197,7 +197,7 @@ template <>
 bool
 read_value(std::istream & fin, char & pix)
 {
-  int x;
+  int x = 0;
   // use operator! to test the stream to avoid compiler warnings
   bool bad = !(fin >> x);
   if (!bad)
@@ -212,7 +212,7 @@ template <>
 bool
 read_value(std::istream & fin, unsigned char & pix)
 {
-  int x;
+  int x = 0;
   // use operator! to test the stream to avoid compiler warnings
   bool bad = !(fin >> x);
   if (!bad)
@@ -227,7 +227,7 @@ template <>
 bool
 read_value(std::istream & fin, signed char & pix)
 {
-  int x;
+  int x = 0;
   // use operator! to test the stream to avoid compiler warnings
   bool bad = !(fin >> x);
   if (!bad)
@@ -241,7 +241,7 @@ template <>
 bool
 read_value(std::istream & fin, bool & pix)
 {
-  int x;
+  int x = 0;
   // use operator! to test the stream to avoid compiler warnings
   bool bad = !(fin >> x);
   if (!bad)
@@ -272,10 +272,10 @@ CheckPixels(const Compare<TruePixelType, ImgPixelType> & check,
   //        plane1pix1comp1 plane1pix1comp2 ... plane1pixNcompC ... planePpix1comp1 ... planePpixNcompC
   //      where N = width*height
 
-  int num_planes;
-  int num_comp;
-  int width;
-  int height;
+  int num_planes = 0;
+  int num_comp = 0;
+  int width = 0;
+  int height = 0;
 
   std::ifstream fin((image_base + true_data_file).c_str());
   if (!(fin >> num_planes >> num_comp >> width >> height))
@@ -432,7 +432,7 @@ CheckFormat(const Compare<TruePixelType, ImgPixelType> & check,
             const char * img_data_file,
             vil_file_format * ffmt)
 {
-  bool result;
+  bool result = false;
   vil_stream * is = new vil_stream_fstream((image_base + img_data_file).c_str(), "r");
   is->ref();
   if (is->ok())

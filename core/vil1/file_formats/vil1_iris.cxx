@@ -46,7 +46,7 @@ vil1_iris_file_format::make_input_image(vil1_stream * is)
 {
   is->seek(0L);
 
-  int colormap_;
+  int colormap_ = 0;
 
   int magic_ = get_short(is);
   int storage_ = get_char(is);
@@ -407,13 +407,13 @@ vil1_iris_generic_image::put_section(const void * buf, int x0, int y0, int xs, i
 bool
 vil1_iris_generic_image::read_offset_tables()
 {
-  int tablen;
+  int tablen = 0;
   tablen = height_ * planes_;
 
   starttab_ = new unsigned long[tablen];
   lengthtab_ = new unsigned long[tablen];
 
-  int i;
+  int i = 0;
   for (i = 0; i < tablen; ++i)
   {
     starttab_[i] = get_long(is_, 512 + (i * 4));
@@ -515,7 +515,7 @@ send_long(vil1_stream * data, long s)
 void
 expandrow(unsigned char * optr, unsigned char * iptr, int z)
 {
-  unsigned char pixel, count;
+  unsigned char pixel = 0, count = 0;
 
   optr += z;
   while (true)

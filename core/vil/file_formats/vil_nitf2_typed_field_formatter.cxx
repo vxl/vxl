@@ -104,13 +104,13 @@ vil_nitf2_integer_formatter::copy() const
 bool
 vil_nitf2_integer_formatter::read_vcl_stream(std::istream & input, int & out_value, bool & out_blank)
 {
-  char * cstr;
+  char * cstr = nullptr;
   if (!read_c_str(input, field_width, cstr, out_blank))
   {
     delete[] cstr;
     return false;
   }
-  char * endp;
+  char * endp = nullptr;
   errno = 0;
   out_value = (int)strtol(cstr, &endp, 10);
   bool sign_ok = check_sign(cstr, show_sign);
@@ -154,14 +154,14 @@ vil_nitf2_long_long_formatter::copy() const
 bool
 vil_nitf2_long_long_formatter::read_vcl_stream(std::istream & input, vil_nitf2_long & out_value, bool & out_blank)
 {
-  char * cstr;
+  char * cstr = nullptr;
   if (!read_c_str(input, field_width, cstr, out_blank))
   {
     delete[] cstr;
     return false;
   }
-  bool conversion_ok;
-  char * endp;
+  bool conversion_ok = false;
+  char * endp = nullptr;
   errno = 0;
 
 #if VXL_HAS_INT_64
@@ -219,13 +219,13 @@ vil_nitf2_double_formatter::copy() const
 bool
 vil_nitf2_double_formatter::read_vcl_stream(std::istream & input, double & out_value, bool & out_blank)
 {
-  char * cstr;
+  char * cstr = nullptr;
   if (!read_c_str(input, field_width, cstr, out_blank))
   {
     delete[] cstr;
     return false;
   }
-  char * endp;
+  char * endp = nullptr;
   errno = 0;
   out_value = strtod(cstr, &endp);
   bool sign_ok = check_sign(cstr, show_sign);
@@ -272,13 +272,13 @@ vil_nitf2_exponential_formatter::copy() const
 bool
 vil_nitf2_exponential_formatter::read_vcl_stream(std::istream & input, double & out_value, bool & out_blank)
 {
-  char * cstr;
+  char * cstr = nullptr;
   if (!read_c_str(input, field_width, cstr, out_blank))
   {
     delete[] cstr;
     return false;
   }
-  char * endp;
+  char * endp = nullptr;
   errno = 0;
   out_value = strtod(cstr, &endp);
   // Check locations of non-digits in format: +d.dddddE+dd
@@ -389,7 +389,7 @@ vil_nitf2_string_formatter::copy() const
 bool
 vil_nitf2_string_formatter::read_vcl_stream(std::istream & input, std::string & out_value, bool & out_blank)
 {
-  char * cstr;
+  char * cstr = nullptr;
   if (!read_c_str(input, field_width, cstr, out_blank))
   {
     delete[] cstr;

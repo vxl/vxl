@@ -14,6 +14,7 @@
 #include "vgl/vgl_point_2d.h"
 #include "vgl/vgl_conic.h"
 #include "vgl/vgl_conic_segment_2d.h"
+#include <cmath>
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vgl/algo/vgl_fit_conics_2d.h>
 #include "vnl/vnl_math.h"
@@ -127,7 +128,7 @@ test_fit_simple_chain()
   vgl_fit_conics_2d<double> fitter;
   for (int i = 18; i >= 0; --i)
   {
-    double x, y;
+    double x = NAN, y = NAN;
     unit_circle(i, 1.0, 0.0, x, y);
     vgl_point_2d<double> p(x, y);
     fitter.add_point(p);
@@ -136,7 +137,7 @@ test_fit_simple_chain()
 
   for (int i = 19; i <= 36; ++i)
   {
-    double x, y;
+    double x = NAN, y = NAN;
     unit_circle(i, 3.0, 0.0, x, y);
     vgl_point_2d<double> p(x, y);
     fitter.add_point(p);

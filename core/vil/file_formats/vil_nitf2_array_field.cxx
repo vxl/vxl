@@ -105,7 +105,7 @@ vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector & in_indice
   write_vector_element(*str, in_indices, -1);
   vil_streampos num_to_read = str->tell();
   str->seek(0);
-  char * buffer;
+  char * buffer = nullptr;
   buffer = (char *)std::malloc((std::size_t)num_to_read + 1);
   str->read((void *)buffer, num_to_read);
   buffer[(std::size_t)num_to_read] = 0;

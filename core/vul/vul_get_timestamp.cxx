@@ -57,11 +57,11 @@ vul_get_time_as_string(vul_time_style style /*default=vul_asc*/)
   std::string timestr;
 
   // Get time in seconds since Jan 1 1970
-  std::time_t time_secs;
+  std::time_t time_secs = 0;
   std::time(&time_secs);
 
   // Convert time to struct tm form
-  struct std::tm * time;
+  struct std::tm * time = nullptr;
   time = std::localtime(&time_secs);
 
   switch (style)

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "vrel_muse_table.h"
+#include <cmath>
 #include <vrel/vrel_misc.h>
 #include "vnl/vnl_math.h"
 
@@ -81,7 +82,7 @@ vrel_muse_table::calculate_expected(unsigned int k, unsigned int n) const
 double
 vrel_muse_table::calculate_standard_dev(unsigned int k, unsigned int n, double expected_kth) const
 {
-  double pk, qk, Qk, pQk, Qk_prime, Qk_dprime, Qk_tprime, vrk;
+  double pk = NAN, qk = NAN, Qk = NAN, pQk = NAN, Qk_prime = NAN, Qk_dprime = NAN, Qk_tprime = NAN, vrk = NAN;
 
   pk = (double)k / (double)(n + 1); // might want alpha beta correction
   qk = 1.0 - pk;

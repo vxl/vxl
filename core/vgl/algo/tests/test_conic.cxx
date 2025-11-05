@@ -12,6 +12,7 @@
 #include "vgl/vgl_conic.h"
 #include "vgl/vgl_box_2d.h"
 #include "vgl/vgl_homg_point_2d.h"
+#include <cmath>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #ifdef _MSC_VER
 #  include "vcl_msvc_warnings.h"
@@ -62,7 +63,7 @@ testlib_test_assert_near(const std::string & msg,
 static double
 conic_distance(const vgl_conic<double> & c1, const vgl_conic<double> & c2)
 {
-  double k; // multiplicative factor for coefficients
+  double k = NAN; // multiplicative factor for coefficients
 
   if (c1.a() != 0 && c2.a() != 0)
     k = c1.a() / c2.a();
@@ -120,7 +121,7 @@ check_points_on_conics(const vgl_conic<double> & c1,
   for (; it != pts.end(); ++it)
   {
     vgl_homg_point_2d<double> p = *it;
-    double fval1, fval2, x, y;
+    double fval1 = NAN, fval2 = NAN, x = NAN, y = NAN;
     if (p.w() == 0)
     { // point at infinity
       x = p.x();
@@ -201,7 +202,7 @@ test_conic()
   cc = vgl_conic<double>(1, 0, 1, -2, -4, 4); // idem, by equation
   std::cout << "By equation: " << cc << '\n';
   TEST("circle equality", c, cc);
-  double xc, yc, major_axis, minor_axis, angle;
+  double xc = NAN, yc = NAN, major_axis = NAN, minor_axis = NAN, angle = NAN;
   bool good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   TEST("circle geometry", good, true);
   TEST_NEAR("circle geometry: centre x", xc, 1, 1e-8);

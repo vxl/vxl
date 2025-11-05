@@ -7,6 +7,7 @@
 #  include "vcl_msvc_warnings.h"
 #endif
 #include "vpgl/vpgl_local_rational_camera.h"
+#include <cmath>
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
 #include "vpgl/vpgl_lvcs.h"
 #include "vnl/vnl_vector_fixed.h"
@@ -67,7 +68,7 @@ construct_rational_camera()
 static void
 test_local_rational_camera()
 {
-  double eu, ev;
+  double eu = NAN, ev = NAN;
 
   vpgl_rational_camera<double> rcam = construct_rational_camera();
   double xoff = rcam.offset(vpgl_rational_camera<double>::X_INDX);
@@ -77,7 +78,7 @@ test_local_rational_camera()
   vpgl_lvcs lvcs(yoff, xoff, zoff);
   vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
 
-  double ug, vg, ul, vl;
+  double ug = NAN, vg = NAN, ul = NAN, vl = NAN;
   rcam.project(xoff, yoff, zoff, ug, vg);
   lrcam.project(0.0, 0.0, 0.0, ul, vl);
   std::cout << "Global (u v) (" << ug << ' ' << vg << std::endl << "Local  (u v) (" << ul << ' ' << vl << std::endl;
@@ -106,19 +107,19 @@ test_local_rational_camera()
   bool good = lrcam.save(path);
   TEST("save to file", good, true);
   vpgl_local_rational_camera<double> * lrc_r = read_local_rational_camera<double>(path);
-  double ulr, vlr;
+  double ulr = NAN, vlr = NAN;
   lrc_r->project(0.0, 0.0, 0.0, ulr, vlr);
   TEST_NEAR("read from file", std::fabs(ug - ulr) + std::fabs(vg - vlr), 0.0, 1e-3);
   vpl_unlink(path.c_str());
 
   //-- test other geographic locations
   double x0 = -71.402457, y0 = 41.821589, z0 = 20;
-  double ug0, vg0, ul0, vl0;
+  double ug0 = NAN, vg0 = NAN, ul0 = NAN, vl0 = NAN;
   rcam.project(x0, y0, z0, ug0, vg0);
   lrcam.project(202.47, 0, 50, ul0, vl0);
   TEST_NEAR("test displacement East", std::fabs(ug0 - ul0) + std::fabs(vg0 - vl0), 0.0, 3);
   double x1 = -71.404887, y1 = 41.823402, z1 = 16;
-  double ug1, vg1, ul1, vl1;
+  double ug1 = NAN, vg1 = NAN, ul1 = NAN, vl1 = NAN;
   rcam.project(x1, y1, z1, ug1, vg1);
   lrcam.project(0, 200, 46, ul1, vl1);
   TEST_NEAR("test displacement North", std::fabs(ug1 - ul1) + std::fabs(vg1 - vl1), 0.0, 3);

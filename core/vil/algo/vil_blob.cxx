@@ -101,7 +101,7 @@ vil_blob_labels(const vil_image_view<bool> & src_binary,
   disjoint_sets merge_list;
   std::vector<unsigned> neighbouring_labels;
 
-  unsigned n_prev_neighbours;
+  unsigned n_prev_neighbours = 0;
   switch (conn)
   {
     case vil_blob_4_conn:
@@ -219,7 +219,7 @@ vil_blob_labels_to_edge_labels(const vil_image_view<unsigned> & src_label,
   dest_label.set_size(ni, nj);
   dest_label.fill(0);
 
-  unsigned n_edge_neighbours;
+  unsigned n_edge_neighbours = 0;
   switch (conn)
   {
     case vil_blob_4_conn:

@@ -259,13 +259,13 @@ template <class T, class longT>
 void
 pnmscaleT<T, longT>::go()
 {
-  T * xelrow;
-  T * tempxelrow;
-  T * newxelrow;
-  T * xP;
-  T * nxP;
-  int row, col, needtoreadrow;
-  long fracrowtofill, fracrowleft;
+  T * xelrow = nullptr;
+  T * tempxelrow = nullptr;
+  T * newxelrow = nullptr;
+  T * xP = nullptr;
+  T * nxP = nullptr;
+  int row = 0, col = 0, needtoreadrow = 0;
+  long fracrowtofill = 0, fracrowleft = 0;
 
   xelrow = new T[cols];
   if (newrows == rows) /* shortcut Y scaling if possible */
@@ -338,8 +338,8 @@ pnmscaleT<T, longT>::go()
     else
     {
       longT g;
-      long fraccoltofill, fraccolleft;
-      int needcol;
+      long fraccoltofill = 0, fraccolleft = 0;
+      int needcol = 0;
 
       nxP = newxelrow;
       fraccoltofill = SCALE;

@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <iostream>
 #include "testlib/testlib_test.h"
 #include "vpgl/vpgl_utm.h"
@@ -31,9 +33,9 @@ test_utm_convert(double lat,
   double utm_tol = 5e-3; // 0.5 cm
 
   // WGS84 to UTM
-  double easting_result, northing_result;
-  int utm_zone_result;
-  bool south_flag_result;
+  double easting_result = NAN, northing_result = NAN;
+  int utm_zone_result = 0;
+  bool south_flag_result = false;
   u.transform(
     lat, lon, easting_result, northing_result, utm_zone_result, south_flag_result, force_utm_zone, force_south_flag);
 
@@ -49,7 +51,7 @@ test_utm_convert(double lat,
   double wgs84_tol = 1e-6;
 
   // UTM to WGS84
-  double lat_result, lon_result;
+  double lat_result = NAN, lon_result = NAN;
   u.transform(utm_zone, easting, northing, lat_result, lon_result, south_flag);
 
   lat_expected = (lat_expected > -9999) ? lat_expected : lat;
@@ -86,7 +88,7 @@ test_utm2utm(int utm_zone_a,
   double utm_tol = 5e-3; // 0.5 cm
 
   // results
-  double easting_result, northing_result;
+  double easting_result = NAN, northing_result = NAN;
 
   // A->B
   u.utm2utm(utm_zone_a, south_flag_a, easting_a, northing_a, utm_zone_b, south_flag_b, easting_result, northing_result);

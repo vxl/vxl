@@ -17,6 +17,8 @@
  *=========================================================================*/
 #include "lsmrBase.h"
 
+#include <cmath>
+
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -282,8 +284,8 @@ Solve( unsigned int m, unsigned int n, const double * b, double * x )
   const double zero = 0.0;
   const double one = 1.0;
 
-  double test1;
-  double test2;
+  double test1 = NAN;
+  double test2 = NAN;
 
   // Initialize.
 

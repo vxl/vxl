@@ -198,7 +198,8 @@ vil_bmp_image::read_header()
   {
     // no info header.
   }
-  else if (core_hdr.header_size == static_cast<unsigned>(vil_bmp_core_header::disk_size) + static_cast<unsigned>(vil_bmp_info_header::disk_size))
+  else if (core_hdr.header_size == static_cast<unsigned>(vil_bmp_core_header::disk_size) +
+                                     static_cast<unsigned>(vil_bmp_info_header::disk_size))
   {
     // probably an info header. read it now.
     info_hdr.read(is_);

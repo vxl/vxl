@@ -187,7 +187,7 @@ vsl_b_write(vsl_b_ostream & os, const test2_derived_class & d)
 void
 vsl_b_read(vsl_b_istream & is, test2_derived_class & d)
 {
-  int i;
+  int i = 0;
   vsl_b_read(is, i);
   d.set_data(i);
 }

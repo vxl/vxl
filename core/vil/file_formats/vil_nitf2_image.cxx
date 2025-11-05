@@ -87,7 +87,7 @@ vil_nitf2_image::get_offset_to(vil_nitf2_header::section_type sec,
                                vil_nitf2_header::portion_type por,
                                unsigned int index) const
 {
-  vil_streampos p;
+  vil_streampos p = 0;
   if (sec == vil_nitf2_header::enum_file_header)
   {
     // there is no data section in the file header and
@@ -113,7 +113,7 @@ vil_nitf2_image::size_to(vil_nitf2_header::section_type sec, vil_nitf2_header::p
   {
     if (index == -1)
     {
-      int file_header_size;
+      int file_header_size = 0;
       m_file_header.get_property("HL", file_header_size);
       return (vil_streampos)file_header_size;
     }
@@ -129,28 +129,28 @@ vil_nitf2_image::size_to(vil_nitf2_header::section_type sec, vil_nitf2_header::p
   bool going_past_end = false;
   if (index == -1)
   {
-    int num_segments;
+    int num_segments = 0;
     m_file_header.get_property(vil_nitf2_header::section_num_tag(sec), num_segments);
     index = num_segments;
     going_past_end = true;
   }
   std::string sh = vil_nitf2_header::section_len_header_tag(sec);
   std::string s = vil_nitf2_header::section_len_data_tag(sec);
-  int i;
+  int i = 0;
   for (i = 0; i < index; i++)
   {
-    int current_header_size;
+    int current_header_size = 0;
     m_file_header.get_property(sh, i, current_header_size);
     offset += current_header_size;
     if (sec == vil_nitf2_header::enum_image_segments)
     {
-      vil_nitf2_long current_data_size;
+      vil_nitf2_long current_data_size = 0;
       m_file_header.get_property(s, i, current_data_size);
       offset += current_data_size;
     }
     else
     {
-      int current_data_size;
+      int current_data_size = 0;
       m_file_header.get_property(s, i, current_data_size);
       offset += current_data_size;
     }
@@ -166,7 +166,7 @@ vil_nitf2_image::size_to(vil_nitf2_header::section_type sec, vil_nitf2_header::p
       assert(!"skipped past all segments");
       return 0L;
     }
-    int current_header_size;
+    int current_header_size = 0;
     m_file_header.get_property(sh, i, current_header_size);
     offset += current_header_size;
   }
@@ -243,7 +243,7 @@ vil_nitf2_image::set_current_image(unsigned int index)
 unsigned int
 vil_nitf2_image::nimages() const
 {
-  int num_images;
+  int num_images = 0;
   if (m_file_header.get_property("NUMI", num_images))
     return num_images;
   else
@@ -267,7 +267,7 @@ vil_nitf2_image::get_offset_to_image_data_block_band(unsigned int image_index,
   //////////////////////////////////////////////////
   // now get the position to the desired block/band
   //////////////////////////////////////////////////
-  int bits_per_pixel_per_band;
+  int bits_per_pixel_per_band = 0;
   current_image_header()->get_property("NBPP", bits_per_pixel_per_band);
 
 #if 0 // Not valid if blocks are partially filled (JLM 11/03/07)
@@ -364,7 +364,7 @@ vil_nitf2_image::parse_headers()
 
   // now parse all the DESs (if any)
   clear_des();
-  int num_des;
+  int num_des = 0;
   m_file_header.get_property("NUMDES", num_des);
   m_des.resize(num_des);
   for (int j = 0; j < num_des; j++)
@@ -372,7 +372,7 @@ vil_nitf2_image::parse_headers()
     vil_streampos offset =
       get_offset_to(vil_nitf2_header::enum_data_extension_segments, vil_nitf2_header::enum_subheader, j);
     m_stream->seek(offset);
-    int data_width;
+    int data_width = 0;
     m_file_header.get_property("LD", j, data_width);
     m_des[j] = new vil_nitf2_des(file_version(), data_width);
     if (!m_des[j]->read(m_stream))
@@ -426,7 +426,7 @@ vil_nitf2_image::ni() const
   // rather than NPPBH*NBPR which would be the total number of pixels in the
   // image.  if NPPBH*NBPR > NCOLS, then all the extra columns are blanked
   // out pad pixels.  Why would anyone want those?
-  int num_significant_cols;
+  int num_significant_cols = 0;
   if (current_image_header()->get_property("NCOLS", num_significant_cols))
   {
     return num_significant_cols;
@@ -441,7 +441,7 @@ vil_nitf2_image::nj() const
   // rather than NPPBV*NBPC which would be the total number of pixels in the
   // image.  if NPPBV*NBPC > NROWS, then all the extra columns are blanked
   // out pad pixels.  Why would anyone want those?
-  int num_significant_rows;
+  int num_significant_rows = 0;
   if (current_image_header()->get_property("NROWS", num_significant_rows))
   {
     return num_significant_rows;
@@ -453,7 +453,7 @@ enum vil_pixel_format
 vil_nitf2_image::pixel_format() const
 {
   std::string pixel_type;
-  int bits_per_pixel;
+  int bits_per_pixel = 0;
   if (current_image_header()->get_property("PVTYPE", pixel_type) &&
       current_image_header()->get_property("NBPP", bits_per_pixel))
   {
@@ -845,7 +845,7 @@ vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_
     return nullptr;
 
   // calculate the start position of the block that we need
-  int bits_per_pixel_per_band, actualBitsPerPixelPerBand;
+  int bits_per_pixel_per_band = 0, actualBitsPerPixelPerBand = 0;
   std::string bitJustification;
   if (!current_image_header()->get_property("NBPP", bits_per_pixel_per_band) ||
       !current_image_header()->get_property("ABPP", actualBitsPerPixelPerBand) ||
@@ -1066,7 +1066,7 @@ vil_nitf2_image::get_tree() const
   auto * t = new vil_nitf2_field::field_tree;
   t->columns.emplace_back("NITF File");
   t->children.push_back(get_header().get_tree());
-  unsigned int i;
+  unsigned int i = 0;
   for (i = 0; i < m_image_headers.size(); i++)
   {
     t->children.push_back(m_image_headers[i]->get_tree(i + 1));

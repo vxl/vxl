@@ -25,7 +25,7 @@ vil1_gen_file_format::make_input_image(vil1_stream * vs)
   std::string s;
   for (;;)
   {
-    char buf;
+    char buf = 0;
     if (vs->read(&buf, 1L) == 0L)
       return nullptr;
     if (buf == 0)

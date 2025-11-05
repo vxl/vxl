@@ -37,7 +37,7 @@ main()
   int inliers = 0, outliers = 0;
 
   //  generate and output data for left side
-  int x;
+  int x = 0;
   for (x = x0; x <= xd; ++x)
   {
     double y = a0 + a1 * x;

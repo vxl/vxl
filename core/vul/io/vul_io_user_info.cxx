@@ -29,7 +29,7 @@ vsl_b_read(vsl_b_istream & is, vul_user_info & p)
   if (!is)
     return;
 
-  short v;
+  short v = 0;
   vsl_b_read(is, v);
   switch (v)
   {

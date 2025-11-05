@@ -16,7 +16,7 @@ test_math_median()
             << " Testing vil_math_median\n"
             << "******************************\n";
 
-  vxl_byte median;
+  vxl_byte median = 0;
   {
     vil_image_view<vxl_byte> img(0, 0);
     vil_math_median(median, img, 0);

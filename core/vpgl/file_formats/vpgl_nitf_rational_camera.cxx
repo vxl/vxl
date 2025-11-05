@@ -15,6 +15,7 @@
 #endif
 #include "vil/vil_load.h"
 // for calls to get nitf_rational parameters from vil
+#include <cmath>
 #include <vil/file_formats/vil_nitf2_image.h>
 
 // Conversion from igeolo string format to doubles
@@ -32,14 +33,14 @@ static int
 geostr_to_double(const char * in_string, double * val, vpgl_nitf_rational_camera::geopt_coord c)
 {
   //  int invalid = 1;
-  int length;
-  int deg, min;
-  float fsec;
+  int length = 0;
+  int deg = 0, min = 0;
+  float fsec = NAN;
   const char * orig = in_string;
 
   // here are lat/lon dependent variables
-  char sposdir, cposdir, snegdir, cnegdir;
-  int maxval;
+  char sposdir = 0, cposdir = 0, snegdir = 0, cnegdir = 0;
+  int maxval = 0;
 
   if (c == vpgl_nitf_rational_camera::LAT)
   {
@@ -237,7 +238,7 @@ vpgl_nitf_rational_camera::geostr_to_latlon_v2(const std::string & str, std::vec
   // separate string into four corner sections: (lat, lon), (lat, lon), (lat, lon), (lat, lon)
   std::string::const_iterator sit = str.begin();
   std::vector<double> latlons;
-  size_t inc_lat = 7, inc_lon = 8, inc;
+  size_t inc_lat = 7, inc_lon = 8, inc = 0;
   geopt_coord lat_code = vpgl_nitf_rational_camera::LAT;
   geopt_coord lon_code = vpgl_nitf_rational_camera::LON;
   // initial condition
@@ -293,10 +294,10 @@ vpgl_nitf_rational_camera::read(vil_nitf2_image * nitf_image, bool verbose)
 
   // extract corner coordinates from image_geolo field
   // example 324158N1171117W324506N1171031W324428N1170648W324120N1170734W
-  double ULlat, ULlon;
-  double URlat, URlon;
-  double LLlat, LLlon;
-  double LRlat, LRlon;
+  double ULlat = NAN, ULlon = NAN;
+  double URlat = NAN, URlon = NAN;
+  double LLlat = NAN, LLlon = NAN;
+  double LRlat = NAN, LRlon = NAN;
 
   geostr_to_latlon(image_igeolo_.c_str(), &ULlat, &ULlon);
   geostr_to_latlon(image_igeolo_.c_str() + 15, &URlat, &URlon);
@@ -338,7 +339,7 @@ vpgl_nitf_rational_camera::read(vil_nitf2_image * nitf_image, bool verbose)
   );
 
   // correction offset
-  double correction_u_off, correction_v_off;
+  double correction_u_off = NAN, correction_v_off = NAN;
   success = hdr->get_image_offset(correction_u_off, correction_v_off);
 
   if (success)
@@ -404,7 +405,7 @@ vpgl_nitf_rational_camera::print(std::ostream & ostr, vpgl_rational_order output
 
   // print corners & projections
   double z_off = this->offset(Z_INDX);
-  double u, v;
+  double u = NAN, v = NAN;
 
   this->project(ul_[LON], ul_[LAT], z_off, u, v);
   ostr << "upper left: " << std::endl

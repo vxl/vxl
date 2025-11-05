@@ -677,7 +677,7 @@ vnl_vector_test_matrix()
 void
 vnl_vector_test_conversion()
 {
-  bool check;
+  bool check = false;
   {
     // convert from a vnl_vector to a block array:
     int v1values[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };

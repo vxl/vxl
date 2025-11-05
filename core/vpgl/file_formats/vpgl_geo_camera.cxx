@@ -20,6 +20,7 @@
 
 #if HAS_GEOTIFF
 #  include "vil/vil_load.h"
+#  include <cmath>
 #  include <vil/file_formats/vil_geotiff_header.h>
 #  include <vil/file_formats/vil_tiff.h>
 #  include <vil/file_formats/vil_nitf2_image.h>
@@ -87,7 +88,7 @@ vpgl_geo_camera::load_from_resource(const vil_image_resource_sptr & geotiff_img,
     return false;
   }
 
-  int utm_zone;
+  int utm_zone = 0;
   vil_geotiff_header::GTIF_HEMISPH h;
 
   std::vector<std::vector<double>> tiepoints;
@@ -96,8 +97,8 @@ vpgl_geo_camera::load_from_resource(const vil_image_resource_sptr & geotiff_img,
   // create a transformation matrix
   // if there is a transformation matrix in GEOTIFF, use that
   vnl_matrix<double> trans_matrix(4, 4, 0.0);
-  double * trans_matrix_values;
-  double sx1, sy1, sz1;
+  double * trans_matrix_values = nullptr;
+  double sx1 = NAN, sy1 = NAN, sz1 = NAN;
   bool scale_tag = false;
   if (gtif->gtif_trans_matrix(trans_matrix_values))
   {
@@ -241,7 +242,7 @@ vpgl_geo_camera::init_geo_camera(const std::string & img_name,
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
   std::string hemisphere, direction;
-  float lon, lat, scale_lat, scale_lon;
+  float lon = NAN, lat = NAN, scale_lat = NAN, scale_lon = NAN;
   std::size_t n = n_coords.find('N');
   if (n < n_coords.size())
     hemisphere = "N";
@@ -354,7 +355,7 @@ vpgl_geo_camera::init_geo_camera_from_filename(const std::string & img_name,
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
   std::string hemisphere, direction;
-  float lon, lat, scale;
+  float lon = NAN, lat = NAN, scale = NAN;
   std::size_t n = n_coords.find('N');
   if (n < n_coords.size())
     hemisphere = "N";
@@ -453,15 +454,15 @@ vpgl_geo_camera::extract_pixel_size()
     lvcs = vpgl_lvcs(*lvcs_);
   else
   {
-    double lon, lat;
+    double lon = NAN, lat = NAN;
     this->img_to_global(0.0, 0.0, lon, lat);
     lvcs = vpgl_lvcs(lat, lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   }
-  double lon0, lat0, lonx, latx, lony, laty;
+  double lon0 = NAN, lat0 = NAN, lonx = NAN, latx = NAN, lony = NAN, laty = NAN;
   this->img_to_global(0.0, 0.0, lon0, lat0);
   this->img_to_global(100000.0, 0.0, lonx, latx);
   this->img_to_global(0.0, 100000.0, lony, laty);
-  double dlx0, dlx1, dly0, dly1, dlz;
+  double dlx0 = NAN, dlx1 = NAN, dly0 = NAN, dly1 = NAN, dlz = NAN;
   lvcs.global_to_local(double(lon0), double(lat0), double(0), vpgl_lvcs::wgs84, dlx0, dly0, dlz);
   lvcs.global_to_local(double(lonx), double(latx), double(0), vpgl_lvcs::wgs84, dlx1, dly1, dlz);
   sx_ = sqrt((dlx1 - dlx0) * (dlx1 - dlx0) + (dly1 - dly0) * (dly1 - dly0)) / 100000.0;
@@ -525,8 +526,8 @@ vpgl_geo_camera::lvcs_elev_origin() const
 {
   if (!lvcs_)
     return 0.0;
-  double ox, oy, oz;
-  int zone;
+  double ox = NAN, oy = NAN, oz = NAN;
+  int zone = 0;
   if (lvcs_->get_cs_name() == vpgl_lvcs::utm)
   {
     lvcs_->get_utm_origin(ox, oy, oz, zone);
@@ -544,14 +545,14 @@ vpgl_geo_camera::lvcs_elev_origin() const
 void
 vpgl_geo_camera::project(const double x, const double y, const double z, double & u, double & v) const
 {
-  double lat, lon, gz;
+  double lat = NAN, lon = NAN, gz = NAN;
   if (lvcs_)
   {
     if (lvcs_->get_cs_name() == vpgl_lvcs::utm)
     {
       if (is_utm_)
       { // geo cam is also utm so keep using utm
-        double gx, gy;
+        double gx = NAN, gy = NAN;
         this->local_to_global(x, y, z, gx, gy, gz);
         this->global_utm_to_img(gx, gy, utm_zone_, gz, u, v);
       }
@@ -592,7 +593,7 @@ vpgl_geo_camera::backproject(const double u, const double v, double & x, double 
   vec[3] = 1;
   // std::cout << '\n' << vec << std::endl;
 
-  double lat, lon, elev;
+  double lat = NAN, lon = NAN, elev = NAN;
   if (is_utm_)
   {
     if (lvcs_)
@@ -678,7 +679,7 @@ vpgl_geo_camera::global_to_img(const double lon, const double lat, const double 
   if (is_utm_)
   {
     vpgl_utm utm;
-    int utm_zone;
+    int utm_zone = 0;
     utm.transform(lat, lon, x1, y1, utm_zone);
     // std::cout << "utm returned x1: " << x1 << " y1: " << y1 << std::endl;
     // z1 = 0;
@@ -732,7 +733,7 @@ vpgl_geo_camera::img_to_global_utm(const double i, const double j, double & x, d
   else
   { // the trans matrix was using lat,lon coord, transform output to utm
     vpgl_utm utm;
-    int dummy_zone;
+    int dummy_zone = 0;
     utm.transform(v[0], v[1], x, y, dummy_zone);
   }
 }
@@ -752,7 +753,7 @@ vpgl_geo_camera::global_utm_to_img(const double x, const double y, int zone, dou
   else
   {
     vpgl_utm utm;
-    double lat, lon, z;
+    double lat = NAN, lon = NAN, z = NAN;
     utm.transform(zone, x, y, elev, lat, lon, z);
     vec[0] = lat;
     vec[1] = lon;
@@ -783,7 +784,7 @@ void
 vpgl_geo_camera::local_to_utm(const double x, const double y, const double z, double & e, double & n, int & utm_zone)
   const
 {
-  double lat, lon, gz;
+  double lat = NAN, lon = NAN, gz = NAN;
   lvcs_->local_to_global(x, y, z, vpgl_lvcs::wgs84, lon, lat, gz);
 
   vpgl_utm utm;
@@ -819,10 +820,10 @@ vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni,
     std::cerr << "In vpgl_geo_camera::img_four_corners_in_utm() -- UTM hasn't been set!\n";
     return false;
   }
-  double lon, lat;
+  double lon = NAN, lat = NAN;
   this->img_to_global(0, 0, lon, lat);
   vpgl_utm utm;
-  int utm_zone;
+  int utm_zone = 0;
   utm.transform(lat, lon, e1, n1, utm_zone);
   this->img_to_global(ni, nj, lon, lat);
   utm.transform(lat, lon, e2, n2, utm_zone);
@@ -968,13 +969,13 @@ vpgl_geo_camera::b_read(vsl_b_istream & is)
 {
   if (!is)
     return;
-  short ver;
+  short ver = 0;
   vsl_b_read(is, ver);
   switch (ver)
   {
     case 1:
     {
-      unsigned nrows, ncols;
+      unsigned nrows = 0, ncols = 0;
       vsl_b_read(is, nrows);
       vsl_b_read(is, ncols);
       trans_matrix_.set_size(nrows, ncols);

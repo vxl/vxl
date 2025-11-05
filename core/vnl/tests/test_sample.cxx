@@ -33,7 +33,7 @@ test_sample_uniform()
   sigma_bar = std::sqrt(sigma_bar / (N - 1));
   TEST_NEAR("sample stddev", sigma_bar, (b - a) / std::sqrt(12.0), eps * a);
 
-  int seed;
+  int seed = 0;
   vul_get_timestamp(seed, seed);
   std::cout << "seed is " << seed << std::endl;
   vnl_sample_reseed(seed);
@@ -82,7 +82,7 @@ test_sample_normal()
   sigma_bar = std::sqrt(sigma_bar / (N - 1));
   TEST_NEAR("sample stddev", sigma_bar, sigma, eps * sigma);
 
-  int seed;
+  int seed = 0;
   vul_get_timestamp(seed, seed);
   std::cout << "seed is " << seed << std::endl;
   vnl_sample_reseed(seed);

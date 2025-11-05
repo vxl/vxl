@@ -230,7 +230,7 @@ isoperator(char c)
 int
 put_brackets(std::string & expr, unsigned long s, int l)
 {
-  int k;
+  int k = 0;
   if (l <= 0)
     return l; // do nothing on empty string
   if (expr[s] == ')')
@@ -319,7 +319,7 @@ put_brackets(std::string & expr, unsigned long s, int l)
 int
 hierarchy_brackets(std::string & expr, unsigned long s, int l)
 {
-  int i, previ, bl, strength = 0;
+  int i = 0, previ = 0, bl = 0, strength = 0;
 
   if (expr[s] == ')')
     ErrorExit(expr, "substring starts with closing bracket", s);
@@ -437,7 +437,7 @@ build_tree(const std::string & expr, unsigned long s, int l)
       ErrorExit(expr, "unknown function call", s);
     n.param1 = new node();
     n.param2 = nullptr;
-    int i;
+    int i = 0;
     for (i = j; i < l - 1; ++i)
       if (expr[s + i] == ',')
         break;

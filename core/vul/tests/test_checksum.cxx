@@ -27,7 +27,7 @@ test_checksum()
   };
 
   char * datac = (char *)data;
-  vxl_uint_32 checksum;
+  vxl_uint_32 checksum = 0;
 
   checksum = vul_checksum_crc32c(datac, datac + 48);
   std::cout << "\nTest on 48 bytes of An iSCSI - SCSI Read (10) Command PDU: " << std::hex << checksum << std::endl;

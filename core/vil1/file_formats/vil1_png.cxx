@@ -206,7 +206,7 @@ struct vil1_png_structures
     if (rows == nullptr)
       return ok = problem("couldn't allocate space for image");
 
-    unsigned long linesize;
+    unsigned long linesize = 0;
     if (png_get_bit_depth(png_ptr, info_ptr) == 16)
       linesize = 2 * png_get_image_width(png_ptr, info_ptr);
     else
@@ -404,7 +404,7 @@ vil1_png_generic_image::write_header()
 
   png_set_write_fn(p->png_ptr, vs_, user_write_data, user_flush_data);
 
-  int color_type;
+  int color_type = 0;
   if (components_ == 3)
     color_type = PNG_COLOR_TYPE_RGB;
   else

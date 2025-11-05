@@ -12,6 +12,7 @@
 #include "vil/vil_load.h"
 #include "vil/vil_save.h"
 #include "vil/vil_image_view.h"
+#include <cmath>
 #include <vil/algo/vil_normalised_correlation_2d.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include "vil/vil_convert.h"
@@ -84,7 +85,7 @@ main(int argc, char ** argv)
   }
 
   // Stretch range to [0,255]
-  float min_v, max_v;
+  float min_v = NAN, max_v = NAN;
   vil_math_value_range(dest_image, min_v, max_v);
   double s = 255 / (max_v - min_v);
   vil_math_scale_and_offset_values(dest_image, s, -s * min_v);

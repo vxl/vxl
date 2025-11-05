@@ -1,5 +1,7 @@
 // This is core/vil/algo/vil_gauss_filter.cxx
 #include <cmath>
+
+#include <cmath>
 #include <algorithm>
 #include <functional>
 #include "vil_gauss_filter.h"
@@ -70,7 +72,7 @@ vil_gauss_filter_gen_ntap(double sd, unsigned diff, std::vector<double> & filter
 {
   std::size_t centre = filter.size() / 2; // or just past centre if even length
   double sum = 0.0;                       // area under sampled curve.
-  double tap;                             // workspace
+  double tap = NAN;                       // workspace
 
   if (diff == 0)
   {

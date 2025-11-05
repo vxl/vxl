@@ -83,7 +83,7 @@ vil_blocked_image_resource::glue_blocks_together(
 
   unsigned int output_width = 0;
   unsigned int output_height = 0;
-  unsigned int i;
+  unsigned int i = 0;
   for (i = 0; i < blocks.size(); i++)
   {
     output_width += blocks[i][0]->ni();

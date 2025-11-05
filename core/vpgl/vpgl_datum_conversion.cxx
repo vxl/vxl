@@ -1,4 +1,6 @@
 #include <cmath>
+
+#include <cmath>
 #include "vpgl_datum_conversion.h"
 //******************************************************************************
 //:
@@ -71,7 +73,7 @@ wgs72_to_wgs84_deltas(double phi,           //!< input lat (degrees)
   // Information found from "Supplement to Department of Defense
   // world geodetic systems 1984 Technical Report".  (pg 25-8)
 
-  double delta_f, a, delta_a, delta_r; // constants
+  double delta_f = NAN, a = NAN, delta_a = NAN, delta_r = NAN; // constants
 
   //****************************** Instructions: ******************************
   //
@@ -114,7 +116,7 @@ wgs72_to_wgs84(double phi, //!< input lat, lon, elev coord (degrees)
                double * wgs84_lamda, //!< lon shift (degrees)
                double * wgs84_hgt)   //!< elev shift (meters)
 {
-  double delta_phi, delta_lamda, delta_hgt;
+  double delta_phi = NAN, delta_lamda = NAN, delta_hgt = NAN;
 
   wgs72_to_wgs84_deltas(phi, &delta_phi, &delta_lamda, &delta_hgt);
 
@@ -135,7 +137,7 @@ wgs84_to_wgs72(double phi, //!< input lat, lon, elev coord (degrees)
                double * wgs72_lamda, //!< lon shift (degrees)
                double * wgs72_hgt)   //!< elev shift (meters)
 {
-  double delta_phi, delta_lamda, delta_hgt;
+  double delta_phi = NAN, delta_lamda = NAN, delta_hgt = NAN;
 
   wgs72_to_wgs84_deltas(phi, &delta_phi, &delta_lamda, &delta_hgt);
 
@@ -161,7 +163,7 @@ nad27m_to_wgs84_deltas(double phi,           //!< input lat (degrees)
   // world geodetic systems 1984 Technical Report.  (pg 20-36)
 
 
-  double U, V, K;
+  double U = NAN, V = NAN, K = NAN;
 
   K = .05235988;
 
@@ -213,7 +215,7 @@ nad27m_to_wgs84(double phi, //!< input lat, lon, elev coord (degrees)
                 double * wgs84_lamda, //!< lon shift (degrees)
                 double * wgs84_hgt)   //!< elev shift (meters)
 {
-  double delta_phi, delta_lamda, delta_hgt;
+  double delta_phi = NAN, delta_lamda = NAN, delta_hgt = NAN;
 
   nad27m_to_wgs84_deltas(phi, lamda, height, &delta_phi, &delta_lamda, &delta_hgt);
 
@@ -235,7 +237,7 @@ wgs84_to_nad27m(double phi, //!< input lat, lon, elev coord (degrees)
                 double * nad27m_lamda, //!< lon shift (degrees)
                 double * nad27m_hgt)   //!< elev shift (meters)
 {
-  double delta_phi, delta_lamda, delta_hgt;
+  double delta_phi = NAN, delta_lamda = NAN, delta_hgt = NAN;
 
   nad27m_to_wgs84_deltas(phi, lamda, height, &delta_phi, &delta_lamda, &delta_hgt);
 
@@ -260,7 +262,7 @@ nad27n_to_wgs84_deltas(double phi,           //!< input lat (degrees)
   // Information found from "Supplement to Department of Defense
   // world geodetic systems 1984 Technical Report.  (pg 19-2)
 
-  double U, V, K;
+  double U = NAN, V = NAN, K = NAN;
 
   K = .05235988;
 
@@ -312,7 +314,7 @@ nad27n_to_wgs84(double phi, //!< input lat, lon, elev coord (degrees)
                 double * wgs84_lamda, //!< lon shift (degrees)
                 double * wgs84_hgt)   //!< elev shift (meters)
 {
-  double delta_phi, delta_lamda, delta_hgt;
+  double delta_phi = NAN, delta_lamda = NAN, delta_hgt = NAN;
 
   nad27n_to_wgs84_deltas(phi, lamda, height, &delta_phi, &delta_lamda, &delta_hgt);
 
@@ -333,7 +335,7 @@ wgs84_to_nad27n(double phi, //!< input lat, lon, elev coord (degrees)
                 double * nad27n_lamda, //!< lon shift (degrees)
                 double * nad27n_hgt)   //!< elev shift (meters)
 {
-  double delta_phi, delta_lamda, delta_hgt;
+  double delta_phi = NAN, delta_lamda = NAN, delta_hgt = NAN;
 
   nad27n_to_wgs84_deltas(phi, lamda, height, &delta_phi, &delta_lamda, &delta_hgt);
 
@@ -367,26 +369,29 @@ nad27n_to_wgs84_alternate(double nad27_lat,
                           double * wgs84_lon,
                           double * wgs84_el)
 {
-  double u, v, k;
+  double u = NAN, v = NAN, k = NAN;
 
-  double a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14;
-  double a15, a16, a17, a18, a19, a20, a21, a22, a23;
+  double a1 = NAN, a2 = NAN, a3 = NAN, a4 = NAN, a5 = NAN, a6 = NAN, a7 = NAN, a8 = NAN, a9 = NAN, a10 = NAN, a11 = NAN,
+         a12 = NAN, a13 = NAN, a14 = NAN;
+  double a15 = NAN, a16 = NAN, a17 = NAN, a18 = NAN, a19 = NAN, a20 = NAN, a21 = NAN, a22 = NAN, a23 = NAN;
 
-  double b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14;
-  double b15, b16, b17, b18, b19, b20, b21, b22, b23;
+  double b1 = NAN, b2 = NAN, b3 = NAN, b4 = NAN, b5 = NAN, b6 = NAN, b7 = NAN, b8 = NAN, b9 = NAN, b10 = NAN, b11 = NAN,
+         b12 = NAN, b13 = NAN, b14 = NAN;
+  double b15 = NAN, b16 = NAN, b17 = NAN, b18 = NAN, b19 = NAN, b20 = NAN, b21 = NAN, b22 = NAN, b23 = NAN;
 
-  double c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14;
-  double c15, c16, c17, c18, c19, c20;
+  double c1 = NAN, c2 = NAN, c3 = NAN, c4 = NAN, c5 = NAN, c6 = NAN, c7 = NAN, c8 = NAN, c9 = NAN, c10 = NAN, c11 = NAN,
+         c12 = NAN, c13 = NAN, c14 = NAN;
+  double c15 = NAN, c16 = NAN, c17 = NAN, c18 = NAN, c19 = NAN, c20 = NAN;
 
-  double delta_lat;
-  double delta_lon;
-  double delta_H;
+  double delta_lat = NAN;
+  double delta_lon = NAN;
+  double delta_H = NAN;
 #ifdef DEBUG_DATUM
   double N_height;
 #endif
 
-  double delta_lat_p;
-  double delta_lon_p;
+  double delta_lat_p = NAN;
+  double delta_lon_p = NAN;
 
 #ifdef DEBUG_DATUM
   double prin_lat_rad;
@@ -406,8 +411,8 @@ nad27n_to_wgs84_alternate(double nad27_lat,
   double new_lon;
 #endif
 
-  double prin_lat; // Est. lat of principal point
-  double prin_lon; // Est. lon of principal point
+  double prin_lat = NAN; // Est. lat of principal point
+  double prin_lon = NAN; // Est. lon of principal point
 
 #ifdef DEBUG_DATUM
   //   Display the program title.
@@ -621,26 +626,29 @@ wgs84_to_nad27n_alternate(double wgs84_lat,
                           double * nad27n_lon,
                           double * nad27n_el)
 {
-  double u, v, k;
+  double u = NAN, v = NAN, k = NAN;
 
-  double a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14;
-  double a15, a16, a17, a18, a19, a20, a21, a22, a23;
+  double a1 = NAN, a2 = NAN, a3 = NAN, a4 = NAN, a5 = NAN, a6 = NAN, a7 = NAN, a8 = NAN, a9 = NAN, a10 = NAN, a11 = NAN,
+         a12 = NAN, a13 = NAN, a14 = NAN;
+  double a15 = NAN, a16 = NAN, a17 = NAN, a18 = NAN, a19 = NAN, a20 = NAN, a21 = NAN, a22 = NAN, a23 = NAN;
 
-  double b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14;
-  double b15, b16, b17, b18, b19, b20, b21, b22, b23;
+  double b1 = NAN, b2 = NAN, b3 = NAN, b4 = NAN, b5 = NAN, b6 = NAN, b7 = NAN, b8 = NAN, b9 = NAN, b10 = NAN, b11 = NAN,
+         b12 = NAN, b13 = NAN, b14 = NAN;
+  double b15 = NAN, b16 = NAN, b17 = NAN, b18 = NAN, b19 = NAN, b20 = NAN, b21 = NAN, b22 = NAN, b23 = NAN;
 
-  double c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14;
-  double c15, c16, c17, c18, c19, c20;
+  double c1 = NAN, c2 = NAN, c3 = NAN, c4 = NAN, c5 = NAN, c6 = NAN, c7 = NAN, c8 = NAN, c9 = NAN, c10 = NAN, c11 = NAN,
+         c12 = NAN, c13 = NAN, c14 = NAN;
+  double c15 = NAN, c16 = NAN, c17 = NAN, c18 = NAN, c19 = NAN, c20 = NAN;
 
-  double delta_lat;
-  double delta_lon;
-  double delta_H;
+  double delta_lat = NAN;
+  double delta_lon = NAN;
+  double delta_H = NAN;
 #ifdef DEBUG_DATUM
   double N_height;
 #endif
 
-  double delta_lat_p;
-  double delta_lon_p;
+  double delta_lat_p = NAN;
+  double delta_lon_p = NAN;
 
 #ifdef DEBUG_DATUM
   double prin_lat_rad;
@@ -660,8 +668,8 @@ wgs84_to_nad27n_alternate(double wgs84_lat,
   double new_lon;
 #endif
 
-  double prin_lat; // Est. lat of principal point
-  double prin_lon; // Est. lon of principal point
+  double prin_lat = NAN; // Est. lat of principal point
+  double prin_lon = NAN; // Est. lon of principal point
 
 #ifdef DEBUG_DATUM
   //   Display the program title.
@@ -912,10 +920,10 @@ GRS_to_latlong(double x,
                double A,
                double B) //!< Major and minor axes of earth
 {
-  double new_lat; //!< used in iteration
-  double N;       //!< Local distance to earth center
-  double xy_dist; //!< dist in x-y plane
-  double ee;      //!< eccentricity square
+  double new_lat = NAN; //!< used in iteration
+  double N = NAN;       //!< Local distance to earth center
+  double xy_dist = NAN; //!< dist in x-y plane
+  double ee = NAN;      //!< eccentricity square
 
   xy_dist = std::sqrt(x * x + y * y);
   ee = 1 - (B / A) * (B / A);
@@ -978,9 +986,9 @@ latlong_to_GRS(double geodetic_lat,
                double A,
                double B) //!< Major and minor axes of earth
 {
-  double geocentric_lat;
-  double local_radius; //!< Local distance to earth center
-  double c, s;
+  double geocentric_lat = NAN;
+  double local_radius = NAN; //!< Local distance to earth center
+  double c = NAN, s = NAN;
 
   geocentric_lat = geo_detic2centric(geodetic_lat, A, B);
 
@@ -1016,7 +1024,7 @@ nad27n_to_wgs72(double phi, //!< input lat, lon, elev coord (degrees)
                 double * wgs72_lamda, //!< lon in wgs72 (degrees)
                 double * wgs72_hgt)   //!< elev in wgs72 (meters)
 {
-  double wgs84_phi, wgs84_lamda, wgs84_hgt;
+  double wgs84_phi = NAN, wgs84_lamda = NAN, wgs84_hgt = NAN;
 
   nad27n_to_wgs84(phi, lamda, height, &wgs84_phi, &wgs84_lamda, &wgs84_hgt);
 
@@ -1036,7 +1044,7 @@ wgs72_to_nad27n(double phi, //!< input lat, lon, elev coord (degrees)
                 double * nad27n_lamda, //!< lon in nad27n (degrees)
                 double * nad27n_hgt)   //!< elev in nad27n (meters)
 {
-  double wgs84_phi, wgs84_lamda, wgs84_hgt;
+  double wgs84_phi = NAN, wgs84_lamda = NAN, wgs84_hgt = NAN;
 
   wgs72_to_wgs84(phi, lamda, height, &wgs84_phi, &wgs84_lamda, &wgs84_hgt);
 

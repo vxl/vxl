@@ -34,8 +34,8 @@ vsl_b_read(vsl_b_istream & is, std::vector<bool> & v)
   if (!is)
     return;
 
-  unsigned int n;
-  short ver;
+  unsigned int n = 0;
+  short ver = 0;
   vsl_b_read(is, ver);
   switch (ver)
   {
@@ -44,7 +44,7 @@ vsl_b_read(vsl_b_istream & is, std::vector<bool> & v)
       v.resize(n);
       for (unsigned int i = 0; i < n; ++i)
       {
-        bool b;
+        bool b = false;
         vsl_b_read(is, b);
         v[i] = b;
       }

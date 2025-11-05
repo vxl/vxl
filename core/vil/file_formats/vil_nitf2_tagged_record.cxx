@@ -465,7 +465,7 @@ vil_nitf2_tagged_record::test()
     }
     delete[] buf;
     std::cerr << "Testing get_value:\n";
-    int mti_dp;
+    int mti_dp = 0;
     if (!record->get_value("MTI_DP", mti_dp) || mti_dp != 2)
     {
       std::cerr << "Get value failed!\n";
@@ -487,7 +487,7 @@ vil_nitf2_tagged_record::test()
     {
       std::cerr << "TGT_2_SPEED = " << tgt_speed[2] << '\n';
     }
-    int d2;
+    int d2 = 0;
     if (!record->get_value("D", vil_nitf2_index_vector(2), d2) || d2 != 9)
     {
       std::cerr << "Get fixed repeat count test failed!\n";
@@ -608,7 +608,7 @@ vil_nitf2_tagged_record::get_tree() const
   // create our tree
   // we add the field definitions if the TRE was recognized, or we note that we
   // skipped it otherwise
-  vil_nitf2_field::field_tree * tr;
+  vil_nitf2_field::field_tree * tr = nullptr;
   if (m_field_sequence)
   {
     tr = m_field_sequence->get_tree();

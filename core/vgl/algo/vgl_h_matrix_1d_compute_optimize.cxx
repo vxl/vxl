@@ -2,6 +2,7 @@
 #include <iostream>
 #include <utility>
 #include "vgl_h_matrix_1d_compute_optimize.h"
+#include <cmath>
 #include <vgl/algo/vgl_h_matrix_1d_compute_linear.h>
 
 #include <cassert>
@@ -47,7 +48,7 @@ public:
   {
     assert(x.size() == 3);
     std::cerr << std::showpos << std::fixed; // <iomanip>
-    double z, y;
+    double z = NAN, y = NAN;
     for (unsigned i = 0; i < N; i++)
     {
       z = z1[i];
@@ -63,7 +64,7 @@ public:
   {
     assert(x.size() == 3);
     assert(fx.size() == N);
-    double z, y;
+    double z = NAN, y = NAN;
     for (unsigned k = 0; k < N; k++)
     {
       z = z1[k];

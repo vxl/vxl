@@ -19,7 +19,7 @@ test_arbitrary_length_int_conversion_int()
   auto * a = new signed int[25000000];
   auto * b = new signed int[25000000];
 
-  int i;
+  int i = 0;
   for (i = 0; i < 25000000; ++i)
     a[i] = ((i - 12500000) * 160);
 
@@ -27,7 +27,7 @@ test_arbitrary_length_int_conversion_int()
 
   auto * buf = new unsigned char[maxbuf];
 
-  std::clock_t t1, t2;
+  std::clock_t t1 = 0, t2 = 0;
 
   std::cout << " Starting encode\n";
 
@@ -159,7 +159,7 @@ test_explicit_int_io()
             << "Testing explicit length integer io\n"
             << "**********************************\n";
 
-  unsigned long i;
+  unsigned long i = 0;
   const std::size_t mult = 1ull << 48;
 
 
@@ -183,11 +183,11 @@ test_explicit_int_io()
     TEST("Opened stringstream for reading", (!bss), false);
     for (i = 0; i < 65536; ++i)
     {
-      unsigned long n;
+      unsigned long n = 0;
       vsl_b_read_uint_16(bss, n);
       if (n != i)
         break;
-      std::size_t n64;
+      std::size_t n64 = 0;
       vsl_b_read_uint_64(bss, n64);
       if (n64 != i * mult)
         break;

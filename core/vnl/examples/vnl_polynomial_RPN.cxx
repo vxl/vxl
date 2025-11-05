@@ -17,6 +17,8 @@
 // \date   August 2011
 //-----------------------------------------------------------------------------
 
+#include <cmath>
+
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -61,7 +63,7 @@ polynomial(char * txt)
 {
   std::vector<double> coef;
   std::stringstream ss(txt);
-  double onecoef;
+  double onecoef = NAN;
   while (ss >> onecoef)
     coef.insert(coef.begin(), 1, onecoef);
   while (!coef.empty() && coef.back() == 0.0)

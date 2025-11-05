@@ -20,8 +20,8 @@ test_homography2d_est()
   std::vector<vnl_vector<double>> p, q;
   vnl_vector<double> param(9, 0.0);
   vnl_vector<double> true_param(9, 0.0);
-  int n;
-  int i, j;
+  int n = 0;
+  int i = 0, j = 0;
   const double pi = vnl_math::pi;
   const double tol = 1e-8;
   vnl_double_3 t(0, 0, 1);

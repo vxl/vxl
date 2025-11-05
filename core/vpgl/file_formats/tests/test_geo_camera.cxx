@@ -1,5 +1,7 @@
 #include "testlib/testlib_test.h"
 
+#include <cmath>
+
 #include <iostream>
 #include <array>
 #include <cmath>
@@ -13,7 +15,7 @@
 void
 _test_project(vpgl_geo_camera camera, double x, double y, double u, double v)
 {
-  double uresult, vresult, uerr, verr;
+  double uresult = NAN, vresult = NAN, uerr = NAN, verr = NAN;
   camera.project(x, y, 0.0, uresult, vresult);
   std::cout << "project (" << x << "," << y << ") -> "
             << "(" << u << "," << v << "); "
@@ -26,7 +28,7 @@ _test_project(vpgl_geo_camera camera, double x, double y, double u, double v)
 static void
 test_geo_camera()
 {
-  double x, y, u, v, lx, ly, lz;
+  double x = NAN, y = NAN, u = NAN, v = NAN, lx = NAN, ly = NAN, lz = NAN;
   std::vector<std::tuple<double, double, double, double>> data;
 
   // WGS84 geotransform

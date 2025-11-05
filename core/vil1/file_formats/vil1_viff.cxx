@@ -254,7 +254,7 @@ bool
 vil1_viff_generic_image::write_header()
 {
   is_->seek(0L);
-  int type;
+  int type = 0;
   if (bits_per_component_ > 1)
     bits_per_component_ = 8 * ((bits_per_component_ + 7) / 8); // round to next 8-tuple
 

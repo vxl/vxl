@@ -9,6 +9,7 @@
 #include "vgl/vgl_homg_point_2d.h"
 #include "vgl/vgl_point_3d.h"
 #include "vgl/vgl_box_3d.h"
+#include <cmath>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
@@ -301,7 +302,7 @@ test_replacement_sensor_model_camera_approx_affine()
   std::vector<vgl_point_3d<double>> test_points{ roi_center, roi_min, roi_max };
   for (const vgl_point_3d<double> & test_pt : test_points)
   {
-    double X, Y, Z;
+    double X = NAN, Y = NAN, Z = NAN;
     lvcs.local_to_global(test_pt.x(), test_pt.y(), test_pt.z(), vpgl_lvcs::wgs84, X, Y, Z);
     vgl_point_3d<double> tpg(X, Y, Z);
     vgl_point_2d<double> img_pt1 = rsm_cam.project(tpg);
@@ -342,7 +343,7 @@ test_generic_camera_convert()
     dorg -= 265.285;
     double dang = std::fabs(angle(ldir, gdir));
     TEST("lcam rays", success && std::fabs(dorg) < 0.1 && dang < 0.001, true);
-    double u, v;
+    double u = NAN, v = NAN;
     gcam.project(x, y, z, u, v);
     std::cout << "(u v)=(" << u << ' ' << v << ")\n";
     double del = std::fabs(u - u0) + std::fabs(v - v0);
@@ -475,7 +476,7 @@ test_rational_camera_convert()
     double x = rng.drand64(min_x, max_x); // sample in local coords
     double y = rng.drand64(min_y, max_y);
     double z = rng.drand64(min_z, max_z);
-    double uRSM, vRSM, uRPC, vRPC;
+    double uRSM = NAN, vRSM = NAN, uRPC = NAN, vRPC = NAN;
     rsm_cam.project(x, y, z, uRSM, vRSM);
     rcam.project(x, y, z, uRPC, vRPC);
     double eru = fabs(uRPC - uRSM), erv = fabs(vRPC - vRSM);

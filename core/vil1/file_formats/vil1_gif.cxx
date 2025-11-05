@@ -92,7 +92,7 @@ vil1_gif_loader_saver::vil1_gif_loader_saver(vil1_stream * s_)
   std::cerr << "screen width and height : " << screen_width_ << ' ' << screen_height_ << std::endl;
 #endif
 
-  unsigned char b;
+  unsigned char b = 0;
 
   // ---------- read screen descriptor
 
@@ -102,7 +102,7 @@ vil1_gif_loader_saver::vil1_gif_loader_saver(vil1_stream * s_)
     std::cerr << "b = 0x" << std::hex << int(b) << std::dec << std::endl;
 #endif
 
-    int bits_of_colour_res;
+    int bits_of_colour_res = 0;
     if (b & 0x80)
     {
       bits_of_colour_res = 1 + ((b & 0x70) >> 4);

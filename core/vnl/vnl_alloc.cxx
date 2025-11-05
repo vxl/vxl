@@ -8,7 +8,7 @@
 char *
 vnl_alloc::chunk_alloc(std::size_t size, int & nobjs)
 {
-  char * result;
+  char * result = nullptr;
   std::size_t total_bytes = size * nobjs;
   const std::size_t bytes_left = end_free - start_free;
 
@@ -76,7 +76,7 @@ vnl_alloc::refill(std::size_t n)
 {
   int nobjs = 20;
   char * chunk = chunk_alloc(n, nobjs);
-  obj * next_obj;
+  obj * next_obj = nullptr;
 
   if (1 == nobjs)
     return chunk;

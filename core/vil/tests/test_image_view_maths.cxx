@@ -1,4 +1,6 @@
 // This is core/vil/tests/test_image_view_maths.cxx
+#include <cmath>
+
 #include <iostream>
 #include <sstream>
 #include "testlib/testlib_test.h"
@@ -68,15 +70,15 @@ test_image_view_maths_byte()
       imB(i, j) = static_cast<vxl_byte>(1 + j + i * n);
     }
 
-  double sum;
+  double sum = NAN;
   vil_math_sum(sum, imA, 0);
   TEST_NEAR("Sum", sum, 0.5 * n * m * (n * m + 1), 1e-8);
 
-  double mean;
+  double mean = NAN;
   vil_math_mean(mean, imA, 0);
   TEST_NEAR("mean", mean, 0.5 * (n * m + 1), 1e-8);
 
-  double sum_sq;
+  double sum_sq = NAN;
   vil_math_sum_squares(sum, sum_sq, imA, 0);
   TEST_NEAR("Sum of squares", sum_sq, sum2, 1e-8);
 
@@ -216,7 +218,7 @@ test_image_view_maths_byte()
             << static_cast<float>(imB(n2, m2)) << ")= " << im_mag(n2, m2) << '\n';
   TEST_NEAR("vector magnitude", im_mag(n2, m2), 71.7008, 1e-4);
 
-  double sumA, sum_sqrA;
+  double sumA = NAN, sum_sqrA = NAN;
   vil_math_sum_squares(sumA, sum_sqrA, imA, 0);
   vil_math_integral_image(imA, im_sum);
   TEST_NEAR("integral_image", im_sum(n, m), sumA, test_tolerance);
@@ -230,7 +232,7 @@ test_image_view_maths_byte()
   f_image(3, 3) = 17;
   std::cout << "Testing vil_math_normalise\n";
   vil_math_normalise(f_image);
-  double f_mean, f_var;
+  double f_mean = NAN, f_var = NAN;
   vil_math_mean_and_variance(f_mean, f_var, f_image, 0);
   TEST_NEAR("Mean", f_mean, 0, test_tolerance);
   TEST_NEAR("Var", f_var, 1.0, test_tolerance);

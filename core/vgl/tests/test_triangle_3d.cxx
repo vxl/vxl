@@ -30,7 +30,7 @@ test_non_intersecting()
   vgl_point_3d<double> b_p3(4, 0, 2);
 
   vgl_line_segment_3d<double> iline;
-  unsigned edge_p1, edge_p2;
+  unsigned edge_p1 = 0, edge_p2 = 0;
   vgl_triangle_3d_intersection_t ret =
     vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, iline, edge_p1, edge_p2);
   TEST("Non-intersecting 1", ret, None);
@@ -63,7 +63,7 @@ test_intersecting1()
   vgl_triangle_3d_intersection_t ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3);
   TEST("Intersecting 1 coplanar", ret, Coplanar);
   vgl_line_segment_3d<double> iline;
-  unsigned edge_p1, edge_p2;
+  unsigned edge_p1 = 0, edge_p2 = 0;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, iline, edge_p1, edge_p2);
   TEST("Intersecting coplanar with iline", ret, Coplanar);
 }
@@ -85,7 +85,7 @@ test_intersecting2()
   TEST("Intersecting 2 Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
-  unsigned edge_p1, edge_p2;
+  unsigned edge_p1 = 0, edge_p2 = 0;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, i_line, edge_p1, edge_p2);
   TEST("Intersecting Skew with iline", ret, Skew);
   double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0, 0, 0));
@@ -116,7 +116,7 @@ test_intersecting3()
   TEST("Intersecting 3 Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
-  unsigned edge_p1, edge_p2;
+  unsigned edge_p1 = 0, edge_p2 = 0;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, i_line, edge_p1, edge_p2);
 
   double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0, 0, 0));
@@ -152,7 +152,7 @@ test_intersecting4()
   TEST("Intersecting 4 coplanar", ret, Coplanar);
 
   vgl_line_segment_3d<double> i_line;
-  unsigned edge_p1, edge_p2;
+  unsigned edge_p1 = 0, edge_p2 = 0;
   ret = vgl_triangle_3d_triangle_intersection(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, i_line, edge_p1, edge_p2);
 
 
@@ -190,7 +190,7 @@ test_intersecting5_arrangement(const vgl_point_3d<double> & a_A,
   TEST("Intersecting Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
-  unsigned edge_p1, edge_p2;
+  unsigned edge_p1 = 0, edge_p2 = 0;
   ret = vgl_triangle_3d_triangle_intersection(a_A, a_B, a_C, b_A, b_B, b_C, i_line, edge_p1, edge_p2);
 
   double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(1, 1, 0));

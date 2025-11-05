@@ -76,7 +76,7 @@ vsl_b_read(vsl_b_istream & is, impl & p)
   if (!is)
     return;
 
-  short ver;
+  short ver = 0;
   vsl_b_read(is, ver);
   switch (ver)
   {
@@ -101,7 +101,7 @@ void
 vsl_b_read(vsl_b_istream & is, impl *& p)
 {
   delete p;
-  bool not_null_ptr;
+  bool not_null_ptr = false;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
   {

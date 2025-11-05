@@ -9,6 +9,7 @@
 
 #include "testlib/testlib_test.h"
 
+#include <cmath>
 #include <vrel/vrel_orthogonal_regression.h>
 
 bool
@@ -119,7 +120,7 @@ test_orthogonal_regression()
   ok = lr1->fit_from_minimal_set(pts_indices, params);
   vnl_double_4 diff1 = params - true_params;
   vnl_double_4 diff2 = params + true_params;
-  double err;
+  double err = NAN;
   if (diff1.two_norm() < diff2.two_norm())
     err = diff1.two_norm();
   else

@@ -12,7 +12,7 @@
 bool
 vcsl_graph::has(const vcsl_spatial_sptr & cs) const
 {
-  bool result;
+  bool result = false;
 
   std::vector<vcsl_spatial_sptr>::const_iterator i;
 

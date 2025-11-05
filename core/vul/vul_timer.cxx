@@ -103,7 +103,7 @@ vul_timer::mark()
 long
 vul_timer::real()
 {
-  long s;
+  long s = 0;
 
 #if !defined(_WIN32) || defined(__CYGWIN__)
   struct timeval real_time; // new real time

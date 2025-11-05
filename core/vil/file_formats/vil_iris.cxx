@@ -54,7 +54,7 @@ vil_iris_file_format::make_input_image(vil_stream * is)
   is->seek(0L);
   if (is->file_size() < 84L)
     return nullptr;
-  int colormap_;
+  int colormap_ = 0;
 
   vxl_sint_16 magic_ = get_short(is);
   int storage_ = get_char(is);
@@ -571,7 +571,7 @@ send_char(vil_stream * data, char s)
 void
 send_short(vil_stream * data, vxl_sint_16 s)
 {
-  vxl_uint_16 bits;
+  vxl_uint_16 bits = 0;
   if (s < 0)
   {
     bits = static_cast<vxl_uint_16>(-s);
@@ -602,7 +602,7 @@ send_long(vil_stream * data, vxl_sint_32 s)
 {
   // The write out the value as a two's complement number in MSB order
 
-  vxl_uint_32 bits;
+  vxl_uint_32 bits = 0;
   if (s < 0)
   {
     bits = -s;
@@ -624,7 +624,7 @@ send_long(vil_stream * data, vxl_sint_32 s)
 void
 expandrow(unsigned char * optr, unsigned char * iptr, int z)
 {
-  unsigned char pixel, count;
+  unsigned char pixel = 0, count = 0;
 
   optr += z;
   while (true)

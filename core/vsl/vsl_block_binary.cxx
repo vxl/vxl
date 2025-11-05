@@ -45,7 +45,7 @@ vsl_block_binary_read_confirm_specialisation(vsl_b_istream & is, bool specialise
 {
   if (!is)
     return;
-  bool b;
+  bool b = false;
   vsl_b_read(is, b);
   if (b != specialised)
   {
@@ -167,7 +167,7 @@ vsl_block_binary_read_int_impl(vsl_b_istream & is, T * begin, std::size_t nelems
   vsl_block_binary_read_confirm_specialisation(is, true);
   if (!is)
     return;
-  std::size_t nbytes;
+  std::size_t nbytes = 0;
   vsl_b_read(is, nbytes);
   if (nbytes == 0)
     return;

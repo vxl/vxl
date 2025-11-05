@@ -122,7 +122,7 @@ test_convert_stretch_range()
   vil_convert_stretch_range(f_image, b_image);
   TEST("Width", b_image.ni(), f_image.ni());
   TEST("Height", b_image.nj(), f_image.nj());
-  vxl_byte min_b, max_b;
+  vxl_byte min_b = 0, max_b = 0;
   vil_math_value_range(b_image, min_b, max_b);
   TEST("Min. value", min_b, 0);
   TEST("Max. value", max_b, 255);
@@ -151,7 +151,7 @@ test_convert_stretch_range_limited()
   vil_convert_stretch_range_limited(f_image, b_image, slo, shi, dlo, dhi);
   TEST("Width", b_image.ni(), f_image.ni());
   TEST("Height", b_image.nj(), f_image.nj());
-  vxl_byte min_b, max_b;
+  vxl_byte min_b = 0, max_b = 0;
   vil_math_value_range(b_image, min_b, max_b);
   TEST("Min. value", min_b, dlo);
   TEST("Max. value", max_b, dhi);
@@ -209,7 +209,7 @@ test_convert_to_n_planes()
        true);
 
   vil_image_view<vxl_uint_16> image_16_3_stretched = vil_convert_stretch_range(vxl_uint_16(), f_image_ref);
-  vxl_uint_16 minp, maxp;
+  vxl_uint_16 minp = 0, maxp = 0;
   vil_math_value_range(image_16_3_stretched, minp, maxp);
   TEST("implicit vil_convert_stretch_range float to 16bit with rounding", minp == 0 && maxp == 65535, true);
 
@@ -260,7 +260,7 @@ test_simple_pixel_conversions()
 {
   {
     vil_convert_round_pixel<float, int> op;
-    int out;
+    int out = 0;
     op(5.5f, out);
     std::cout << out << std::endl;
     TEST("round_pixel float->int", out, 6);
@@ -270,7 +270,7 @@ test_simple_pixel_conversions()
   }
   {
     vil_convert_round_pixel<double, unsigned short> op;
-    unsigned short out;
+    unsigned short out = 0;
     op(5.5f, out);
     std::cout << out << std::endl;
     TEST("round_pixel double->ushort", out, 6);

@@ -3,6 +3,8 @@
 // \file
 // This file is a cut-and-paste of vnl_na.cxx
 
+#include <cmath>
+
 #include <istream>
 #include <ios>
 #include "vil_na.h"
@@ -18,7 +20,7 @@
 double
 vil_na(double)
 {
-  double a;
+  double a = NAN;
 
 #if VXL_HAS_INT_64
   *reinterpret_cast<vxl_uint_64 *>(&a) = 0x7ff00000000007a2LL;
@@ -45,7 +47,7 @@ vil_na(double)
 float
 vil_na(float)
 {
-  float a;
+  float a = NAN;
 
   *reinterpret_cast<vxl_uint_32 *>(&a) = 0x7f8007a2L;
 

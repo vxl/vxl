@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include "vrel_kernel_density_obj.h"
+#include <cmath>
 #include <vrel/vrel_muset_obj.h>
 #include "vnl/vnl_vector.h"
 #include "vnl/vnl_math.h"
@@ -65,7 +66,7 @@ vrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_e
   // Golden Section Search is adapted from "Numerical Recipes in C++"
   // to find x that maximizes kernel_density.
   const double R = 0.61803399, C = 1.0 - R; // The golden ratios.
-  double f1, f2, x0, x1, x2, x3;
+  double f1 = NAN, f2 = NAN, x0 = NAN, x1 = NAN, x2 = NAN, x3 = NAN;
   double tol = 1.0e-9;
   double f0 = 0;
 

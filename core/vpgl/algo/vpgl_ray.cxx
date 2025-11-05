@@ -13,6 +13,7 @@
 #include "vgl/vgl_vector_3d.h"
 #include "vgl/vgl_plane_3d.h"
 #include "vgl/vgl_intersection.h"
+#include <cmath>
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
 #include "vpgl_backproject.h"
 
@@ -31,7 +32,7 @@ vpgl_ray::ray(const vpgl_camera<double> * cam, const vnl_double_3 & point_3d, vn
     return true;
   }
   // create an image point
-  double u, v;
+  double u = NAN, v = NAN;
   cam->project(point_3d[0], point_3d[1], point_3d[2], u, v);
   vnl_double_2 image_point(u, v);
 
