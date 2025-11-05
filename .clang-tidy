@@ -61,7 +61,7 @@ Checks: <
    performance-inefficient-algorithm,
    performance-inefficient-string-concatenation,
    performance-inefficient-vector-operation,
-  -performance-move-const-arg,
+   performance-move-const-arg,
   -performance-noexcept-destructor,
   -performance-noexcept-move-constructor,
    performance-noexcept-swap,
