@@ -38,9 +38,9 @@ struct vnl_complex_traits;
     /*              and long double.  All other types */                                   \
     /*              are undefined behavior.           */                                   \
     static std::complex<float>                                                             \
-    complexify(T x)                                                                        \
+    complexify(T /* x */)                                                                  \
     {                                                                                      \
-      throw std::runtime_error("Can not call complexify on non flaoting point data type"); \
+      throw std::runtime_error("Can not call complexify on non floating point data type"); \
       return std::complex<float>(0, (T)0);                                                 \
     }                                                                                      \
   }
@@ -191,9 +191,9 @@ struct VNL_EXPORT vnl_complex_traits<vnl_bignum>
     return x;
   }
   static std::complex<float>
-  complexify(vnl_bignum x)
+  complexify(vnl_bignum /* x */)
   {
-    throw std::runtime_error("Can not call complexify on non flaoting point data type");
+    throw std::runtime_error("Can not call complexify on non floating point data type");
     return std::complex<float>(0., 0.);
   }
 };
@@ -211,9 +211,9 @@ struct VNL_EXPORT vnl_complex_traits<std::complex<vnl_bignum>>
     return std::complex<vnl_bignum>(x.real(), -x.imag());
   }
   static std::complex<float>
-  complexify(std::complex<float> x)
+  complexify(std::complex<float> /* x */)
   {
-    throw std::runtime_error("Can not call complexify on non flaoting point data type");
+    throw std::runtime_error("Can not call complexify on non floating point data type");
     return std::complex<float>(0., 0.);
   }
 };
@@ -233,9 +233,9 @@ struct VNL_EXPORT vnl_complex_traits<vnl_rational>
     return x;
   }
   static std::complex<float>
-  complexify(vnl_rational x)
+  complexify(vnl_rational /* x */)
   {
-    throw std::runtime_error("Can not call complexify on non flaoting point data type");
+    throw std::runtime_error("Can not call complexify on non floating point data type");
     return std::complex<float>(0., 0.);
   }
 };
@@ -248,9 +248,9 @@ struct VNL_EXPORT vnl_complex_traits<std::complex<vnl_rational>>
     isreal = false
   };
   static std::complex<float>
-  conjugate(std::complex<float> x)
+  conjugate(std::complex<float> /* x */)
   {
-    throw std::runtime_error("Can not call complexify on non flaoting point data type");
+    throw std::runtime_error("Can not call complexify on non floating point data type");
     return std::complex<float>(0., 0.);
   }
   static std::complex<vnl_rational>
