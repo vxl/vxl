@@ -5,14 +5,9 @@ project( tiff C )
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 
 if(NOT VXL_USING_NATIVE_TIFF)
-
-  include( ${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake )
-
-
   include( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
 
   if(ZLIB_FOUND)
-    include_directories( ${ZLIB_INCLUDE_DIR} )
     set( LZW_SUPPORT 1 )
     set( ZIP_SUPPORT 1 )
   endif()
@@ -20,7 +15,6 @@ if(NOT VXL_USING_NATIVE_TIFF)
   include( ${VXL_CMAKE_DIR}/FindJPEG.cmake )
 
   if(JPEG_FOUND)
-    include_directories( ${JPEG_INCLUDE_DIR} )
     set( JPEG_SUPPORT  1 )
   endif()
 
@@ -171,6 +165,18 @@ if(NOT VXL_USING_NATIVE_TIFF)
       DISABLE_MSVC_MP
   )
   target_link_libraries( tiff ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES})
+
+  # Add Zlib/JPEG include dirs *after* `vxl_add_library` so that vxl’s own
+  # TIFF headers (added by `vxl_add_library`) appear first in the include
+  # path. This prevents system/venv include dirs that may contain TIFF
+  # headers from overriding vxl’s internal TIFF.
+  if(ZLIB_FOUND)
+    include_directories( ${ZLIB_INCLUDE_DIR} )
+  endif()
+
+  if(JPEG_FOUND)
+    include_directories( ${JPEG_INCLUDE_DIR} )
+  endif()
 
   if( BUILD_TESTING)
     add_subdirectory(test)
