@@ -172,7 +172,6 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   }
   const double sr = rSv0v1 / rSv1v1;
   const double tv = v0_avg - sr * rv1_avg;
-  std::cout << "affine row trans: " << sr << ' ' << tv << std::endl;
 
   // Assign the transformation equally between the left and right images
   bool neg_scale = sr < 0.0; // determine if scale factor is negative
@@ -245,7 +244,6 @@ vpgl_equi_rectification::rectify_pair(const vpgl_affine_fundamental_matrix<doubl
   double su = fabs(x[0]), sigma_u = x[1], sqtsu = sqrt(su), ufact = 1.0 / (1.0 + sqtsu);
   // un-normalize to get the translation term
   const double tu = u0_avg - x[0] * u1_avg - sigma_u * v1_avg;
-  std::cout << "affine column trans: " << x[0] << ' ' << sigma_u << ' ' << tu << std::endl;
   if (su < min_scale)
   {
     std::cout << "in vpgl_equi_rectification::compute_rectification(), row scale " << x[0] << " too small "
