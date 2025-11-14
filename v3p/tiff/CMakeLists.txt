@@ -168,8 +168,9 @@ if(NOT VXL_USING_NATIVE_TIFF)
 
   # Add Zlib/JPEG include dirs *after* `vxl_add_library` so that vxl’s own
   # TIFF headers (added by `vxl_add_library`) appear first in the include
-  # path. This prevents system/venv include dirs that may contain TIFF
-  # headers from overriding vxl’s internal TIFF.
+  # path. This prevents system/venv include dirs, where Zlib/JPEG headers might 
+  # be found, that may contain TIFF headers from a native installation of TIFF
+  # from overriding vxl’s internal TIFF.
   if(ZLIB_FOUND)
     include_directories( ${ZLIB_INCLUDE_DIR} )
   endif()
