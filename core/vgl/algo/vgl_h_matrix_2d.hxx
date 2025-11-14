@@ -497,8 +497,8 @@ vgl_h_matrix_2d<T>::get_upper_2x2_matrix() const
 {
   vnl_matrix_fixed<T, 2, 2> R;
   vgl_h_matrix_2d<T> m = this->get_upper_2x2();
-  for (unsigned r = 0; r < 3; ++r)
-    for (unsigned c = 0; c < 3; ++c)
+  for (unsigned r = 0; r < 2; ++r)
+    for (unsigned c = 0; c < 2; ++c)
       R[r][c] = m.get(r, c);
   return R;
 }
