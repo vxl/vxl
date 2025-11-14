@@ -172,11 +172,11 @@ if(NOT VXL_USING_NATIVE_TIFF)
   # be found, that may contain TIFF headers from a native installation of TIFF
   # from overriding vxl’s internal TIFF.
   if(ZLIB_FOUND)
-    include_directories( ${ZLIB_INCLUDE_DIR} )
+    target_include_directories(tiff PRIVATE ${ZLIB_INCLUDE_DIR})
   endif()
 
   if(JPEG_FOUND)
-    include_directories( ${JPEG_INCLUDE_DIR} )
+    target_include_directories(tiff PRIVATE ${JPEG_INCLUDE_DIR})
   endif()
 
   if( BUILD_TESTING)
