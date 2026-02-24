@@ -43,15 +43,7 @@ vxl_add_library(
     DISABLE_MSVC_MP
 )
 
-find_library(VXL_MATH_LIBRARY_FOUND m)
-if(VXL_MATH_LIBRARY_FOUND)
-  # Math library is needed for many OpenJPEG functions.
-  # The previous behaviour assumed the linker had m available thus,
-  # didn't explicitly link it. On some systems though,
-  # specifying the link is required.
-  target_link_libraries(openjpeg2 m)
-endif()
-mark_as_advanced(VXL_MATH_LIBRARY_FOUND)
+target_link_libraries(openjpeg2 PRIVATE vxl_platform_math)
 set_target_properties(openjpeg2 PROPERTIES
   VERSION       2.0.0
   DEFINE_SYMBOL OPJ_EXPORTS)

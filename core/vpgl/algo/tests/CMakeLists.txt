@@ -36,10 +36,10 @@ add_executable( vpgl_algo_test_all
   test_fit_rational_cubic.cxx
   test_equi_rectification.cxx
 )
-target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
-endif()
+target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}testlib )
 
-if(GEOTIFF_VALID)
+else()
+
 add_executable( vpgl_algo_test_all
   test_driver.cxx
   test_optimize_camera.cxx
@@ -66,7 +66,7 @@ add_executable( vpgl_algo_test_all
   test_fit_rational_cubic.cxx
   test_equi_rectification.cxx
 )
-target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
+target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}testlib )
 add_test( NAME vpgl_algo_test_backproject_dem COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_backproject_dem )
 endif()
 
