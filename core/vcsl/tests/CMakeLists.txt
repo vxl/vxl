@@ -35,4 +35,3 @@ add_test( NAME vcsl_test_rotation COMMAND $<TARGET_FILE:vcsl_test_all> test_rota
 add_test( NAME vcsl_test_displacement COMMAND $<TARGET_FILE:vcsl_test_all> test_displacement)
 
 add_executable( vcsl_test_include test_include.cxx )
-target_link_libraries( vcsl_test_include ${VXL_LIB_PREFIX}vcsl )
