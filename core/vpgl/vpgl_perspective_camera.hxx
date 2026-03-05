@@ -69,15 +69,6 @@ vpgl_perspective_camera<T>::vpgl_perspective_camera(const vpgl_calibration_matri
 
 //-------------------------------------------
 template <class T>
-vpgl_perspective_camera<T>::vpgl_perspective_camera(const vpgl_perspective_camera & that)
-  : vpgl_proj_camera<T>(that)
-  , K_(that.K_)
-  , camera_center_(that.camera_center_)
-  , R_(that.R_)
-{}
-
-//-------------------------------------------
-template <class T>
 vpgl_perspective_camera<T> *
 vpgl_perspective_camera<T>::clone() const
 {

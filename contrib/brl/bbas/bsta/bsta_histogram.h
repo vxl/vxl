@@ -139,12 +139,18 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   //: array of bin values
   std::vector<T> value_array() const {
     std::vector<T> v(nbins_);
-    for (unsigned b = 0; b<nbins_; ++b) v[b]=avg_bin_value(b); return v; }
+    for (unsigned b = 0; b<nbins_; ++b)
+      v[b]=avg_bin_value(b);
+    return v;
+  }
 
   //: array of bin counts
   std::vector<T> count_array() const {
     std::vector<T> v(nbins_);
-    for (unsigned b = 0; b<nbins_; ++b) v[b]=counts(b); return v; }
+    for (unsigned b = 0; b<nbins_; ++b)
+      v[b]=counts(b);
+    return v;
+  }
 
  //: Smooth the histogram with a Parzen window of sigma
   void parzen(const T sigma);

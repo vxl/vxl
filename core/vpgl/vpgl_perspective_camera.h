@@ -71,10 +71,6 @@ public:
   //: Main constructor based on K[R|t]
   vpgl_perspective_camera(const vpgl_calibration_matrix<T> & K, vgl_rotation_3d<T> R, const vgl_vector_3d<T> & t);
 
-
-  //: Copy constructor
-  vpgl_perspective_camera(const vpgl_perspective_camera & cam);
-
   //: Destructor
   ~vpgl_perspective_camera() override = default;
 
