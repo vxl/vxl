@@ -941,7 +941,7 @@ remainder_truncated(unsigned long long x, unsigned long long y)
 inline float
 remainder_truncated(float x, float y)
 {
-  return fmod(x, y);
+  return fmodf(x, y);
 }
 inline double
 remainder_truncated(double x, double y)
@@ -951,7 +951,7 @@ remainder_truncated(double x, double y)
 inline long double
 remainder_truncated(long double x, long double y)
 {
-  return fmod(x, y);
+  return fmodl(x, y);
 }
 
 // floored remainder
@@ -988,17 +988,17 @@ remainder_floored(unsigned long long x, unsigned long long y)
 inline float
 remainder_floored(float x, float y)
 {
-  return fmod(fmod(x, y) + y, y);
+  return fmodf(fmodf(x, y) + y, y);
 }
 inline double
 remainder_floored(double x, double y)
 {
-  return fmod(fmod(x, y) + y, y);
+  return std::fmod(std::fmod(x, y) + y, y);
 }
 inline long double
 remainder_floored(long double x, long double y)
 {
-  return fmod(fmod(x, y) + y, y);
+  return fmodl(fmodl(x, y) + y, y);
 }
 
 } // end of namespace vnl_math
