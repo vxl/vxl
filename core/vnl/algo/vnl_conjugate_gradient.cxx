@@ -70,7 +70,7 @@ vnl_conjugate_gradient::preconditioner_(double * out, double * in, void * userda
   // e.g. P = inv(diag(A'A)) for linear least squares systems.
 
   auto * self = static_cast<vnl_conjugate_gradient *>(userdata);
-  vnl_cost_function * const f = self->f_;
+  const vnl_cost_function * const f = self->f_;
 
   const int n = f->get_number_of_unknowns();
   for (int i = 0; i < n; ++i)

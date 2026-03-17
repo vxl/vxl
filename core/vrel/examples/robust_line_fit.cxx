@@ -100,7 +100,7 @@ main()
   //
   {
     const int num_sam_inst = lr->num_samples_to_instantiate();
-    vrel_objective * const lms = new vrel_lms_obj(num_sam_inst);
+    const vrel_objective * const lms = new vrel_lms_obj(num_sam_inst);
     auto * ransam = new vrel_ran_sam_search;
     ransam->set_sampling_params(max_outlier_frac, desired_prob_good, max_pops);
     ransam->set_trace_level(trace_level);
@@ -198,7 +198,7 @@ main()
   //  should provide an initial parameter estimate.
   //
   {
-    vrel_m_est_obj * const m_est = new vrel_tukey_obj(4.0);
+    const vrel_m_est_obj * const m_est = new vrel_tukey_obj(4.0);
 
     lr->set_no_prior_scale();
 
@@ -230,7 +230,7 @@ main()
   }
 
   {
-    vrel_m_est_obj * const m_est = new vrel_tukey_obj(4.0);
+    const vrel_m_est_obj * const m_est = new vrel_tukey_obj(4.0);
 
     lr->set_no_prior_scale();
 

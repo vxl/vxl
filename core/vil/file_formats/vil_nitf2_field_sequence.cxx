@@ -56,7 +56,7 @@ vil_nitf2_field_sequence::create_array_fields(const vil_nitf2_field_definitions 
     else if (node && node->is_repeat_node())
     {
       // recursively create nested vector fields
-      vil_nitf2_field_definition_repeat_node * const repeat_node = node->repeat_node();
+      const vil_nitf2_field_definition_repeat_node * const repeat_node = node->repeat_node();
       if (!create_array_fields(repeat_node->field_definitions, num_dimensions + 1))
       {
         return false;
@@ -65,7 +65,7 @@ vil_nitf2_field_sequence::create_array_fields(const vil_nitf2_field_definitions 
     else if (node && node->is_condition_node())
     {
       // pass through create_array_fields to nested nodes
-      vil_nitf2_field_definition_condition_node * const condition_node = node->condition_node();
+      const vil_nitf2_field_definition_condition_node * const condition_node = node->condition_node();
       if (!create_array_fields(condition_node->field_definitions, num_dimensions))
       {
         return false;
@@ -89,7 +89,7 @@ vil_nitf2_field_sequence::set_array_fields_dimension(const vil_nitf2_field_defin
   {
     if (node && node->is_field_definition())
     {
-      vil_nitf2_field_definition * const field_def = node->field_definition();
+      const vil_nitf2_field_definition * const field_def = node->field_definition();
       vil_nitf2_array_field * field = get_field(field_def->tag)->array_field();
       if (field)
       {
@@ -106,13 +106,13 @@ vil_nitf2_field_sequence::set_array_fields_dimension(const vil_nitf2_field_defin
     else if (node && node->is_repeat_node())
     {
       // recursively set dimension vector fields
-      vil_nitf2_field_definition_repeat_node * const repeat_node = node->repeat_node();
+      const vil_nitf2_field_definition_repeat_node * const repeat_node = node->repeat_node();
       set_array_fields_dimension(repeat_node->field_definitions, index, repeat_count);
     }
     else if (node && node->is_condition_node())
     {
       // pass through set_array_fields_dimension to nested nodes
-      vil_nitf2_field_definition_condition_node * const condition_node = node->condition_node();
+      const vil_nitf2_field_definition_condition_node * const condition_node = node->condition_node();
       set_array_fields_dimension(condition_node->field_definitions, index, repeat_count);
     }
     else
@@ -206,7 +206,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
           {
             // read vector field element
             bool read_error = true;
-            vil_nitf2_field_definition * const field_def = node->field_definition();
+            const vil_nitf2_field_definition * const field_def = node->field_definition();
             if (field_def)
             {
               vil_nitf2_array_field * field = get_field(field_def->tag)->array_field();
@@ -231,7 +231,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
     }
     else if (node && node->is_repeat_node())
     {
-      vil_nitf2_field_definition_repeat_node * const repeat_node = node->repeat_node();
+      const vil_nitf2_field_definition_repeat_node * const repeat_node = node->repeat_node();
 
       // Compute how many times it repeats
       int repeat_count = 0;
@@ -303,7 +303,7 @@ vil_nitf2_field_sequence::read(vil_nitf2_istream & input,
     }
     else if (node && node->is_condition_node())
     {
-      vil_nitf2_field_definition_condition_node * const condition_node = node->condition_node();
+      const vil_nitf2_field_definition_condition_node * const condition_node = node->condition_node();
 
       // evaluate condition
       bool condition = false;
@@ -348,7 +348,7 @@ vil_nitf2_field_sequence::write(vil_nitf2_ostream & output,
   {
     if (node && node->is_field_definition())
     {
-      vil_nitf2_field_definition * const field_def = node->field_definition();
+      const vil_nitf2_field_definition * const field_def = node->field_definition();
       if (!field_def)
       {
         std::cerr << "vil_nitf2_field_sequence::write(): Missing field definition!\n";
@@ -431,7 +431,7 @@ vil_nitf2_field_sequence::write(vil_nitf2_ostream & output,
     }
     else if (node && node->is_repeat_node())
     {
-      vil_nitf2_field_definition_repeat_node * const repeat_node = node->repeat_node();
+      const vil_nitf2_field_definition_repeat_node * const repeat_node = node->repeat_node();
       // Compute how many times it repeats
       int repeat_count = 0;
       bool computed_repeat = false;
@@ -458,7 +458,7 @@ vil_nitf2_field_sequence::write(vil_nitf2_ostream & output,
     }
     else if (node && node->is_condition_node())
     {
-      vil_nitf2_field_definition_condition_node * const condition_node = node->condition_node();
+      const vil_nitf2_field_definition_condition_node * const condition_node = node->condition_node();
 
       // evaluate condition
       bool condition = false;
@@ -490,7 +490,7 @@ vil_nitf2_field_sequence::~vil_nitf2_field_sequence()
   // Delete fields, which I own
   for (auto & field_map_entry : fields)
   {
-    vil_nitf2_field * const field = field_map_entry.second;
+    const vil_nitf2_field * const field = field_map_entry.second;
     delete field;
   }
 }

@@ -34,7 +34,7 @@ vil_geotiff_header::vil_geotiff_header(TIFF * tif)
 bool
 vil_geotiff_header::gtif_tiepoints(std::vector<std::vector<double>> & tiepoints)
 {
-  double * points = nullptr;
+  const double * points = nullptr;
   short count = 0;
   if (TIFFGetField(tif_, GTIFF_TIEPOINTS, &count, &points) < 0)
     return false;
@@ -62,7 +62,7 @@ vil_geotiff_header::gtif_tiepoints(std::vector<std::vector<double>> & tiepoints)
 bool
 vil_geotiff_header::gtif_pixelscale(double & scale_x, double & scale_y, double & scale_z)
 {
-  double * data = nullptr;
+  const double * data = nullptr;
   short count = 0;
   if (TIFFGetField(tif_, GTIFF_PIXELSCALE, &count, &data))
   {
@@ -205,7 +205,7 @@ vil_geotiff_header::GCS_WGS84_MET_DEG()
     int length = 0;
     tagtype_t ttype;
     bool status = false;
-    short * val = nullptr;
+    const short * val = nullptr;
 
     // confirm linear units (optional) are in meters
     status = get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);

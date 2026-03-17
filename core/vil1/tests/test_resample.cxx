@@ -28,7 +28,7 @@ static unsigned char * t = (unsigned char *)nullptr;
 static void
 test_resample(int argc, char * argv[])
 {
-  char * filename = argv[1];
+  const char * filename = argv[1];
   if (argc < 2)
   {
     filename = default_filename;

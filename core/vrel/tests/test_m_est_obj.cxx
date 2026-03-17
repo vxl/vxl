@@ -15,7 +15,7 @@ static void
 test_m_est_obj()
 {
   constexpr double c = 4.0;
-  vrel_m_est_obj * const m_est = new vrel_tukey_obj(c);
+  const vrel_m_est_obj * const m_est = new vrel_tukey_obj(c);
   constexpr double sigma = 2.5;
 
   //
@@ -77,7 +77,7 @@ test_m_est_obj()
   // Test the functions specific to the Cauchy rho function
   //
   const double cauchy_cnst = 2;
-  vrel_m_est_obj * const m_est2 = new vrel_cauchy_obj(cauchy_cnst);
+  const vrel_m_est_obj * const m_est2 = new vrel_cauchy_obj(cauchy_cnst);
   TEST_NEAR("cauchy rho 1", m_est2->rho(0), 0.0, 1e-6);
   TEST_NEAR("cauchy rho 2", m_est2->rho(0.5), 0.0303123, 1e-6);
 
@@ -89,7 +89,7 @@ test_m_est_obj()
   // Test the functions specific to the truncated quadratic rho function
   //
   const double trunc_quad_cnst = 2;
-  vrel_m_est_obj * const m_est3 = new vrel_trunc_quad_obj(trunc_quad_cnst);
+  const vrel_m_est_obj * const m_est3 = new vrel_trunc_quad_obj(trunc_quad_cnst);
   TEST_NEAR("trunc_quad rho 1", m_est3->rho(0), 0.0, 1e-6);
   TEST_NEAR("trunc_quad rho 2", m_est3->rho(0.5), 0.25, 1e-6);
   TEST_NEAR("trunc_quad rho 3", m_est3->rho(3.0), vnl_math::sqr(trunc_quad_cnst), 1e-6);

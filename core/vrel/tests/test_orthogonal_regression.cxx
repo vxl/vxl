@@ -87,7 +87,7 @@ test_orthogonal_regression()
   //
   //  The first set of tests are for the constructor, and parameter access methods.
   //
-  vrel_estimation_problem * lr1 = new vrel_orthogonal_regression(pts);
+  const vrel_estimation_problem * lr1 = new vrel_orthogonal_regression(pts);
   TEST("ctor 1", !lr1, false);
 
   TEST("num_points_to_instantiate (1)", lr1->num_samples_to_instantiate(), 3);

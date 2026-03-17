@@ -796,7 +796,7 @@ vil_openjpeg_image ::opj2vil(void * opj_view, unsigned int i0, unsigned int ni, 
 
     for (unsigned int j = 0; j < nj; ++j)
     {
-      int * const src_row = src_plane + (j0 + j) * opj_view_t->comps[p].w + i0;
+      const int * const src_row = src_plane + (j0 + j) * opj_view_t->comps[p].w + i0;
       T_PIXEL * const dst_row = dst_plane + j * vil_view_t->jstep();
 
       for (unsigned int i = 0; i < ni; ++i)

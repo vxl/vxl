@@ -73,7 +73,7 @@ vsl_indent_clear(std::ostream & os)
 std::ostream &
 operator<<(std::ostream & os, const vsl_indent & /*indent*/)
 {
-  indent_data_type * const data = indent_data(os);
+  const indent_data_type * const data = indent_data(os);
 
   const int n = data->first * data->second;
   for (int i = 0; i < n; i++)

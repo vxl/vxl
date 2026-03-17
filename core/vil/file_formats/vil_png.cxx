@@ -501,7 +501,7 @@ vil_png_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
     return nullptr;
 
   // PNG lib wants everything in memory - the first get_rows reads the whole image.
-  png_byte ** const rows = p_->get_rows();
+  png_byte * const * const rows = p_->get_rows();
   if (!rows)
     return nullptr;
 
@@ -589,7 +589,7 @@ vil_png_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned 
 
   // PNG lib wants everything in memory - the writing isn't done till this image is deleted.
 
-  png_byte ** const rows = p_->get_rows();
+  png_byte * const * const rows = p_->get_rows();
   if (!rows)
     return false;
 

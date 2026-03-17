@@ -61,7 +61,7 @@ vul_get_time_as_string(vul_time_style style /*default=vul_asc*/)
   std::time(&time_secs);
 
   // Convert time to struct tm form
-  struct std::tm * time = nullptr;
+  struct std::tm const * time = nullptr;
   time = std::localtime(&time_secs);
 
   switch (style)

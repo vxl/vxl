@@ -343,9 +343,9 @@ vil_image_view_base_sptr
 vil_pnm_image::get_copy_view(unsigned x0, unsigned ni, unsigned y0, unsigned nj) const
 {
   bool * bb = nullptr;
-  unsigned char * ib = nullptr;
-  unsigned short * jb = nullptr;
-  unsigned int * kb = nullptr;
+  vxl_byte * ib = nullptr;
+  vxl_uint_16 * jb = nullptr;
+  vxl_uint_32 * kb = nullptr;
 
   vil_memory_chunk_sptr buf;
 

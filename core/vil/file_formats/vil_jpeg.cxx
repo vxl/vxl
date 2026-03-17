@@ -240,7 +240,7 @@ vil_jpeg_image::put_view(const vil_image_view_base & view, unsigned x0, unsigned
                                                              view2.nplanes(),
                                                              view2.nplanes() * view2.ni(),
                                                              1);
-    JSAMPLE * const scanline = line.top_left_ptr();
+    JSAMPLE const * const scanline = line.top_left_ptr();
 
     for (unsigned int j = 0; j < view2.nj(); ++j)
     {

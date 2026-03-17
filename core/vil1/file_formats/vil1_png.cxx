@@ -440,7 +440,7 @@ vil1_png_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys) 
     return false;
 
   // PNG lib wants everything in memory - the first get_rows reads the whole image.
-  png_byte ** const rows = p->get_rows();
+  png_byte * const * const rows = p->get_rows();
   if (!rows)
     return false;
 
@@ -469,7 +469,7 @@ vil1_png_generic_image::put_section(const void * buf, int x0, int y0, int xs, in
 
   // PNG lib wants everything in memory - the writing isn't done till this image is deleted.
 
-  png_byte ** const rows = p->get_rows();
+  png_byte * const * const rows = p->get_rows();
   if (!rows)
     return false;
 

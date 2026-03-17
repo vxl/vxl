@@ -72,11 +72,11 @@ main(int argc, char ** argv)
   // Build kernel in "kernelimg"
   vil1_memory_image_of<float> kernelimg(0, 0);
   const std::string & kernel(a_kernel());
-  for (vil1_kernel_info * kp = kernels; kp->name; ++kp)
+  for (const vil1_kernel_info * kp = kernels; kp->name; ++kp)
     if (kernel == kp->name)
     {
       kernelimg.resize(kp->w, kp->h);
-      double * v = kp->mask;
+      const double * v = kp->mask;
       double power = 0;
       for (int y = 0; y < kp->h; ++y)
         for (int x = 0; x < kp->w; ++x)

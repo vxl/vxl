@@ -48,7 +48,7 @@ vbl_bit_array_2d::enlarge(unsigned int num_rows, unsigned int num_cols)
 {
   assert(num_rows >= num_rows_ && num_cols >= num_cols_);
 
-  unsigned char * const tempdata = data_;
+  const unsigned char * const tempdata = data_;
   const unsigned int tempm = num_rows_;
   const unsigned int tempn = num_cols_;
 

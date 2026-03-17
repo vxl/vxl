@@ -464,7 +464,7 @@ vil_bmp_image::get_copy_view(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
     // In other words,  swap B and R
     assert((want_bytes_per_raster & 3) == 0); //  must be multiple of 4
     auto * data = reinterpret_cast<vxl_byte *>(buf->data());
-    vxl_byte * const data_end = data + (want_bytes_per_raster * ny);
+    const vxl_byte * const data_end = data + (want_bytes_per_raster * ny);
     for (; data != data_end; data += 4)
     {
       // memory layout for pixel color values:

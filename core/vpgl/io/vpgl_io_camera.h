@@ -10,7 +10,7 @@
 //: Binary save camera to stream
 template <class T>
 void
-vsl_b_write(vsl_b_ostream & os, vpgl_camera<T> * const & camera);
+vsl_b_write(vsl_b_ostream & os, const vpgl_camera<T> * const & camera);
 
 //: Binary load camera from stream.
 template <class T>

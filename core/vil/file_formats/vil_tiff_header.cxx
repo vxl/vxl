@@ -15,7 +15,7 @@ static std::string
 date_and_time()
 {
   std::time_t clock = 0;
-  struct std::tm * t_m = nullptr;
+  struct std::tm const * t_m = nullptr;
   clock = std::time(nullptr);
   t_m = std::localtime(&clock);
   char tmp[20];
@@ -29,7 +29,7 @@ date_and_time()
 static void
 read_string(TIFF * tif, ttag_t tag, std::string & stag, const std::string & deflt = "not_defined")
 {
-  char * adr = nullptr;
+  const char * adr = nullptr;
   TIFFGetField(tif, tag, &adr);
   if (adr)
     stag = std::string(adr);
@@ -160,7 +160,7 @@ vil_tiff_header::read_header()
 
   // EXTRASAMPLES tag requires two input arguments, which is different
   // from other 16bit values.
-  vxl_uint_16 * sample_info = nullptr;
+  const vxl_uint_16 * sample_info = nullptr;
   extra_samples.val = 0;
   extra_samples.valid = false;
   const int ret_extrasamples = TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
@@ -168,7 +168,7 @@ vil_tiff_header::read_header()
     extra_samples.valid = true;
 
   read_short_tag(tif_, TIFFTAG_FILLORDER, fill_order);
-  vxl_uint_16 * gc = nullptr;
+  const vxl_uint_16 * gc = nullptr;
   TIFFGetField(tif_, TIFFTAG_GRAYRESPONSECURVE, &gc);
   read_short_tag(tif_, TIFFTAG_GRAYRESPONSEUNIT, gray_response_unit);
   read_string(tif_, TIFFTAG_HOSTCOMPUTER, host_computer);
@@ -241,7 +241,7 @@ vil_tiff_header::read_header()
   }
 #endif
   uint32_t count = 0, f = 0;
-  char * data = nullptr;
+  const char * data = nullptr;
   f = TIFFGetField(tif_, 42113, &count, &data);
   if (f)
   {
@@ -289,7 +289,7 @@ vil_tiff_header::is_striped() const
 bool
 vil_tiff_header::is_GEOTIFF() const
 {
-  short * data = nullptr;
+  const short * data = nullptr;
   short count = 0;
   return TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data) != 0;
 }

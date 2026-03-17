@@ -17,7 +17,7 @@ vil_nitf2_field_specified::operator()(vil_nitf2_field_sequence * record,
     // Invalid tag
     return false;
   }
-  vil_nitf2_field * const field = record->get_field(tag);
+  const vil_nitf2_field * const field = record->get_field(tag);
   if (field != nullptr)
   {
     std::string value;

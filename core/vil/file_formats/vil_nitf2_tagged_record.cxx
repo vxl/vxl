@@ -541,11 +541,11 @@ vil_nitf2_tagged_record::output(std::ostream & os) const
   os << "CETAG: " << name() << '\n' << "CELEN: " << length() << std::endl;
   for (auto & m_field_definition : *m_definition->m_field_definitions)
   {
-    vil_nitf2_field_definition * const field_def = m_field_definition->field_definition();
+    const vil_nitf2_field_definition * const field_def = m_field_definition->field_definition();
     // to do: handle other nodes
     if (!field_def)
       break;
-    vil_nitf2_field * const field = get_field(field_def->tag);
+    const vil_nitf2_field * const field = get_field(field_def->tag);
     os << field_def->tag << ": ";
     if (field)
     {
