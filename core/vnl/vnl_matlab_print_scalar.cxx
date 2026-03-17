@@ -351,7 +351,7 @@ vnl_matlab_print_scalar(std::complex<float> v, char * buf, vnl_matlab_print_form
 void
 vnl_matlab_print_scalar(std::complex<long double> v, char * buf, size_t buf_len, vnl_matlab_print_format format)
 {
-  vnl_matlab_print_scalar(std::complex<double>(std::real(v), std::imag(v)), buf, buf_len, format); // FIXME
+  vnl_matlab_print_scalar(std::complex<double>(static_cast<double>(std::real(v)), static_cast<double>(std::imag(v))), buf, buf_len, format); // FIXME
 }
 
 #if !VXL_LEGACY_FUTURE_REMOVE

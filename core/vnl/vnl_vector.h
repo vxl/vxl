@@ -721,7 +721,7 @@ vnl_vector<T>::get(size_t i) const
 {
 #if VNL_CONFIG_CHECK_BOUNDS
   if (i >= this->size())              // If invalid index specified
-    vnl_error_vector_index("get", i); // Raise exception
+    vnl_error_vector_index("get", static_cast<int>(i)); // Raise exception
 #endif
   return this->data[i];
 }
@@ -735,7 +735,7 @@ vnl_vector<T>::put(size_t i, const T & v)
 {
 #if VNL_CONFIG_CHECK_BOUNDS
   if (i >= this->size())              // If invalid index specified
-    vnl_error_vector_index("put", i); // Raise exception
+    vnl_error_vector_index("put", static_cast<int>(i)); // Raise exception
 #endif
   this->data[i] = v; // Assign data value
 }

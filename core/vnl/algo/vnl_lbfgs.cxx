@@ -63,7 +63,7 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
 
   if (verbose_)
     std::cerr << "vnl_lbfgs: n = " << n << ", memory = " << m << ", Workspace = " << w.size() << "[ "
-              << (w.size() / 128.0 / 1024.0) << " MB], ErrorScale = " << f_->reported_error(1)
+              << (static_cast<double>(w.size()) / 128.0 / 1024.0) << " MB], ErrorScale = " << f_->reported_error(1)
               << ", xnorm = " << x.magnitude() << std::endl;
 
   const bool we_trace = (verbose_ && !trace);
@@ -114,7 +114,7 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
       vnl_vector<double> fdg = f_->fdgradf(x);
       if (verbose_)
       {
-        int l = n;
+        int l = static_cast<int>(n);
         const int limit = 100;
         const int limit_tail = 10;
         if (l > limit + limit_tail)
@@ -129,7 +129,7 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
         if (n > limit)
         {
           std::cerr << "   ...\n";
-          for (int i = n - limit_tail; i < n; ++i)
+          for (int i = static_cast<int>(n) - limit_tail; i < static_cast<int>(n); ++i)
             print_(i, x[i], g[i], fdg[i], g[i] - fdg[i]);
         }
       }

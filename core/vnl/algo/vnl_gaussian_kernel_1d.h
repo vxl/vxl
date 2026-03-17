@@ -29,7 +29,7 @@ public:
   int
   width() const
   {
-    return vec_.size();
+    return static_cast<int>(vec_.size());
   }
   double
   operator[](int i) const

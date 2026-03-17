@@ -18,8 +18,8 @@ main()
   std::cin >> pts;
 
   // Build design matrix D
-  const int npts = pts.rows();
-  const int dim = pts.columns();
+  const int npts = static_cast<int>(pts.rows());
+  const int dim = static_cast<int>(pts.columns());
   vnl_matrix<double> D(npts, dim + 1);
   for (int i = 0; i < npts; ++i)
   {

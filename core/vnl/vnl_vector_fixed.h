@@ -207,7 +207,7 @@ public:
   {
 #if VNL_CONFIG_CHECK_BOUNDS
     if (i >= this->size())              // If invalid index specified
-      vnl_error_vector_index("put", i); // Raise exception
+      vnl_error_vector_index("put", static_cast<int>(i)); // Raise exception
 #endif
     this->data_[i] = v;
   }

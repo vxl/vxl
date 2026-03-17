@@ -179,7 +179,7 @@ vnl_vector_fixed<T, n>::get(unsigned int i) const
 {
 #if VNL_CONFIG_CHECK_BOUNDS
   if (i >= this->size())              // If invalid index specified
-    vnl_error_vector_index("get", i); // Raise exception
+    vnl_error_vector_index("get", static_cast<int>(i)); // Raise exception
 #endif
   return this->data_[i];
 }

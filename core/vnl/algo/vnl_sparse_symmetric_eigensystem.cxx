@@ -24,7 +24,7 @@ sse_op_callback(const long * n, const long * m, const double * p, double * q)
 {
   assert(current_system != nullptr);
 
-  current_system->CalculateProduct(*n, *m, p, q);
+  current_system->CalculateProduct(static_cast<int>(*n), static_cast<int>(*m), p, q);
 }
 
 //------------------------------------------------------------
@@ -38,9 +38,9 @@ sse_iovect_callback(const long * n, const long * m, double * q, const long * j, 
   assert(current_system != nullptr);
 
   if (*k == 0)
-    current_system->SaveVectors(*n, *m, q, *j - *m);
+    current_system->SaveVectors(static_cast<int>(*n), static_cast<int>(*m), q, static_cast<int>(*j - *m));
   else if (*k == 1)
-    current_system->RestoreVectors(*n, *m, q, *j - *m);
+    current_system->RestoreVectors(static_cast<int>(*n), static_cast<int>(*m), q, static_cast<int>(*j - *m));
 }
 
 vnl_sparse_symmetric_eigensystem::vnl_sparse_symmetric_eigensystem()
@@ -106,11 +106,11 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & M,
 
   // Calculate size of workspace needed.  These expressions come from
   // the LASO documentation.
-  int work_size = dim * nblock;
-  const int t2 = maxj * (2 * nblock + 3) + 2 * n + 6 + (2 * nblock + 2) * (nblock + 1);
+  int work_size = static_cast<int>(dim * nblock);
+  const int t2 = static_cast<int>(maxj * (2 * nblock + 3) + 2 * n + 6 + (2 * nblock + 2) * (nblock + 1));
   if (work_size < t2)
     work_size = t2;
-  work_size += 2 * dim * nblock + maxj * (nblock + n + 2) + 2 * nblock * nblock + 3 * n;
+  work_size += static_cast<int>(2 * dim * nblock + maxj * (nblock + n + 2) + 2 * nblock * nblock + 3 * n);
   std::vector<double> work(work_size + 10);
 
   // Set starting vectors to zero.
@@ -192,7 +192,7 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & M,
     delete[] i;
   temp_store.clear();
 
-  return ierr;
+  return static_cast<int>(ierr);
 }
 
 
@@ -253,7 +253,7 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & A,
   std::memset((void *)resid, 0, sizeof(double) * matSize);
 
   if (maxIterations <= 0)
-    maxIterations = nEVL * 100;
+    maxIterations = static_cast<int>(nEVL * 100);
 
   if (numberLanczosVecsL <= 0)
     numberLanczosVecsL = 2 * nEVL + 1;
@@ -373,14 +373,14 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & A,
         case -8:    // Could not perform LAPACK eigenvalue calculation
         case -9:    // Starting vector is zero
         case -9999: // Could not build an Arnoldi factorization
-          return info;
+          return static_cast<int>(info);
           break;
         case 0: // success
         case 1: // hit maxIterations - should be DONE
         case 3: // No shifts could be applied during a cycle of IRAM iteration
           break;
         default: // unknown ARPACK error
-          return info;
+          return static_cast<int>(info);
       }
 
       // setting z pointer to ( = Bx) into workd
@@ -429,7 +429,7 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & A,
   vnl_vector<long> select(numberLanczosVecsL);
 
   // allocate eVals and eVecs
-  nvalues = nconv;
+  nvalues = static_cast<int>(nconv);
   values = new double[nvalues];
   vectors = new vnl_vector<double>[nvalues];
 
@@ -477,7 +477,7 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & A,
   delete[] workd;
   delete[] workl;
 
-  return info;
+  return static_cast<int>(info);
 }
 
 

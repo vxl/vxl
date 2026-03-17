@@ -128,7 +128,7 @@ public:
   unsigned long
   operator()(unsigned n)
   {
-    return lrand32(0, n - 1);
+    return lrand32(0, static_cast<int>(n) - 1);
   }
 
   //:  Generates a random double in the range 0 <= x <= b with 32 bit randomness.

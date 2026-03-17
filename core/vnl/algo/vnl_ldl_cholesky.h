@@ -111,7 +111,7 @@ public:
   int
   rank_deficiency() const
   {
-    return num_dims_rank_def_;
+    return static_cast<int>(num_dims_rank_def_);
   }
 
   //: Return reciprocal condition number (smallest/largest singular values).
