@@ -14,6 +14,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
+#include <cassert>
+#include <climits>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_algo_export.h>
@@ -81,6 +83,7 @@ public:
   int
   rank_deficiency() const
   {
+    assert(num_dims_rank_def_ >= static_cast<long>(INT_MIN) && num_dims_rank_def_ <= static_cast<long>(INT_MAX));
     return static_cast<int>(num_dims_rank_def_);
   }
 

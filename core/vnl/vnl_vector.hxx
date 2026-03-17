@@ -511,7 +511,7 @@ vnl_vector<T>::extract(size_t len, size_t start) const
 #ifndef NDEBUG
   size_t stop = start + len;
   if (this->num_elmts < stop)
-    vnl_error_vector_dimension("extract", static_cast<int>(stop - start), static_cast<int>(len));
+    vnl_error_vector_dimension("extract", stop - start, len);
 #endif
   vnl_vector<T> result(len);
   // std::copy_n( this->data + start, len, result.data );

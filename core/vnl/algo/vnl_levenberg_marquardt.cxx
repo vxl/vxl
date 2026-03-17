@@ -523,12 +523,12 @@ vnl_levenberg_marquardt::get_JtJ()
     vnl_vector<int> jpvt(n);
     for (unsigned int j = 0; j < n; ++j)
     {
-      unsigned int i = 0;
-      for (; i < n; i++)
+      int i = 0;
+      for (; i < static_cast<int>(n); i++)
       {
         if (ipvt_[i] == (int)j + 1)
         {
-          jpvt(j) = static_cast<int>(i);
+          jpvt(j) = i;
           break;
         }
       }

@@ -136,7 +136,7 @@ vnl_matrix_fixed_ref_const<T, nrows, ncols>::extract(unsigned rowz, unsigned col
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
   if ((nrows < bottom) || (ncols < right))
-    vnl_error_matrix_dimension("extract", static_cast<int>(nrows), static_cast<int>(ncols), static_cast<int>(bottom), static_cast<int>(right));
+    vnl_error_matrix_dimension("extract", nrows, ncols, bottom, right);
 #endif
   vnl_matrix<T> result(rowz, colz);
   for (unsigned int i = 0; i < rowz; i++)   // actual copy of all elements
