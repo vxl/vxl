@@ -704,7 +704,7 @@ vnl_matrix<T>::extract(vnl_matrix<T> & submatrix, unsigned top, unsigned left) c
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
   if ((this->num_rows < bottom) || (this->num_cols < right))
-    vnl_error_matrix_dimension("extract", static_cast<int>(this->num_rows), static_cast<int>(this->num_cols), static_cast<int>(bottom), static_cast<int>(right));
+    vnl_error_matrix_dimension("extract", this->num_rows, this->num_cols, bottom, right);
 #endif
   for (unsigned int i = 0; i < rowz; i++)   // actual copy of all elements
     for (unsigned int j = 0; j < colz; j++) // in submatrix

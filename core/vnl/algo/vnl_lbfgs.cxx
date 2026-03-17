@@ -114,9 +114,9 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
       vnl_vector<double> fdg = f_->fdgradf(x);
       if (verbose_)
       {
-        int l = static_cast<int>(n);
-        const int limit = 100;
-        const int limit_tail = 10;
+        long l = n;
+        constexpr long limit = 100;
+        constexpr long limit_tail = 10;
         if (l > limit + limit_tail)
         {
           std::cerr << " [ Showing only first " << limit << " components ]\n";
@@ -124,12 +124,12 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
         }
         print_("i", "x", "g", "fdg", "dg");
         print_("-", "-", "-", "---", "--");
-        for (int i = 0; i < l; ++i)
+        for (long i = 0; i < l; ++i)
           print_(i, x[i], g[i], fdg[i], g[i] - fdg[i]);
         if (n > limit)
         {
           std::cerr << "   ...\n";
-          for (int i = static_cast<int>(n) - limit_tail; i < static_cast<int>(n); ++i)
+          for (long i = n - limit_tail; i < n; ++i)
             print_(i, x[i], g[i], fdg[i], g[i] - fdg[i]);
         }
       }

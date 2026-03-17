@@ -13,6 +13,8 @@
 //      Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
+#include <cassert>
+#include <climits>
 #include <string>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -90,6 +92,7 @@ public:
   int
   get_max_function_evals() const
   {
+    assert(maxfev >= static_cast<long>(INT_MIN) && maxfev <= static_cast<long>(INT_MAX));
     return static_cast<int>(maxfev);
   }
 
@@ -165,6 +168,7 @@ public:
   int
   get_num_evaluations() const
   {
+    assert(num_evaluations_ >= static_cast<long>(INT_MIN) && num_evaluations_ <= static_cast<long>(INT_MAX));
     return static_cast<int>(num_evaluations_);
   }
 
@@ -173,6 +177,7 @@ public:
   int
   get_num_iterations() const
   {
+    assert(num_iterations_ <= static_cast<unsigned>(INT_MAX));
     return static_cast<int>(num_iterations_);
   }
 

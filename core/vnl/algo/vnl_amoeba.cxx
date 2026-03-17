@@ -5,6 +5,8 @@
 // \date   23 Oct 97
 //-----------------------------------------------------------------------------
 
+#include <cassert>
+#include <climits>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -162,7 +164,7 @@ operator==(const vnl_amoeba_SimplexCorner & a, const vnl_amoeba_SimplexCorner & 
 void
 vnl_amoebaFit::set_up_simplex_relative(std::vector<vnl_amoeba_SimplexCorner> & simplex, const vnl_vector<double> & x)
 {
-  const int n = static_cast<int>(x.size());
+  const size_t n = x.size();
 
   simplex[0].v = x;
   simplex[0].fv = f(x);
@@ -171,7 +173,7 @@ vnl_amoebaFit::set_up_simplex_relative(std::vector<vnl_amoeba_SimplexCorner> & s
   const double usual_delta = relative_diameter; // 5 percent deltas for non-zero terms
   // const double zero_term_delta = 0.00025;      // Even smaller delta for zero elements of x
   //  vnl_vector<double> y(n);
-  for (int j = 0; j < n; ++j)
+  for (size_t j = 0; j < n; ++j)
   {
     vnl_amoeba_SimplexCorner * const s = &simplex[j + 1];
     s->v = x;
@@ -192,12 +194,12 @@ vnl_amoebaFit::set_up_simplex_absolute(std::vector<vnl_amoeba_SimplexCorner> & s
                                        const vnl_vector<double> & x,
                                        const vnl_vector<double> & dx)
 {
-  const int n = static_cast<int>(x.size());
+  const size_t n = x.size();
 
   simplex[0].v = x;
   simplex[0].fv = f(x);
 
-  for (int j = 0; j < n; ++j)
+  for (size_t j = 0; j < n; ++j)
   {
     vnl_amoeba_SimplexCorner * const s = &simplex[j + 1];
     s->v = x;
@@ -239,8 +241,9 @@ void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x)
 {
   // Set up a simplex near the initial guess.
-  const int n = static_cast<int>(x.size());
-  std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(n));
+  const size_t n = x.size();
+  assert(n <= static_cast<size_t>(INT_MAX));
+  std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(static_cast<int>(n)));
 
   set_up_simplex_relative(simplex, x);
   amoeba(x, simplex);
@@ -250,8 +253,9 @@ void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x, const vnl_vector<double> & dx)
 {
   // Set up a simplex near the initial guess.
-  const int n = static_cast<int>(x.size());
-  std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(n));
+  const size_t n = x.size();
+  assert(n <= static_cast<size_t>(INT_MAX));
+  std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(static_cast<int>(n)));
 
   set_up_simplex_absolute(simplex, x, dx);
   amoeba(x, simplex);
@@ -261,7 +265,8 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, const vnl_vector<double> & dx)
 void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorner> & simplex)
 {
-  const int n = static_cast<int>(x.size());
+  const size_t n = x.size();
+  assert(n <= static_cast<size_t>(INT_MAX));
   sort_simplex(simplex);
 
   if (verbose > 1)
@@ -274,10 +279,10 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorn
   }
 
   // Iterate until the diameter of the simplex is less than X_tolerance.
-  vnl_amoeba_SimplexCorner reflect(n);
-  vnl_amoeba_SimplexCorner expand(n);
-  vnl_amoeba_SimplexCorner contract(n);
-  vnl_amoeba_SimplexCorner shrink(n);
+  vnl_amoeba_SimplexCorner reflect(static_cast<int>(n));
+  vnl_amoeba_SimplexCorner expand(static_cast<int>(n));
+  vnl_amoeba_SimplexCorner contract(static_cast<int>(n));
+  vnl_amoeba_SimplexCorner shrink(static_cast<int>(n));
 
   vnl_vector<double> vbar(n);
   while (cnt < maxiter)
@@ -286,12 +291,12 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorn
       break;
 
     // One step of the Nelder-Mead simplex algorithm
-    for (int k = 0; k < n; ++k)
+    for (size_t k = 0; k < n; ++k)
     {
       vbar[k] = 0;
-      for (int i = 0; i < n; ++i)
+      for (size_t i = 0; i < n; ++i)
         vbar[k] += simplex[i].v[k];
-      vbar[k] /= n;
+      vbar[k] /= static_cast<double>(n);
     }
 
     set_corner_a_plus_bl(&reflect, vbar, simplex[n].v, -1);
@@ -333,7 +338,7 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorn
       else
       {
         // The contraction point was only average, shrink the entire simplex.
-        for (int j = 1; j < n; ++j)
+        for (size_t j = 1; j < n; ++j)
 
           set_corner_a_plus_bl(&simplex[j], simplex[0].v, simplex[j].v, 0.5);
         set_corner_a_plus_bl(&shrink, simplex[0].v, simplex[n].v, 0.5);
