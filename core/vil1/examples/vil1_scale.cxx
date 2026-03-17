@@ -262,7 +262,7 @@ pnmscaleT<T, longT>::go()
   T * xelrow = nullptr;
   T * tempxelrow = nullptr;
   T * newxelrow = nullptr;
-  T * xP = nullptr;
+  const T * xP = nullptr;
   T * nxP = nullptr;
   int row = 0, col = 0, needtoreadrow = 0;
   long fracrowtofill = 0, fracrowleft = 0;

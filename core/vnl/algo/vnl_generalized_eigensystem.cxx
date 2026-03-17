@@ -52,7 +52,7 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
 
   // transpose-copy V1 to V
   {
-    double * vptr = &V1[0];
+    const double * vptr = &V1[0];
     for (int c = 0; c < n; ++c)
       for (int r = 0; r < n; ++r)
         V(r, c) = *vptr++;

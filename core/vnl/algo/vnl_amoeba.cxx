@@ -301,7 +301,7 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorn
 
     set_corner_a_plus_bl(&reflect, vbar, simplex[n].v, -1);
 
-    vnl_amoeba_SimplexCorner * next = &reflect;
+    const vnl_amoeba_SimplexCorner * next = &reflect;
     const char * how = "reflect ";
     if (reflect.fv < simplex[n - 1].fv)
     {
@@ -322,7 +322,7 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorn
     {
       // Reflection *is* totally crap...
       {
-        vnl_amoeba_SimplexCorner * tmp = &simplex[n];
+        const vnl_amoeba_SimplexCorner * tmp = &simplex[n];
         if (reflect.fv < tmp->fv)
           // replace simplex[n] by reflection as at least it's better than that
           tmp = &reflect;

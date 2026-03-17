@@ -139,7 +139,7 @@ vul_reg_exp::vul_reg_exp(const vul_reg_exp & rxp)
   this->regmust = rxp.regmust;     // Copy field
   if (rxp.regmust != nullptr)
   {
-    char * dum = rxp.program;
+    const char * dum = rxp.program;
     ind = 0;
     while (dum != rxp.regmust)
     {
@@ -533,7 +533,7 @@ reg(int paren, int * flagp)
 {
   char * ret = nullptr;
   char * br = nullptr;
-  char * ender = nullptr;
+  const char * ender = nullptr;
   int parno = 0;
   int flags = 0;
 

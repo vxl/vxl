@@ -108,7 +108,7 @@ vsl_b_write(vsl_b_ostream & os, const vpgl_lvcs_sptr & lvcs_sptr)
 {
   if (!lvcs_sptr)
     return;
-  vpgl_lvcs * const lvcs = lvcs_sptr.ptr();
+  const vpgl_lvcs * const lvcs = lvcs_sptr.ptr();
   vsl_b_write(os, *lvcs);
 }
 

@@ -193,7 +193,7 @@ vil1_stream_url::vil1_stream_url(const char * url)
 #endif
 
   // get network address of server.
-  hostent * const hp = gethostbyname(host.c_str());
+  const hostent * const hp = gethostbyname(host.c_str());
   if (!hp)
   {
     std::cerr << __FILE__ ": failed to lookup host\n";

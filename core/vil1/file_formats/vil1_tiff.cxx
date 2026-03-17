@@ -751,7 +751,7 @@ vil1_tiff_generic_image::get_section(void * buf, int x0, int y0, int xs, int ys)
         // printf("reading strip %d, y  = %d .. %d\n", strip_id, ymin, ymax);
         for (long y = ymin; y <= ymax; ++y)
         {
-          unsigned char * const in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
+          const unsigned char * const in_row = p->buf + (y - strip_min_row) * p->scanlinesize;
           unsigned char * const out_row = (unsigned char *)buf + ((y - y0) * xs * pixel_bit_size + 7) / 8;
           std::memcpy(out_row, in_row + (x0 * pixel_bit_size + 7) / 8, (xs * pixel_bit_size + 7) / 8);
         }

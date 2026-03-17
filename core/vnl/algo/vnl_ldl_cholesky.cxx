@@ -245,7 +245,7 @@ vnl_ldl_cholesky::update(const vnl_matrix<double> & W0)
   vnl_vector<double> gamma(r); // Workspace
   for (unsigned j = 0; j < n; ++j)
   {
-    double * const Wj = W[j];
+    const double * const Wj = W[j];
     for (unsigned i = 0; i < r; ++i)
     {
       const double a2 = a[i] + Wj[i] * Wj[i] / d_[j];

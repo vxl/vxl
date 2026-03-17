@@ -15,7 +15,7 @@ void
 vil1_byte_swap(void * b_, void * e_)
 {
   char * const b = static_cast<char *>(b_);
-  char * const e = static_cast<char *>(e_);
+  const char * const e = static_cast<char *>(e_);
   assert(b < e);
   const std::ptrdiff_t n = e - b;
   for (std::ptrdiff_t i = 0; i < n / 2; ++i)

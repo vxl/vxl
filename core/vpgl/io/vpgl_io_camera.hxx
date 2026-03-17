@@ -26,40 +26,40 @@
 //: Binary save camera to stream
 template <class T>
 void
-vsl_b_write(vsl_b_ostream & os, vpgl_camera<T> * const & camera)
+vsl_b_write(vsl_b_ostream & os, const vpgl_camera<T> * const & camera)
 {
   if (camera->type_name() == "vpgl_proj_camera")
   {
     // projective camera
-    vpgl_proj_camera<T> * procam = static_cast<vpgl_proj_camera<T> *>(camera);
+    const vpgl_proj_camera<T> * procam = static_cast<const vpgl_proj_camera<T> *>(camera);
     vsl_b_write(os, procam->type_name());
     vsl_b_write(os, *procam);
   }
   else if (camera->type_name() == "vpgl_perspective_camera")
   {
     // perspective camera
-    vpgl_perspective_camera<T> * percam = static_cast<vpgl_perspective_camera<T> *>(camera);
+    const vpgl_perspective_camera<T> * percam = static_cast<const vpgl_perspective_camera<T> *>(camera);
     vsl_b_write(os, percam->type_name());
     vsl_b_write(os, *percam);
   }
   else if (camera->type_name() == "vpgl_affine_camera")
   {
     // affine camera
-    vpgl_affine_camera<T> * affcam = static_cast<vpgl_affine_camera<T> *>(camera);
+    const vpgl_affine_camera<T> * affcam = static_cast<const vpgl_affine_camera<T> *>(camera);
     vsl_b_write(os, affcam->type_name());
     vsl_b_write(os, *affcam);
   }
   else if (camera->type_name() == "vpgl_rational_camera")
   {
     // rational camera
-    vpgl_rational_camera<T> * ratcam = static_cast<vpgl_rational_camera<T> *>(camera);
+    const vpgl_rational_camera<T> * ratcam = static_cast<const vpgl_rational_camera<T> *>(camera);
     vsl_b_write(os, ratcam->type_name());
     vsl_b_write(os, *ratcam);
   }
   else if (camera->type_name() == "vpgl_local_rational_camera")
   {
     // local rational camera
-    vpgl_local_rational_camera<T> * lratcam = static_cast<vpgl_local_rational_camera<T> *>(camera);
+    const vpgl_local_rational_camera<T> * lratcam = static_cast<const vpgl_local_rational_camera<T> *>(camera);
     vsl_b_write(os, lratcam->type_name());
     vsl_b_write(os, *lratcam);
   }
@@ -129,6 +129,6 @@ vsl_b_read(vsl_b_istream & is, vpgl_camera<T> *& camera)
 
 #define VPGL_IO_CAMERA_INSTANTIATE(T)                           \
   template void vsl_b_read(vsl_b_istream &, vpgl_camera<T> *&); \
-  template void vsl_b_write(vsl_b_ostream &, vpgl_camera<T> * const &)
+  template void vsl_b_write(vsl_b_ostream &, const vpgl_camera<T> * const &)
 
 #endif // vpgl_io_camera_hxx_

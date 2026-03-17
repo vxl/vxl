@@ -25,7 +25,7 @@ vil_nitf2_field_formatter::read_char_array(std::istream & input, int size)
 std::string
 vil_nitf2_field_formatter::read_string(std::istream & input, int size)
 {
-  char * const cstr = read_char_array(input, size);
+  const char * const cstr = read_char_array(input, size);
   std::string str = std::string(cstr);
   delete[] cstr;
   return str;

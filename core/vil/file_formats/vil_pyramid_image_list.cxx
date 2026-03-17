@@ -318,7 +318,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0,
               << '\n';
     return nullptr;
   }
-  pyramid_level * const pl = levels_[level];
+  const pyramid_level * const pl = levels_[level];
   const float actual_scale = pl->scale_;
 
   float fi0 = actual_scale * i0, fni = actual_scale * n_i, fj0 = actual_scale * j0, fnj = actual_scale * n_j;
@@ -352,7 +352,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0,
                                       float & actual_scale) const
 {
   // find the resource that is closest to the specified scale
-  pyramid_level * const pl = this->closest(scale);
+  const pyramid_level * const pl = this->closest(scale);
   if (!pl)
   {
     actual_scale = 0;

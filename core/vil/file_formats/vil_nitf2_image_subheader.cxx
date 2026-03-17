@@ -718,7 +718,7 @@ vil_nitf2_image_subheader::get_tree(int i) const
 void
 vil_nitf2_image_subheader::add_rpc_definitions()
 {
-  vil_nitf2_tagged_record_definition * tr = vil_nitf2_tagged_record_definition::find("RPC00B");
+  const vil_nitf2_tagged_record_definition * tr = vil_nitf2_tagged_record_definition::find("RPC00B");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("RPC00B", "Rational Polynomial Coefficients Type B")
@@ -786,7 +786,7 @@ vil_nitf2_image_subheader::add_rpc_definitions()
 void
 vil_nitf2_image_subheader::add_USE_definitions()
 {
-  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("USE00A");
+  const vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("USE00A");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("USE00A", "EXPLOITATION USABILITY EXTENSION FORMAT")
@@ -852,7 +852,7 @@ vil_nitf2_image_subheader::get_sun_params(double & sun_el, double & sun_az) cons
 void
 vil_nitf2_image_subheader::add_ICHIPB_definitions()
 {
-  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("ICHIPB");
+  const vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("ICHIPB");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("ICHIPB", "ICHIPB SUPPORT DATA EXTENSION")
@@ -914,7 +914,7 @@ vil_nitf2_image_subheader::add_ICHIPB_definitions()
 void
 vil_nitf2_image_subheader::add_STDIDC_definitions()
 {
-  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("STDIDC");
+  const vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("STDIDC");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("STDIDC", "STDIDC SUPPORT DATA EXTENSION")
@@ -946,7 +946,7 @@ vil_nitf2_image_subheader::add_STDIDC_definitions()
 void
 vil_nitf2_image_subheader::add_STDIDB_definitions()
 {
-  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("STDIDB");
+  const vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("STDIDB");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("STDIDB", "STDIDB SUPPORT DATA EXTENSION")
@@ -983,7 +983,7 @@ vil_nitf2_image_subheader::add_STDIDB_definitions()
 void
 vil_nitf2_image_subheader::add_MPD26A_definitions()
 {
-  vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("MPD26A");
+  const vil_nitf2_tagged_record_definition * const tr = vil_nitf2_tagged_record_definition::find("MPD26A");
   if (!tr)
   {
     vil_nitf2_tagged_record_definition::define("MPD26A", "MPD26A SUPPORT DATA EXTENSION")

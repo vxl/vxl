@@ -320,7 +320,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
     arg->set_ = false;
 
   // Generate shorter command name
-  char * cmdname = argv[0] + std::strlen(argv[0]);
+  const char * cmdname = argv[0] + std::strlen(argv[0]);
   while (cmdname > argv[0] && *cmdname != '/' && *cmdname != '\\')
     --cmdname;
   if (*cmdname == '\\' || *cmdname == '/')
@@ -334,7 +334,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
   char ** my_argv = argv + 1; // Skip program name
   while (*my_argv)
   {
-    char * const argmt = *my_argv;
+    const char * const argmt = *my_argv;
     bool eaten = false;
     for (unsigned int i = 0; i < args_.size(); ++i)
     {
@@ -370,7 +370,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
   if (verbose_)
   {
     std::cerr << "args remaining:";
-    for (char ** av = argv; *av; ++av)
+    for (char * const * av = argv; *av; ++av)
       std::cerr << " [" << *av << ']';
     std::cerr << std::endl;
   }
@@ -402,7 +402,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
 
   // 3. Move my_argv down to first unused arg, and reset argc
   argc = 1;
-  for (char ** av = my_argv; *av; ++av)
+  for (char * const * av = my_argv; *av; ++av)
     ++argc;
   for (int i = 1; i < argc; ++i)
     argv[i] = my_argv[i - 1];
@@ -414,7 +414,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
   if (autonomy_ == all)
   {
     std::cerr << "vul_arg_info_list: Some arguments were unused: ";
-    for (char ** av = argv; *av; ++av)
+    for (char * const * av = argv; *av; ++av)
       std::cerr << ' ' << *av;
     std::cerr << std::endl;
     display_help(cmdname);
@@ -422,7 +422,7 @@ vul_arg_info_list::parse(int & argc, char **& argv, bool warn_about_unrecognized
 
   // 4.3 It's often bad if a switch was not recognized.
   if (warn_about_unrecognized_arguments)
-    for (char ** av = argv; *av; ++av)
+    for (char * const * av = argv; *av; ++av)
       if (**av == '-')
       {
         display_help(cmdname);
@@ -1028,7 +1028,7 @@ parse(vul_arg<std::vector<double>> * argmt, char ** argv)
   int sucked = 0;
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
-  char * current = argv[0];
+  const char * current = argv[0];
   while (current)
   {
     char * endptr = nullptr;

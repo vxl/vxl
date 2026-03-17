@@ -174,7 +174,7 @@ rat_cameras(vpgl_local_rational_camera<double> & cam0,
   ss0 << "232.111831665" << std::endl;
 
   std::istringstream istr(ss0.str());
-  vpgl_local_rational_camera<double> * const cam0_ptr = read_local_rational_camera<double>(istr);
+  const vpgl_local_rational_camera<double> * const cam0_ptr = read_local_rational_camera<double>(istr);
 
   ss1 << " satId ="
          "????"
@@ -288,7 +288,7 @@ rat_cameras(vpgl_local_rational_camera<double> & cam0,
   ss1 << "232.111831665" << std::endl;
 
   std::istringstream istr1(ss1.str());
-  vpgl_local_rational_camera<double> * const cam1_ptr = read_local_rational_camera<double>(istr1);
+  const vpgl_local_rational_camera<double> * const cam1_ptr = read_local_rational_camera<double>(istr1);
 
   ss2 << " satId ="
          "????"
@@ -402,7 +402,7 @@ rat_cameras(vpgl_local_rational_camera<double> & cam0,
   ss2 << "232.111831665" << std::endl;
 
   std::istringstream istr2(ss2.str());
-  vpgl_local_rational_camera<double> * const cam2_ptr = read_local_rational_camera<double>(istr2);
+  const vpgl_local_rational_camera<double> * const cam2_ptr = read_local_rational_camera<double>(istr2);
   cam0 = *cam0_ptr;
   cam1 = *cam1_ptr;
   cam2 = *cam2_ptr;

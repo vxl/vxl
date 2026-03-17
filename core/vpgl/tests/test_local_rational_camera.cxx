@@ -106,7 +106,7 @@ test_local_rational_camera()
   const std::string path = "./test.lrcam";
   const bool good = lrcam.save(path);
   TEST("save to file", good, true);
-  vpgl_local_rational_camera<double> * const lrc_r = read_local_rational_camera<double>(path);
+  const vpgl_local_rational_camera<double> * const lrc_r = read_local_rational_camera<double>(path);
   double ulr = NAN, vlr = NAN;
   lrc_r->project(0.0, 0.0, 0.0, ulr, vlr);
   TEST_NEAR("read from file", std::fabs(ug - ulr) + std::fabs(vg - vlr), 0.0, 1e-3);

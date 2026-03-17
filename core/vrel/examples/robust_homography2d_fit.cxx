@@ -67,7 +67,7 @@ main()
   //
   {
     const int num_dep_res = hg->num_samples_to_instantiate();
-    vrel_objective * const lms = new vrel_lms_obj(num_dep_res);
+    const vrel_objective * const lms = new vrel_lms_obj(num_dep_res);
 
     auto * ransam = new vrel_ran_sam_search;
     ransam->set_trace_level(trace_level);

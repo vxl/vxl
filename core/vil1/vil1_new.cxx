@@ -48,7 +48,7 @@ vil1_new(vil1_stream * os,
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
-  for (vil1_file_format ** p = vil1_file_format::all(); *p; ++p)
+  for (vil1_file_format * const * p = vil1_file_format::all(); *p; ++p)
   {
     vil1_file_format * fmt = *p;
     if (std::strcmp(fmt->tag(), file_format) == 0)

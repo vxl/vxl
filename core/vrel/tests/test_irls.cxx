@@ -174,7 +174,7 @@ test_irls()
   regression_points(true_params.as_vector(), sigma, pts);
   auto * lr = new vrel_linear_regression(pts, use_intercept);
   const int dof = lr->param_dof();
-  vrel_wls_obj * const m_est = new vrel_tukey_obj(dof);
+  const vrel_wls_obj * const m_est = new vrel_tukey_obj(dof);
   int max_iterations = 50;
   testlib_test_begin("ctor");
   auto * irls = new vrel_irls(max_iterations);
@@ -240,7 +240,7 @@ test_irls()
   std::vector<image_point_match> matches;
   sigma = 0.25;
   generate_similarity_matches(params.as_vector(), sigma, matches);
-  vrel_estimation_problem * const match_prob = new similarity_from_matches(matches);
+  const vrel_estimation_problem * const match_prob = new similarity_from_matches(matches);
 
   vrel_irls irls_m(20);
   irls_m.set_trace_level(trace_level);

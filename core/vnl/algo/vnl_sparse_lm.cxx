@@ -183,7 +183,7 @@ vnl_sparse_lm::minimize(vnl_vector<double> & a,
         // this large inverse is the bottle neck of this algorithm
         vnl_matrix<double> H;
         const vnl_cholesky Sa_cholesky(Sa, vnl_cholesky::quiet);
-        vnl_svd<double> * Sa_svd = nullptr;
+        const vnl_svd<double> * Sa_svd = nullptr;
         // use SVD as a backup if Cholesky is deficient
         if (Sa_cholesky.rank_deficiency() > 0)
         {

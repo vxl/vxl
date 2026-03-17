@@ -221,7 +221,7 @@ test_gaussian_sphere_type(T epsilon, const std::string & type_name)
               box_test,
               epsilon);
 
-    vpdl_distribution<T> * const base = &gauss; // pointer to the base class
+    const vpdl_distribution<T> * const base = &gauss; // pointer to the base class
     TEST_NEAR(("box probability (base==derived) <" + type_name + ">").c_str(),
               base->box_prob(test2.as_ref(), test1.as_ref()),
               gauss.box_prob(test2.as_ref(), test1.as_ref()),

@@ -440,7 +440,7 @@ vpgl_nitf_RSM_camera_extractor::determine_overflow_status(vil_nitf2_image * nitf
   }
   vil_nitf2_tagged_record_sequence::const_iterator tres_itr;
   // get the data extension
-  vil_nitf2_des * const des = (nitf_image->get_des())[ixsofl - 1]; // should agree with subheader index
+  const vil_nitf2_des * const des = (nitf_image->get_des())[ixsofl - 1]; // should agree with subheader index
   if (!des)
   {
     std::cout << "null des" << std::endl;
@@ -553,7 +553,7 @@ vpgl_nitf_RSM_camera_extractor::init(vil_nitf2_image * nitf_image, bool verbose)
 
   for (unsigned i = 0; i < headers.size(); ++i)
   {
-    vil_nitf2_image_subheader * const hdr = headers[i];
+    const vil_nitf2_image_subheader * const hdr = headers[i];
     if (nitf_status_[i] == INVALID)
       continue;
     // Get standard metadata from the nitf2_image and image subheader

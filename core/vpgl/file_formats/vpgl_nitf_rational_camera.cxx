@@ -276,7 +276,7 @@ bool
 vpgl_nitf_rational_camera::read(vil_nitf2_image * nitf_image, bool verbose)
 {
   const std::vector<vil_nitf2_image_subheader *> & headers = nitf_image->get_image_headers();
-  vil_nitf2_image_subheader * const hdr = headers[0];
+  const vil_nitf2_image_subheader * const hdr = headers[0];
 
   // initialize the array
   double tre_data[90];

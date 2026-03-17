@@ -180,9 +180,9 @@ test_ran_sam_search()
   //  function.
   //
   const bool use_intercept = true;
-  vrel_estimation_problem * const lr = new vrel_linear_regression(pts, use_intercept);
+  const vrel_estimation_problem * const lr = new vrel_linear_regression(pts, use_intercept);
   const int dof = lr->num_samples_to_instantiate();
-  vrel_objective * const lms = new vrel_lms_obj(dof);
+  const vrel_objective * const lms = new vrel_lms_obj(dof);
   auto * ransam = new vrel_ran_sam_search();
   TEST("ctor", !ransam, false);
 #if 0
@@ -269,7 +269,7 @@ test_ran_sam_search()
   std::vector<image_point_match> matches;
   vnl_double_4 sim_params(1.4, -0.2, 20.0, -18.0);
   generate_similarity_matches(sim_params.as_vector(), sigma, matches); // 20 matches, 13 points
-  vrel_estimation_problem * const match_prob = new similarity_from_matches(matches);
+  const vrel_estimation_problem * const match_prob = new similarity_from_matches(matches);
 #if 0
   ransam->set_sampling_params( 0.5, 0.999, 1 );
   ransam->calc_num_samples( match_prob->num_data_points(), match_prob->num_correspondences_all(),

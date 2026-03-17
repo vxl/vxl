@@ -46,8 +46,8 @@ test_class()
   sp a(new some_class);
   sp b((some_class *)nullptr);
 
-  void * const olda = (void *)a.as_pointer();
-  void * const oldb = (void *)b.as_pointer();
+  const void * const olda = (void *)a.as_pointer();
+  const void * const oldb = (void *)b.as_pointer();
 
   for (int i = 0; i < 10003; ++i)
   {

@@ -38,7 +38,7 @@ vil1_load_raw(vil1_stream * is)
 
   // failed.
   std::cerr << __FILE__ ": Tried";
-  for (vil1_file_format ** p = vil1_file_format::all(); *p; ++p)
+  for (vil1_file_format * const * p = vil1_file_format::all(); *p; ++p)
     std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
   std::cerr << ": none succeeded\n";
 

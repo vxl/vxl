@@ -48,7 +48,7 @@ test_memory_chunk_io_as(T value)
   vpl_unlink("vil_memory_chunk_test_io.bvl.tmp");
 #endif
 
-  T * const data2 = reinterpret_cast<T *>(chunk2.data());
+  const T * const data2 = reinterpret_cast<T *>(chunk2.data());
 
   TEST("Size OK", chunk2.size() == chunk1.size(), true);
   TEST("Type OK", chunk1.pixel_format(), chunk2.pixel_format());
