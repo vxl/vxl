@@ -299,7 +299,7 @@ vnl_matrix_fixed<T, nrows, ncols>::extract(vnl_matrix<T> & sub_matrix, unsigned 
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
   if ((nrows < bottom) || (ncols < right))
-    vnl_error_matrix_dimension("extract", nrows, ncols, bottom, right);
+    vnl_error_matrix_dimension("extract", static_cast<int>(nrows), static_cast<int>(ncols), static_cast<int>(bottom), static_cast<int>(right));
 #endif
   for (unsigned int i = 0; i < rowz; ++i)   // actual copy of all elements
     for (unsigned int j = 0; j < colz; ++j) // in submatrix

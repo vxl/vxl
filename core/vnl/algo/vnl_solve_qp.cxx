@@ -138,7 +138,7 @@ vnl_solve_qp_update_x(vnl_vector<double> & x,
       if (alpha < min_alpha)
       {
         min_alpha = alpha;
-        worst_i = i;
+        worst_i = static_cast<int>(i);
       }
     }
   }

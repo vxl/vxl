@@ -97,7 +97,7 @@ vnl_levenberg_marquardt::lmdif_lsqfun(long * n,     // I   Number of residuals
       std::cerr << "] = " << ref_fx.magnitude() << '\n';
     }
 
-    f->trace(self->num_iterations_, ref_x, ref_fx);
+    f->trace(static_cast<int>(self->num_iterations_), ref_x, ref_fx);
     ++(self->num_iterations_);
   }
   else
@@ -270,7 +270,7 @@ vnl_levenberg_marquardt::lmder_lsqfun(long * n,    // I   Number of residuals
         std::cerr << ", ... ";
       std::cerr << "] = " << ref_fx.magnitude() << '\n';
     }
-    f->trace(self->num_iterations_, ref_x, ref_fx);
+    f->trace(static_cast<int>(self->num_iterations_), ref_x, ref_fx);
   }
   else if (*iflag == 1)
   {
@@ -528,7 +528,7 @@ vnl_levenberg_marquardt::get_JtJ()
       {
         if (ipvt_[i] == (int)j + 1)
         {
-          jpvt(j) = i;
+          jpvt(j) = static_cast<int>(i);
           break;
         }
       }

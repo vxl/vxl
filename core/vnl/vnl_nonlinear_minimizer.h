@@ -90,7 +90,7 @@ public:
   int
   get_max_function_evals() const
   {
-    return maxfev;
+    return static_cast<int>(maxfev);
   }
 
   //: Set the step length for FD Jacobian.
@@ -165,7 +165,7 @@ public:
   int
   get_num_evaluations() const
   {
-    return num_evaluations_;
+    return static_cast<int>(num_evaluations_);
   }
 
   //: Return the number of {\em iterations} in the last minimization.
@@ -173,7 +173,7 @@ public:
   int
   get_num_iterations() const
   {
-    return num_iterations_;
+    return static_cast<int>(num_iterations_);
   }
 
   //: Some generic return codes that apply to all minimizers.

@@ -52,7 +52,7 @@ public:
   int
   num_cols() const
   {
-    return num_cols_;
+    return static_cast<int>(num_cols_);
   }
 
   //: number of non-zero elements

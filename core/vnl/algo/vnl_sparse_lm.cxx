@@ -22,14 +22,14 @@
 
 //: Initialize with the function object that is to be minimized.
 vnl_sparse_lm::vnl_sparse_lm(vnl_sparse_lst_sqr_function & f)
-  : num_a_(f.number_of_a())
-  , num_b_(f.number_of_b())
-  , num_e_(f.number_of_e())
+  : num_a_(static_cast<int>(f.number_of_a()))
+  , num_b_(static_cast<int>(f.number_of_b()))
+  , num_e_(static_cast<int>(f.number_of_e()))
   , num_nz_(f.residual_indices().num_non_zero())
-  , size_a_(f.index_a(num_a_))
-  , size_b_(f.index_b(num_b_))
-  , size_c_(f.number_of_params_c())
-  , size_e_(f.index_e(num_e_))
+  , size_a_(static_cast<int>(f.index_a(num_a_)))
+  , size_b_(static_cast<int>(f.index_b(num_b_)))
+  , size_c_(static_cast<int>(f.number_of_params_c()))
+  , size_e_(static_cast<int>(f.index_e(num_e_)))
   , A_(num_nz_)
   , B_(num_nz_)
   , C_(num_nz_)
@@ -120,16 +120,16 @@ vnl_sparse_lm::minimize(vnl_vector<double> & a,
   }
 
   double sqr_error = e_.squared_magnitude();
-  start_error_ = std::sqrt(sqr_error / e_.size()); // RMS error
+  start_error_ = std::sqrt(sqr_error / static_cast<double>(e_.size())); // RMS error
 
   for (num_iterations_ = 0; num_iterations_ < (unsigned int)maxfev; ++num_iterations_)
   {
     if (verbose_)
       std::cout << "iteration " << std::setw(4) << num_iterations_ << " RMS error = " << std::setprecision(6)
-                << std::setw(12) << std::sqrt(sqr_error / e_.size()) << " mu = " << std::setprecision(6)
+                << std::setw(12) << std::sqrt(sqr_error / static_cast<double>(e_.size())) << " mu = " << std::setprecision(6)
                 << std::setw(12) << mu << " nu = " << nu << std::endl;
     if (trace)
-      f_->trace(num_iterations_, a, b, c, e_);
+      f_->trace(static_cast<int>(num_iterations_), a, b, c, e_);
 
     // Compute the Jacobian in block form J = [A|B|C]
     // where A, B, and C are sparse and contain subblocks Aij, Bij, and Cij
@@ -296,13 +296,13 @@ vnl_sparse_lm::minimize(vnl_vector<double> & a,
 
       if (verbose_)
         std::cout << "               RMS error = " << std::setprecision(6) << std::setw(12)
-                  << std::sqrt(sqr_error / e_.size()) << " mu = " << std::setprecision(6) << std::setw(12) << mu
+                  << std::sqrt(sqr_error / static_cast<double>(e_.size())) << " mu = " << std::setprecision(6) << std::setw(12) << mu
                   << " nu = " << nu << std::endl;
     }
   }
 
 
-  end_error_ = std::sqrt(sqr_error / e_.size()); // RMS error
+  end_error_ = std::sqrt(sqr_error / static_cast<double>(e_.size())); // RMS error
 
   if ((int)num_iterations_ >= maxfev)
   {
@@ -385,8 +385,8 @@ vnl_sparse_lm::allocate_matrices()
     const vnl_crs_index::sparse_vector row = crs.sparse_row(i);
     for (auto & r_itr : row)
     {
-      const unsigned int j = r_itr.second;
-      const unsigned int k = r_itr.first;
+      const int j = r_itr.second;
+      const int k = r_itr.first;
       const unsigned int bj_size = f_->number_of_params_b(j);
       const unsigned int eij_size = f_->number_of_residuals(k);
       A_[k].set_size(eij_size, ai_size);
@@ -430,7 +430,7 @@ vnl_sparse_lm::compute_normal_equations()
   // JtJ = |T  Q  R|
   //       |Qt U  W|  with U and V block diagonal
   //       |Rt Wt V|  and W with same sparsity as residuals
-  for (unsigned int i = 0; i < f_->number_of_a(); ++i)
+  for (int i = 0; i < static_cast<int>(f_->number_of_a()); ++i)
   {
     vnl_matrix<double> & Ui = U_[i];
     Ui.fill(0.0);
@@ -442,9 +442,8 @@ vnl_sparse_lm::compute_normal_equations()
     const vnl_crs_index::sparse_vector row = crs.sparse_row(i);
     for (auto & r_itr : row)
     {
-      const unsigned int j = r_itr.second;
-      const unsigned int k = r_itr.first;
-      ;
+      const int j = r_itr.second;
+      const int k = r_itr.first;
       const vnl_matrix<double> & Aij = A_[k];
       const vnl_matrix<double> & Bij = B_[k];
       const vnl_matrix<double> & Cij = C_[k];
@@ -795,8 +794,8 @@ vnl_sparse_lm::backsolve_db(const vnl_vector<double> & da, const vnl_vector<doub
     }
     for (auto & c_itr : col)
     {
-      const unsigned int k = c_itr.first;
-      const unsigned int i = c_itr.second;
+      const int k = c_itr.first;
+      const int i = c_itr.second;
       const vnl_vector_ref<double> dai(f_->number_of_params_a(i),
                                        const_cast<double *>(da.data_block() + f_->index_a(i)));
       vnl_fastops::dec_X_by_AtB(seb, W_[k], dai);

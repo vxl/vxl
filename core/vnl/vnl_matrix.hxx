@@ -704,7 +704,7 @@ vnl_matrix<T>::extract(vnl_matrix<T> & submatrix, unsigned top, unsigned left) c
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
   if ((this->num_rows < bottom) || (this->num_cols < right))
-    vnl_error_matrix_dimension("extract", this->num_rows, this->num_cols, bottom, right);
+    vnl_error_matrix_dimension("extract", static_cast<int>(this->num_rows), static_cast<int>(this->num_cols), static_cast<int>(bottom), static_cast<int>(right));
 #endif
   for (unsigned int i = 0; i < rowz; i++)   // actual copy of all elements
     for (unsigned int j = 0; j < colz; j++) // in submatrix
@@ -1528,7 +1528,9 @@ int
 vnl_inplace_transpose(doublereal * a, unsigned m, unsigned n, char * move, unsigned iwrk)
 {
   doublereal b, c;
-  const int k = m * n - 1;
+  const int im_ = static_cast<int>(m);
+  const int in_ = static_cast<int>(n);
+  const int k = im_ * in_ - 1;
   int iter, i1, i2, im, i1c, i2c, ncount, max_;
 
   // *****
@@ -1557,8 +1559,8 @@ vnl_inplace_transpose(doublereal * a, unsigned m, unsigned n, char * move, unsig
     for (unsigned i = 0; i < n; ++i)
       for (unsigned j = i + 1; j < n; ++j)
       {
-        i1 = i + j * n;
-        i2 = j + i * m;
+        i1 = static_cast<int>(i + j * n);
+        i2 = static_cast<int>(j + i * m);
         b = a[i1];
         a[i1] = a[i2];
         a[i2] = b;
@@ -1571,8 +1573,8 @@ vnl_inplace_transpose(doublereal * a, unsigned m, unsigned n, char * move, unsig
   if (m > 2 && n > 2)
   {
     // CALCULATE THE NUMBER OF FIXED POINTS, EUCLIDS ALGORITHM FOR GCD(M-1,N-1).
-    int ir2 = m - 1;
-    int ir1 = n - 1;
+    int ir2 = im_ - 1;
+    int ir1 = in_ - 1;
     int ir0 = ir2 % ir1;
     while (ir0 != 0)
     {
@@ -1584,7 +1586,7 @@ vnl_inplace_transpose(doublereal * a, unsigned m, unsigned n, char * move, unsig
   }
   // SET INITIAL VALUES FOR SEARCH
   iter = 1;
-  im = m;
+  im = im_;
   // AT LEAST ONE LOOP MUST BE RE-ARRANGED
   goto L80;
 // SEARCH FOR LOOPS TO REARRANGE
@@ -1593,7 +1595,7 @@ L40:
   ++iter;
   if (iter > max_)
     return iter; // error return
-  im += m;
+  im += im_;
   if (im > k)
     im -= k;
   i2 = im;
@@ -1609,7 +1611,7 @@ L40:
   while (i2 > iter && i2 < max_)
   {
     i1 = i2;
-    i2 = m * i1 - k * (i1 / n);
+    i2 = im_ * i1 - k * (i1 / in_);
   }
   if (i2 != iter)
     goto L40;
@@ -1621,7 +1623,7 @@ L80:
   c = a[i1c];
   while (true)
   {
-    i2 = m * i1 - k * (i1 / n);
+    i2 = im_ * i1 - k * (i1 / in_);
     i2c = k - i2;
     if (i1 <= (int)iwrk)
       move[i1 - 1] = '1'; // true;

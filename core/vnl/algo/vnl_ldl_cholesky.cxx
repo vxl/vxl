@@ -123,7 +123,7 @@ vnl_ldl_cholesky::inplace_solve(double * x) const
   const double * L_data = &L_(n - 1, n - 2);
   const double * x_data = &x[n - 1];
   unsigned c = 1;
-  for (int i = n - 2; i >= 0; --i, L_data -= (n + 1), --x_data, ++c)
+  for (int i = static_cast<int>(n) - 2; i >= 0; --i, L_data -= (n + 1), --x_data, ++c)
   {
     x[i] -= dot(L_data, n, x_data, c);
   }

@@ -162,7 +162,7 @@ operator==(const vnl_amoeba_SimplexCorner & a, const vnl_amoeba_SimplexCorner & 
 void
 vnl_amoebaFit::set_up_simplex_relative(std::vector<vnl_amoeba_SimplexCorner> & simplex, const vnl_vector<double> & x)
 {
-  const int n = x.size();
+  const int n = static_cast<int>(x.size());
 
   simplex[0].v = x;
   simplex[0].fv = f(x);
@@ -192,7 +192,7 @@ vnl_amoebaFit::set_up_simplex_absolute(std::vector<vnl_amoeba_SimplexCorner> & s
                                        const vnl_vector<double> & x,
                                        const vnl_vector<double> & dx)
 {
-  const int n = x.size();
+  const int n = static_cast<int>(x.size());
 
   simplex[0].v = x;
   simplex[0].fv = f(x);
@@ -239,7 +239,7 @@ void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x)
 {
   // Set up a simplex near the initial guess.
-  const int n = x.size();
+  const int n = static_cast<int>(x.size());
   std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(n));
 
   set_up_simplex_relative(simplex, x);
@@ -250,7 +250,7 @@ void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x, const vnl_vector<double> & dx)
 {
   // Set up a simplex near the initial guess.
-  const int n = x.size();
+  const int n = static_cast<int>(x.size());
   std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(n));
 
   set_up_simplex_absolute(simplex, x, dx);
@@ -261,7 +261,7 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, const vnl_vector<double> & dx)
 void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorner> & simplex)
 {
-  const int n = x.size();
+  const int n = static_cast<int>(x.size());
   sort_simplex(simplex);
 
   if (verbose > 1)
@@ -428,7 +428,7 @@ class vnl_amoeba_LSCF : public vnl_cost_function
 
 public:
   vnl_amoeba_LSCF(vnl_least_squares_function & ls)
-    : vnl_cost_function(ls.get_number_of_unknowns())
+    : vnl_cost_function(static_cast<int>(ls.get_number_of_unknowns()))
     , ls_(&ls)
     , fx(ls.get_number_of_residuals())
   {}

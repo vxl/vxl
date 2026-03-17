@@ -72,7 +72,7 @@ vnl_nonlinear_minimizer::ReturnCodes
 vnl_powell::minimize(vnl_vector<double> & p)
 {
   // verbose_ = true;
-  const int n = p.size();
+  const int n = static_cast<int>(p.size());
   vnl_powell_1dfun f1d(n, functor_, this);
 
   vnl_matrix<double> xi(n, n, vnl_matrix_identity);
