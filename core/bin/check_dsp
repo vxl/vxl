@@ -370,20 +370,6 @@ foreach my $dir (@DIRS)
   # now replace all variables by their content:
   foreach my $n (keys %names) { $cmakefile =~ s/\$\{$n\}/$names{$n}/g; }
 
-  while ($cmakefile =~ s/\bGENERATE_TEST_DRIVER\s*\(\s*\S+\s+(\S+)(.*?)\)//s)
-  {
-    my $n = $1;
-    # move "TEST" entries from %source_files to %test_files:
-    $cmakefile .= "ADD_EXECUTABLE(x test_driver.cxx $names{$n})\n";
-    foreach my $g (split /\s+/, $names{$n}) {
-      $cmakefile .= "ADD_TEST(x x $g)\n" if ($g =~ s/\.cxx$//);
-      foreach (grep { m/^$g$/ } keys %source_files) { delete $source_files{$_}; }
-    }
-  }
-  while ($cmakefile =~ s/\bGENERATE_TEST_INCLUDE\s*\(.*?\)//s)
-  {
-    $cmakefile .= "ADD_EXECUTABLE(x test_include.cxx)\n";
-  }
   # now try to do a reasonable guess about the IF .. ELSE .. ENDIF constructs:
   while ($cmakefile =~ s/\bIF\s*\(\s*([A-Z0-9_]+_FOUND)\s*\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
   while ($cmakefile =~ s/\bIF\s*\(\s*(HAS_[A-Z0-9_]+)\s*\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
