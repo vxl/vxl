@@ -1307,7 +1307,7 @@ vnl_matrix<T>::read_ascii(std::istream & s)
     return s.good() || s.eof();
   }
 
-  const bool debug = false;
+  constexpr bool debug = false;
 
   std::vector<T> first_row_vals;
   if (debug)

@@ -96,12 +96,12 @@ public:
   }
 };
 
-static const double twopi = vnl_math::twopi;
+static constexpr double twopi = vnl_math::twopi;
 
-static const double epsilonB = 2.e-03;
+static constexpr double epsilonB = 2.e-03;
 static const vnl_rnpoly_solve_cmplx epsilonZ = vnl_rnpoly_solve_cmplx(1.e-04, 1.e-04);
-static const double final_eps = 1.e-10;
-static const double stepinit = 1.e-02;
+static constexpr double final_eps = 1.e-10;
+static constexpr double stepinit = 1.e-02;
 
 
 std::vector<vnl_vector<double> *>
