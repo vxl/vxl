@@ -5,13 +5,8 @@
 #include <vil1/vil1_save.h>
 #include "image_convert.h"
 #include <vxl_config.h> // for vxl_byte
-
-#ifndef INT_MAX
-#define INT_MAX (int)0x7fffffff
-#endif
-#ifndef INT_MIN
-#define INT_MIN (int)(-0x80000000)
-#endif
+                        //
+#include <climits> // for INT_MAX and INT_MIN
 
 template <class T>
 vil1_memory_image_of<T> &operator -=
