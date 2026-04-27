@@ -1,0 +1,361 @@
+# GitHub Actions CI for VXL with CDash submission.
+#
+# Coverage:
+#   * itk-core: Build only the libraries ITK vendors from VXL
+#     (vnl + testlib + their dependencies via VXL_BUILD_CORE_NUMERICS_ONLY=ON).
+#     Runs on ubuntu-24.04, macos-14, windows-2022.
+#   * full-modules: Ubuntu 24.04 only. Builds full core + every contrib
+#     module that compiles cleanly with VXL_BUILD_NONDEPRECATED_ONLY=ON
+#     using the system packages available in the GitHub Actions runner
+#     image. Optional dependencies that need rare libraries (DCMTK,
+#     FFmpeg, Qt/VGUI, OpenCL) are intentionally left off.
+#
+# Output minimization (modeled on ITK's arm.yml):
+#   * ctest -S drives configure/build/test/submit; per-target output stays
+#     in Build.xml / Test.xml and is consumed by CDash, not echoed to the
+#     job log.
+#   * report_build_diagnostics.py extracts warning/error text from Build.xml
+#     after the run so that diagnostics appear inline in the GitHub log
+#     without dumping every -DCMAKE_VERBOSE_MAKEFILE line.
+#   * ccache is restored from a cross-run cache to avoid full rebuilds.
+#   * paths-ignore skips the workflow on docs-only changes.
+#
+# Submissions go to https://open.cdash.org/index.php?project=vxl
+# (matches CTestConfig.cmake at the repo root).
+#
+# Workflow injection hardening: any GitHub-derived metadata
+# (ref_name, sha, PR number, head_ref) is exposed to scripts only via
+# env: blocks, never interpolated directly into a `run:` body.
+
+name: VXL.Build
+
+on:
+  push:
+    branches:
+      - master
+      - 'release*'
+    paths-ignore:
+      - '*.md'
+      - LICENSE
+      - 'scripts/**'
+      - '.circleci/**'
+      - '.travis.yml'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - LICENSE
+      - 'scripts/**'
+      - '.circleci/**'
+      - '.travis.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: '${{ github.workflow }}@${{ github.head_ref || github.ref }}'
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  CMAKE_VERSION: "3.30.5"
+
+jobs:
+
+  itk-core:
+    name: itk-core (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            name: Ubuntu-24.04
+            generator: Ninja
+            parallel-level: 4
+            shell: bash
+          - os: macos-14
+            name: macOS-14
+            generator: Ninja
+            parallel-level: 3
+            shell: bash
+          - os: windows-2022
+            name: Windows-2022
+            generator: Ninja
+            parallel-level: 4
+            shell: bash
+
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 5
+          clean: true
+
+      - name: Install ccache (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ccache ninja-build python3-defusedxml
+          else
+            brew install ccache ninja
+            python3 -m pip install --upgrade defusedxml
+          fi
+          echo "CCACHE_BASEDIR=${GITHUB_WORKSPACE}" >> "$GITHUB_ENV"
+          echo "CCACHE_COMPILERCHECK=content" >> "$GITHUB_ENV"
+          echo "CCACHE_NOHASHDIR=true" >> "$GITHUB_ENV"
+          echo "CCACHE_SLOPPINESS=pch_defines,time_macros" >> "$GITHUB_ENV"
+          echo "CCACHE_DIR=${RUNNER_TEMP}/ccache" >> "$GITHUB_ENV"
+          echo "CCACHE_MAXSIZE=2G" >> "$GITHUB_ENV"
+
+      - name: Install build deps (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install -y --no-progress ccache ninja
+          python -m pip install --upgrade defusedxml
+          echo "CCACHE_DIR=${RUNNER_TEMP}/ccache" >> $GITHUB_ENV
+          echo "CCACHE_MAXSIZE=2G" >> $GITHUB_ENV
+
+      - name: Set up MSVC environment (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Restore ccache
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ runner.temp }}/ccache
+          key: ccache-itk-core-${{ matrix.name }}-${{ github.sha }}
+          restore-keys: |
+            ccache-itk-core-${{ matrix.name }}-
+
+      - name: Reset ccache stats
+        run: ccache --zero-stats
+
+      - name: Get CMake / Ninja
+        uses: lukka/get-cmake@v4.0.1
+        with:
+          cmakeVersion: ~${{ env.CMAKE_VERSION }}
+          ninjaVersion: latest
+
+      - name: Configure dashboard env
+        env:
+          MATRIX_NAME: ${{ matrix.name }}
+          MATRIX_PARALLEL_LEVEL: ${{ matrix.parallel-level }}
+          GH_SHA: ${{ github.sha }}
+          GH_REF_NAME: ${{ github.ref_name }}
+          GH_EVENT_NAME: ${{ github.event_name }}
+          GH_PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          SHORT_SHA="${GH_SHA:0:7}"
+          if [ "$GH_EVENT_NAME" = "pull_request" ]; then
+            REF_LABEL="PR-${GH_PR_NUMBER}"
+          else
+            # ref_name is GitHub-validated; sanitize defensively to [A-Za-z0-9._-].
+            REF_LABEL=$(printf '%s' "$GH_REF_NAME" | tr -c 'A-Za-z0-9._-' '_')
+          fi
+          BUILD_NAME="itk-core_${MATRIX_NAME}_${REF_LABEL}_${SHORT_SHA}"
+          if [ "$GH_EVENT_NAME" = "push" ] && [ "$GH_REF_NAME" = "master" ]; then
+            DASHBOARD_MODEL="Continuous"
+          else
+            DASHBOARD_MODEL="Experimental"
+          fi
+          {
+            echo "CTEST_SOURCE_DIRECTORY=${GITHUB_WORKSPACE}"
+            echo "CTEST_BINARY_DIRECTORY=${GITHUB_WORKSPACE}/build"
+            echo "CTEST_BUILD_NAME=${BUILD_NAME}"
+            echo "CTEST_SITE=github-actions"
+            echo "DASHBOARD_MODEL=${DASHBOARD_MODEL}"
+            echo "CTEST_PARALLEL_LEVEL=${MATRIX_PARALLEL_LEVEL}"
+          } >> "$GITHUB_ENV"
+          mkdir -p "${GITHUB_WORKSPACE}/build"
+
+      - name: Configure dashboard cache (itk-core)
+        run: |
+          # VXL_BUILD_CORE_NUMERICS_ONLY=ON disables every core component
+          # except numerics — this matches what ITK vendors under
+          # Modules/ThirdParty/VNL/src/vxl/.
+          {
+            echo 'DASHBOARD_CACHE<<DC_EOF'
+            echo 'CMAKE_BUILD_TYPE:STRING=Release'
+            echo 'CMAKE_C_STANDARD:STRING=11'
+            echo 'CMAKE_CXX_STANDARD:STRING=17'
+            echo 'CMAKE_C_COMPILER_LAUNCHER:STRING=ccache'
+            echo 'CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache'
+            echo 'BUILD_TESTING:BOOL=ON'
+            echo 'BUILD_SHARED_LIBS:BOOL=OFF'
+            echo 'VXL_BUILD_CORE_NUMERICS_ONLY:BOOL=ON'
+            echo 'VXL_BUILD_CONTRIB:BOOL=OFF'
+            echo 'VXL_BUILD_VGUI:BOOL=OFF'
+            echo 'VXL_BUILD_CORE_VIDEO:BOOL=OFF'
+            echo 'VXL_BUILD_NONDEPRECATED_ONLY:BOOL=ON'
+            echo 'VXL_BUILD_EXAMPLES:BOOL=OFF'
+            echo 'DC_EOF'
+          } >> "$GITHUB_ENV"
+
+      - name: Build, test, and submit to CDash
+        run: |
+          ctest -S "${GITHUB_WORKSPACE}/.github/dashboard/vxl_github_dashboard.cmake" -V
+
+      - name: Report build diagnostics
+        if: always()
+        run: |
+          python3 "${GITHUB_WORKSPACE}/.github/dashboard/report_build_diagnostics.py" "${GITHUB_WORKSPACE}/build" || true
+
+      - name: ccache stats
+        if: always()
+        run: ccache --show-stats || true
+
+      - name: Save ccache
+        if: ${{ !cancelled() }}
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ runner.temp }}/ccache
+          key: ccache-itk-core-${{ matrix.name }}-${{ github.sha }}
+
+  full-modules:
+    name: full-modules (Ubuntu-24.04)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    needs: itk-core
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 5
+          clean: true
+
+      - name: Install build & contrib system deps
+        run: |
+          # Packages chosen for breadth: every external library that any
+          # non-deprecated VXL contrib module can use, where the package
+          # exists in the noble (24.04) main/universe repos.
+          # DCMTK, FFmpeg, Qt/VGUI, OpenCL are intentionally NOT installed
+          # because they pull in either deprecated paths or large
+          # additional toolchains. Re-evaluate if those modules are
+          # needed downstream.
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            ccache ninja-build python3-defusedxml \
+            libtiff-dev libgeotiff-dev libpng-dev libjpeg-turbo8-dev \
+            libexpat1-dev zlib1g-dev libbz2-dev \
+            libxml2-dev libxslt1-dev \
+            libopenjp2-7-dev \
+            liblapack-dev libblas-dev \
+            libtbb-dev
+          {
+            echo "CCACHE_BASEDIR=${GITHUB_WORKSPACE}"
+            echo "CCACHE_COMPILERCHECK=content"
+            echo "CCACHE_NOHASHDIR=true"
+            echo "CCACHE_SLOPPINESS=pch_defines,time_macros"
+            echo "CCACHE_DIR=${RUNNER_TEMP}/ccache"
+            echo "CCACHE_MAXSIZE=4G"
+          } >> "$GITHUB_ENV"
+
+      - name: Restore ccache
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ runner.temp }}/ccache
+          key: ccache-full-modules-${{ github.sha }}
+          restore-keys: |
+            ccache-full-modules-
+
+      - name: Reset ccache stats
+        run: ccache --zero-stats
+
+      - name: Get CMake / Ninja
+        uses: lukka/get-cmake@v4.0.1
+        with:
+          cmakeVersion: ~${{ env.CMAKE_VERSION }}
+          ninjaVersion: latest
+
+      - name: Configure dashboard env
+        env:
+          GH_SHA: ${{ github.sha }}
+          GH_REF_NAME: ${{ github.ref_name }}
+          GH_EVENT_NAME: ${{ github.event_name }}
+          GH_PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          SHORT_SHA="${GH_SHA:0:7}"
+          if [ "$GH_EVENT_NAME" = "pull_request" ]; then
+            REF_LABEL="PR-${GH_PR_NUMBER}"
+          else
+            REF_LABEL=$(printf '%s' "$GH_REF_NAME" | tr -c 'A-Za-z0-9._-' '_')
+          fi
+          BUILD_NAME="full-modules_Ubuntu-24.04_${REF_LABEL}_${SHORT_SHA}"
+          if [ "$GH_EVENT_NAME" = "push" ] && [ "$GH_REF_NAME" = "master" ]; then
+            DASHBOARD_MODEL="Continuous"
+          else
+            DASHBOARD_MODEL="Experimental"
+          fi
+          {
+            echo "CTEST_SOURCE_DIRECTORY=${GITHUB_WORKSPACE}"
+            echo "CTEST_BINARY_DIRECTORY=${GITHUB_WORKSPACE}/build"
+            echo "CTEST_BUILD_NAME=${BUILD_NAME}"
+            echo "CTEST_SITE=github-actions"
+            echo "DASHBOARD_MODEL=${DASHBOARD_MODEL}"
+            echo "CTEST_PARALLEL_LEVEL=4"
+          } >> "$GITHUB_ENV"
+          mkdir -p "${GITHUB_WORKSPACE}/build"
+
+      - name: Configure dashboard cache (full-modules)
+        run: |
+          # Full core + every contrib module that VXL_BUILD_NONDEPRECATED_ONLY
+          # leaves enabled. We do NOT enable: VGUI (Qt/X11 headache),
+          # CORE_VIDEO (FFmpeg API drift, see vxl/vxl#515), DCMTK module,
+          # OpenCL. Adjust here when more system packages become reliable.
+          {
+            echo 'DASHBOARD_CACHE<<DC_EOF'
+            echo 'CMAKE_BUILD_TYPE:STRING=Release'
+            echo 'CMAKE_C_STANDARD:STRING=11'
+            echo 'CMAKE_CXX_STANDARD:STRING=17'
+            echo 'CMAKE_C_COMPILER_LAUNCHER:STRING=ccache'
+            echo 'CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache'
+            echo 'BUILD_TESTING:BOOL=ON'
+            echo 'BUILD_SHARED_LIBS:BOOL=OFF'
+            echo 'VXL_BUILD_CORE_NUMERICS_ONLY:BOOL=OFF'
+            echo 'VXL_BUILD_CORE_NUMERICS:BOOL=ON'
+            echo 'VXL_BUILD_CORE_GEOMETRY:BOOL=ON'
+            echo 'VXL_BUILD_CORE_IMAGING:BOOL=ON'
+            echo 'VXL_BUILD_CORE_PROBABILITY:BOOL=ON'
+            echo 'VXL_BUILD_CORE_SERIALISATION:BOOL=ON'
+            echo 'VXL_BUILD_CORE_UTILITIES:BOOL=ON'
+            echo 'VXL_BUILD_CORE_VIDEO:BOOL=OFF'
+            echo 'VXL_BUILD_CONTRIB:BOOL=ON'
+            echo 'VXL_BUILD_VGUI:BOOL=OFF'
+            echo 'VXL_BUILD_DCMTK:BOOL=OFF'
+            echo 'VXL_BUILD_NONDEPRECATED_ONLY:BOOL=ON'
+            echo 'VXL_BUILD_EXAMPLES:BOOL=ON'
+            echo 'VXL_USE_GEOTIFF:BOOL=ON'
+            echo 'DC_EOF'
+          } >> "$GITHUB_ENV"
+
+      - name: Build, test, and submit to CDash
+        run: |
+          ctest -S "${GITHUB_WORKSPACE}/.github/dashboard/vxl_github_dashboard.cmake" -V
+
+      - name: Report build diagnostics
+        if: always()
+        run: |
+          python3 "${GITHUB_WORKSPACE}/.github/dashboard/report_build_diagnostics.py" "${GITHUB_WORKSPACE}/build" || true
+
+      - name: ccache stats
+        if: always()
+        run: ccache --show-stats || true
+
+      - name: Save ccache
+        if: ${{ !cancelled() }}
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ runner.temp }}/ccache
+          key: ccache-full-modules-${{ github.sha }}
