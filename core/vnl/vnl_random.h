@@ -98,22 +98,35 @@ public:
   void
   restart();
 
-  //: Generates a random unsigned 32-bit number.
+  //: Generates a random unsigned 32-bit value in [0, 2^32 - 1].
+  // \note The return type is \c unsigned \c long for historical
+  //       (ABI-stable) reasons. The produced value is always masked
+  //       to 32 bits, so it fits in a \c uint32_t on every platform
+  //       even when \c unsigned \c long is 64 bits wide (LP64).
   unsigned long
   lrand32();
 
-  //: Generates a random unsigned long in [a,b]
+  //: Generates a random signed integer in the inclusive range [a, b].
+  // \pre \c a \c <= \c b
+  // \note Despite sharing the name \c lrand32, this overload returns
+  //       a signed \c int rather than the 32-bit unsigned value
+  //       produced by the no-argument \c lrand32(). The naming is
+  //       preserved for ABI stability; new code preferring strongly
+  //       typed RNG output should use \c <random> directly.
   int
   lrand32(int a, int b);
 
-  //: Generates a random unsigned long in [0,b]
+  //: Generates a random signed integer in the inclusive range [0, b].
+  // \pre \c 0 \c <= \c b
   int
   lrand32(int b)
   {
     return lrand32(0, b);
   }
 
-  //: Generates a random unsigned long in [a,b]
+  //: Generates a random signed integer in [a, b]; \c count returns
+  //  the number of underlying \c lrand32() draws taken (rejection
+  //  sampling is used to avoid modulo bias).
   int
   lrand32(int a, int b, int &);
 
