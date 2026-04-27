@@ -16,6 +16,22 @@ test_random()
 
   TEST("lrand32", mz_random.lrand32(), 3501493769ul);
   TEST("lrand32(0,10)", mz_random.lrand32(0, 10), 9);
+
+  // The new fixed-width-typed API must produce the same sequence as
+  // lrand32() when seeded identically — they delegate to the same
+  // engine. Reseed and compare draw-by-draw.
+  vnl_random ref_random;
+  ref_random.reseed(123456);
+  vnl_random new_random;
+  new_random.reseed(123456);
+  TEST("next_uint32 matches lrand32", new_random.next_uint32(), static_cast<std::uint32_t>(ref_random.lrand32()));
+  TEST("next_int32(0,10) matches lrand32(0,10)",
+       new_random.next_int32(0, 10),
+       static_cast<std::int32_t>(ref_random.lrand32(0, 10)));
+  TEST("next_int32(b) matches lrand32(b)",
+       new_random.next_int32(42),
+       static_cast<std::int32_t>(ref_random.lrand32(42)));
+
   const double d1 = mz_random.drand32(0, 1);
   TEST_NEAR("drand32(0,1)", d1, 0.6158541, 1e-7);
   const double d2 = mz_random.drand64(0, 1);

@@ -4,6 +4,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
+#include <cstdint>
 #include "vnl/vnl_export.h"
 
 //:
@@ -116,6 +117,33 @@ public:
   //: Generates a random unsigned long in [a,b]
   int
   lrand32(int a, int b, int &);
+
+  //: Generates a random 32-bit unsigned integer in [0, 2^32 - 1].
+  //  Strongly typed C++11 replacement for \c lrand32(). Delegates to
+  //  the same underlying Marsaglia-Zaman engine so migrating callers
+  //  observe an identical random sequence. Prefer this over
+  //  \c lrand32() in new code; the return type is guaranteed to be
+  //  exactly 32 bits on every platform.
+  std::uint32_t
+  next_uint32();
+
+  //: Generates a random signed 32-bit integer in [a, b] (inclusive).
+  //  Strongly typed C++11 replacement for \c lrand32(int,int).
+  //  Delegates to the existing rejection-sampling implementation, so
+  //  the produced sequence matches \c lrand32(a,b). Prefer this in
+  //  new code.
+  //  \pre \c a \c <= \c b
+  std::int32_t
+  next_int32(std::int32_t a, std::int32_t b);
+
+  //: Generates a random signed 32-bit integer in [0, b] (inclusive).
+  //  Strongly typed C++11 replacement for \c lrand32(int).
+  //  \pre \c 0 \c <= \c b
+  std::int32_t
+  next_int32(std::int32_t b)
+  {
+    return next_int32(0, b);
+  }
 
   //:  Generates a random double in the range a <= x <= b with 32 bit randomness.
   //   drand32(1,0) is random down to about the 10th decimal place.

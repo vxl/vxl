@@ -223,6 +223,21 @@ vnl_random::lrand32(int lower, int upper, int & count)
   return lower + int(ran / denom);
 }
 
+std::uint32_t
+vnl_random::next_uint32()
+{
+  // lrand32() already masks its output with & 0xffffffff, so the
+  // narrowing cast to uint32_t is exact and well-defined on every
+  // platform regardless of sizeof(unsigned long).
+  return static_cast<std::uint32_t>(lrand32());
+}
+
+std::int32_t
+vnl_random::next_int32(std::int32_t a, std::int32_t b)
+{
+  return static_cast<std::int32_t>(lrand32(a, b));
+}
+
 double
 vnl_random::drand32(double lower, double upper)
 {
