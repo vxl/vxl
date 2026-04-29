@@ -105,7 +105,9 @@ jobs:
             sudo apt-get install -y ccache ninja-build python3-defusedxml
           else
             brew install ccache ninja
-            python3 -m pip install --upgrade defusedxml
+            # macOS runner Python is PEP-668 "externally-managed"; CI runners are
+            # ephemeral so --break-system-packages is the documented escape hatch.
+            python3 -m pip install --upgrade --break-system-packages defusedxml
           fi
           echo "CCACHE_BASEDIR=${GITHUB_WORKSPACE}" >> "$GITHUB_ENV"
           echo "CCACHE_COMPILERCHECK=content" >> "$GITHUB_ENV"
