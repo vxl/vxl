@@ -4,6 +4,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
+#include <array>
 #include <cstdint>
 #include "vcl_compiler.h"
 #include "vnl/vnl_export.h"
@@ -32,8 +33,8 @@ class VNL_EXPORT vnl_random
     mz_previous1 = 24
   };
   unsigned long linear_congruential_previous;
-  unsigned long mz_seed_array[vnl_random_array_size];
-  unsigned long mz_array[vnl_random_array_size];
+  std::array<unsigned long, vnl_random_array_size> mz_seed_array{};
+  std::array<unsigned long, vnl_random_array_size> mz_array{};
   unsigned int mz_array_position{ 0UL };
   int mz_borrow{ 0 };
   unsigned long
@@ -66,7 +67,12 @@ public:
   //  Initializes the random number generator deterministically
   //  using 37 ulongs as the 'seed'. The same seed will
   //  produce the same series of random numbers.
-  vnl_random(unsigned long seed[vnl_random_array_size]);
+  vnl_random(const std::array<unsigned long, vnl_random_array_size> & seed);
+
+  //: Construct with C-array seed (deprecated; use std::array overload).
+  VXL_DEPRECATED_MSG("Pass std::array<unsigned long, vnl_random_array_size> instead")
+  // NOLINTNEXTLINE(modernize-avoid-c-arrays)
+  vnl_random(const unsigned long seed[vnl_random_array_size]);
 
   //: Copy constructor.
   //  Initializes/sets the random number generator to exactly
@@ -91,7 +97,13 @@ public:
 
   //: Starts a new deterministic sequence from an already declared generator using the provided seed.
   void
-  reseed(const unsigned long[vnl_random_array_size]);
+  reseed(const std::array<unsigned long, vnl_random_array_size> & seed);
+
+  //: Reseed from C-array (deprecated; use std::array overload).
+  VXL_DEPRECATED_MSG("Pass std::array<unsigned long, vnl_random_array_size> instead")
+  // NOLINTNEXTLINE(modernize-avoid-c-arrays)
+  void
+  reseed(const unsigned long seed[vnl_random_array_size]);
 
   //: This restarts the sequence of random numbers.
   //  Restarts so that it repeats
