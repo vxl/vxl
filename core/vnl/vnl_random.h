@@ -5,6 +5,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <cstdint>
+#include "vcl_compiler.h"
 #include "vnl/vnl_export.h"
 
 //:
@@ -100,25 +101,22 @@ public:
   restart();
 
   //: Generates a random unsigned 32-bit value in [0, 2^32 - 1].
-  // \note The return type is \c unsigned \c long for historical
-  //       (ABI-stable) reasons. The produced value is always masked
-  //       to 32 bits, so it fits in a \c uint32_t on every platform
-  //       even when \c unsigned \c long is 64 bits wide (LP64).
+  // \deprecated Use next_uint32() — fixed-width return type (issue #976).
+  VXL_DEPRECATED_MSG("Use next_uint32() - see vxl issue #976")
   unsigned long
   lrand32();
 
   //: Generates a random signed integer in the inclusive range [a, b].
+  // \deprecated Use next_int32(a, b) — fixed-width return type (issue #976).
   // \pre \c a \c <= \c b
-  // \note Despite sharing the name \c lrand32, this overload returns
-  //       a signed \c int rather than the 32-bit unsigned value
-  //       produced by the no-argument \c lrand32(). The naming is
-  //       preserved for ABI stability; new code preferring strongly
-  //       typed RNG output should use \c <random> directly.
+  VXL_DEPRECATED_MSG("Use next_int32(a, b) - see vxl issue #976")
   int
   lrand32(int a, int b);
 
   //: Generates a random signed integer in the inclusive range [0, b].
+  // \deprecated Use next_int32(b) — fixed-width return type (issue #976).
   // \pre \c 0 \c <= \c b
+  VXL_DEPRECATED_MSG("Use next_int32(b) - see vxl issue #976")
   int
   lrand32(int b)
   {
@@ -126,8 +124,10 @@ public:
   }
 
   //: Generates a random signed integer in [a, b]; \c count returns
-  //  the number of underlying \c lrand32() draws taken (rejection
-  //  sampling is used to avoid modulo bias).
+  //  the number of underlying draws taken (rejection sampling).
+  // \deprecated No fixed-width replacement; use std::uniform_int_distribution
+  //             over next_uint32() if a draw count is needed.
+  VXL_DEPRECATED_MSG("No direct replacement; use std::uniform_int_distribution over next_uint32()")
   int
   lrand32(int a, int b, int &);
 
@@ -169,7 +169,7 @@ public:
   unsigned long
   operator()(unsigned n)
   {
-    return lrand32(0, static_cast<int>(n) - 1);
+    return static_cast<unsigned long>(next_int32(static_cast<std::int32_t>(n) - 1));
   }
 
   //:  Generates a random double in the range 0 <= x <= b with 32 bit randomness.
