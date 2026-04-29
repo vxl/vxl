@@ -210,7 +210,7 @@ jobs:
       - name: Report build diagnostics
         if: always()
         run: |
-          python3 "${GITHUB_WORKSPACE}/.github/dashboard/report_build_diagnostics.py" "${GITHUB_WORKSPACE}/build" || true
+          python3 "${GITHUB_WORKSPACE}/.github/dashboard/report_build_diagnostics.py" --fail-on-warnings "${GITHUB_WORKSPACE}/build"
 
       - name: ccache stats
         if: always()
@@ -349,7 +349,7 @@ jobs:
       - name: Report build diagnostics
         if: always()
         run: |
-          python3 "${GITHUB_WORKSPACE}/.github/dashboard/report_build_diagnostics.py" "${GITHUB_WORKSPACE}/build" || true
+          python3 "${GITHUB_WORKSPACE}/.github/dashboard/report_build_diagnostics.py" --fail-on-warnings "${GITHUB_WORKSPACE}/build"
 
       - name: ccache stats
         if: always()

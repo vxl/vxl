@@ -8,7 +8,11 @@ element so diagnostics appear directly in CI logs without inflating the
 log with full per-target compile output.
 
 Usage:
-    python report_build_diagnostics.py <build-directory>
+    python report_build_diagnostics.py [--fail-on-warnings] <build-directory>
+
+By default the script exits 1 only when <Error> entries are present.
+With --fail-on-warnings the script also exits 1 when any <Warning>
+entry is present, so CI can gate on warning regressions.
 
 Adapted from ITK's Testing/ContinuousIntegration/report_build_diagnostics.py.
 Uses defusedxml to harden against XXE / billion-laughs attacks even though
@@ -25,11 +29,20 @@ from defusedxml import ElementTree as ET
 
 
 def main() -> int:
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <build-directory>", file=sys.stderr)
+    args = sys.argv[1:]
+    fail_on_warnings = False
+    if args and args[0] == "--fail-on-warnings":
+        fail_on_warnings = True
+        args = args[1:]
+
+    if len(args) != 1:
+        print(
+            f"Usage: {sys.argv[0]} [--fail-on-warnings] <build-directory>",
+            file=sys.stderr,
+        )
         return 1
 
-    build_dir = sys.argv[1]
+    build_dir = args[0]
 
     tag_file = os.path.join(build_dir, "Testing", "TAG")
     if not os.path.isfile(tag_file):
@@ -85,7 +98,11 @@ def main() -> int:
 
     print("====================================================")
 
-    return 1 if errors else 0
+    if errors:
+        return 1
+    if warnings and fail_on_warnings:
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
