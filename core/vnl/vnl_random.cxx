@@ -9,6 +9,22 @@
 #include "vnl_random.h"
 #include <cassert>
 
+// next_uint32/next_int32 deliberately delegate to lrand32* to preserve
+// bitwise backward compatibility — the produced sequence is identical
+// for a given seed; only the public return type is corrected to fixed
+// width. A future refactor onto C++11 <random> would change the
+// sequence and is intentionally out of scope (separate effort).
+#if defined(__clang__)
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#  pragma warning(push)
+#  pragma warning(disable : 4996)
+#endif
+
 unsigned long
 vnl_random::linear_congruential_lrand32()
 {
@@ -253,3 +269,11 @@ vnl_random::drand64(double lower, double upper)
            (upper - lower) +
          lower;
 }
+
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#  pragma warning(pop)
+#endif
