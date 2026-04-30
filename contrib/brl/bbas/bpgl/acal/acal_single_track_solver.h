@@ -28,13 +28,19 @@
 #include "acal_match_tree.h"
 #include "acal_match_graph.h"
 #include "acal_solution_error.h"
+
 class acal_single_track_solver
 {
 public:
   acal_single_track_solver(): verbose_(false){}
 
- acal_single_track_solver(std::map<size_t, std::string> inames,std::map<size_t, vgl_point_2d<double> > track,std::map<size_t, vpgl_affine_camera<double> > const& acams):
-  inames_(inames), track_(track), track_acams_(acams),verbose_(false), use_covariance_(false){}
+  acal_single_track_solver(
+    std::map<size_t, std::string> inames,
+    std::map<size_t, vgl_point_2d<double>> track,
+    std::map<size_t, vpgl_affine_camera<double>> const& acams
+  )
+    : inames_(inames), track_(track), track_acams_(acams) {}
+  
   void set_verbose(bool verbose) { verbose_ = verbose; }
 
   // potentially condition the covariance matrix by adding a scaled identity matrix, s*I.
@@ -65,8 +71,8 @@ public:
  
 
  private:
-  bool verbose_;
-  bool use_covariance_;
+  bool verbose_ = false;
+  bool use_covariance_ = false;
   vnl_matrix<double> covar_plane_cs_;
   size_t large_track_size_;
   double max_sing_val_fraction_;

@@ -38,8 +38,10 @@ class bpgl_geotif_camera : vpgl_camera<T>
  public:
   //: default constructor - may want a container of cameras
   //  the default member values represent the most common case, e.g. a local_rational_camera
- bpgl_geotif_camera():has_lvcs_(true), gcam_has_wgs84_cs_(true),
-    elev_org_at_zero_(true), is_utm_(false), project_local_points_(true),scale_defined_(false), projection_enabled_(false){}
+ bpgl_geotif_camera()
+  : projection_enabled_(false), project_local_points_(true),
+    elev_org_at_zero_(true), has_lvcs_(true), gcam_has_wgs84_cs_(true),
+    scale_defined_(false), is_utm_(false) {}
 
   virtual ~bpgl_geotif_camera() = default;
 

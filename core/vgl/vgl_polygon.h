@@ -77,14 +77,6 @@ public:
     : sheets_(std::move(sheets))
   {}
 
-  // Copy constructor
-  vgl_polygon(const vgl_polygon & a)
-    : sheets_(a.sheets_)
-  {}
-
-  // Destructor
-  ~vgl_polygon() = default;
-
   //: Returns true if \a p(x,y) is inside the polygon, else false
   bool
   contains(const point_t & p) const

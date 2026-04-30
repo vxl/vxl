@@ -100,7 +100,7 @@ class match_edge
              std::shared_ptr<match_vertex> v1,
              std::vector<acal_match_pair> const& matches,
              size_t id = 0)
-    : v0_(v0), v1_(v1), matches_(matches), id_(id)
+    : id_(id), matches_(matches), v0_(v0), v1_(v1)
   {
     v0_->add_edge(this);
     v1_->add_edge(this);

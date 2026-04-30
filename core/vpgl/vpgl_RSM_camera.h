@@ -133,58 +133,33 @@ template <class T>
 class vpgl_region_selector
 {
 public:
-  vpgl_region_selector()
-    : rnis_(1)
-    , cnis_(1)
-    , tnis_(0)
-    , minr_(0)
-    , maxr_(0)
-    , minc_(0)
-    , maxc_(0)
-    , rssiz_(0.0)
-    , cssiz_(0.0)
-  {
+  vpgl_region_selector() {
     row_coefs_.resize(10);
     col_coefs_.resize(10);
   }
 
-  vpgl_region_selector(std::vector<T> row_coefs,
-                       std::vector<T> col_coefs,
-                       size_t minr,
-                       size_t maxr,
-                       size_t minc,
-                       size_t maxc,
-                       size_t rnis,
-                       size_t cnis,
-                       size_t tnis,
-                       size_t rssiz,
-                       size_t cssiz)
-    : row_coefs_(row_coefs)
-    , col_coefs_(col_coefs)
-    , minr_(minr)
-    , maxr_(maxr)
-    , minc_(minc)
-    , maxc_(maxc)
-    , rnis_(rnis)
-    , cnis_(cnis)
-    , tnis_(tnis)
-    , rssiz_(rssiz)
-    , cssiz_(cssiz)
-  {}
+  vpgl_region_selector(
+    std::vector<T> row_coefs, std::vector<T> col_coefs,
+    size_t minr, size_t maxr, size_t minc, size_t maxc,
+    size_t rnis, size_t cnis, size_t tnis, size_t rssiz, size_t cssiz
+  )
+    : row_coefs_(row_coefs), col_coefs_(col_coefs), minr_(minr), maxr_(maxr)
+    , minc_(minc), maxc_(maxc), rnis_(rnis), cnis_(cnis), tnis_(tnis)
+    , rssiz_(rssiz), cssiz_(cssiz) {}
 
-  void
-  select(T X, T Y, T Z, size_t & region_row, size_t & region_col) const;
+  void select(T X, T Y, T Z, size_t & region_row, size_t & region_col) const;
+
   std::vector<T> row_coefs_;
   std::vector<T> col_coefs_;
-  size_t minr_;
-  size_t maxr_;
-  size_t minc_;
-  size_t maxc_;
-  size_t rnis_;
-  size_t cnis_;
-  size_t tnis_;
-  T rssiz_;
-  T cssiz_;
+  size_t minr_ = 0;
+  size_t maxr_ = 0;
+  size_t minc_ = 0;
+  size_t maxc_ = 0;
+  size_t rnis_ = 1;
+  size_t cnis_ = 1;
+  size_t tnis_ = 0;
+  T rssiz_ = 0.0;
+  T cssiz_ = 0.0;
 };
 
 

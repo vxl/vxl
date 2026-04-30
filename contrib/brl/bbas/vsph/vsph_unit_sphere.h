@@ -54,7 +54,7 @@ class vsph_unit_sphere : public vbl_ref_count
 {
  public:
   //: default constructor
- vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0), verbose_(false) {}
+  vsph_unit_sphere() : verbose_(false), point_angle_(0.0), min_theta_(0.0), max_theta_(0.0) {}
   //: constructor, angles are in degrees
   // \p point_angle is the maximum angle between adjacent triangle vertices
   // \p min_theta and \p max_theta bound the points constructed on the sphere surface

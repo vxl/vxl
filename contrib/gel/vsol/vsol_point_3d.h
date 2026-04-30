@@ -215,7 +215,10 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   inline void describe(std::ostream &strm, int blanking=0) const override
   {
-    if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+    if (blanking < 0)
+      blanking = 0;
+    while (blanking--)
+      strm << ' ';
     strm << '(' << x() << ' ' << y() << ' ' << z() << ')' << std::endl;
   }
 };

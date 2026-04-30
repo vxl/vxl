@@ -8,18 +8,7 @@
 #endif
 
 vdgl_edgel::vdgl_edgel( const double x, const double y, const double grad, const double theta )
-  : p_( x, y), grad_( grad), theta_( theta)
-{
-}
-
-vdgl_edgel& vdgl_edgel::operator=(const vdgl_edgel& that)
-{
-  p_    = vgl_point_2d<double>( that.get_x(), that.get_y());
-  grad_ = that.get_grad();
-  theta_= that.get_theta();
-
-  return *this;
-}
+  : p_( x, y), grad_( grad), theta_( theta) {}
 
 
 bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2)

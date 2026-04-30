@@ -49,9 +49,6 @@ public:
       this->set_lvcs(lvcs);
   }
 
-  // copy constructor
-  vpgl_geo_camera(const vpgl_geo_camera & rhs);
-
   vpgl_geo_camera(const vpgl_camera<double> & rhs);
 
 #if HAS_GEOTIFF
@@ -118,7 +115,6 @@ public:
     vpgl_lvcs_sptr lvcs = nullptr;
     return init_geo_camera(tfw_name, lvcs, utm_zone, northing, camera);
   }
-  ~vpgl_geo_camera() override = default;
 
   std::string
   type_name() const override

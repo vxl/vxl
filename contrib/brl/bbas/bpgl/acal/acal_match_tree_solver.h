@@ -37,13 +37,15 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
   acal_match_tree_lsqr() : vnl_least_squares_function(0,0){}
 
   //: Constructor
-  acal_match_tree_lsqr(std::map<size_t, vpgl_affine_camera<double> >& tree_acams,
-                        std::vector< std::map<size_t, vgl_point_2d<double> > > tracks,
-                        size_t n_residuals,  double cam_trans_penalty):
-    vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::use_gradient),
-    tree_acams_(tree_acams), trans_acams_(tree_acams), tracks_(tracks),
-    verbose_(false), track_intersect_failure_(false),
-    cam_trans_penalty_(cam_trans_penalty){}
+  acal_match_tree_lsqr(
+    std::map<size_t, vpgl_affine_camera<double>>& tree_acams,
+    std::vector< std::map<size_t, vgl_point_2d<double>>> tracks,
+    size_t n_residuals,  double cam_trans_penalty
+  )
+    : vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::use_gradient),
+      verbose_(false), cam_trans_penalty_(cam_trans_penalty),
+      track_intersect_failure_(false), tree_acams_(tree_acams),
+      trans_acams_(tree_acams), tracks_(tracks) {}
 
   //: The main function.
   //  Given the parameter vector translations, compute the vector of residuals, projection errors
@@ -79,11 +81,13 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
 class acal_match_tree_solver
 {
 public:
-  acal_match_tree_solver(): verbose_(false), cam_trans_penalty_(0.05),conn_comp_index_(-1){}
+  acal_match_tree_solver() = default;
 
-  acal_match_tree_solver(acal_match_graph const& match_graph, size_t conn_comp_index, double cam_trans_penalty = 0.05):
-    match_graph_(match_graph), verbose_(false),
-    cam_trans_penalty_(cam_trans_penalty), conn_comp_index_(conn_comp_index)
+  acal_match_tree_solver(
+    acal_match_graph const& match_graph, size_t conn_comp_index, double cam_trans_penalty = 0.05
+  )
+    : conn_comp_index_(conn_comp_index), cam_trans_penalty_(cam_trans_penalty),
+      match_graph_(match_graph)
   {
     match_graph_.compute_match_trees();
     match_graph_.validate_match_trees_and_set_metric();
@@ -126,9 +130,9 @@ public:
   bool save_tree_in_dot_format(std::string path);
 
  private:
-  bool verbose_;
-  size_t conn_comp_index_;
-  double cam_trans_penalty_;
+  bool verbose_ = false;
+  size_t conn_comp_index_ = -1;
+  double cam_trans_penalty_ = 0.05;
   acal_match_graph match_graph_;
   std::shared_ptr<acal_match_tree> match_tree_;
   std::vector< std::map<size_t, vgl_point_2d<double> > > tracks_;
