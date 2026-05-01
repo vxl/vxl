@@ -33,7 +33,7 @@
 // a display of progress as a moving '+' symbol
 class reg_progress {
 public:
- reg_progress(size_t n_steps) : move_(1), pos_(1), n_(n_steps) {
+ reg_progress(size_t n_steps) : n_(n_steps) {
     display_ = std::string(n_+2,' ');
     display_[0]='['; display_[n_+1] = ']';
   }
@@ -54,8 +54,8 @@ public:
   }
 private:
   std::string display_;
-  int move_;
-  int pos_;
+  int move_ = 1;
+  int pos_ = 1;
   int n_;
 };
 template <class T>

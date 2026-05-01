@@ -34,7 +34,7 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
 {
  public:
   //: Default constructor, use to define variable for assignment
-  acal_match_tree_lsqr() : vnl_least_squares_function(0,0){}
+  acal_match_tree_lsqr() : vnl_least_squares_function(0, 0) {}
 
   //: Constructor
   acal_match_tree_lsqr(
@@ -43,8 +43,7 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
     size_t n_residuals,  double cam_trans_penalty
   )
     : vnl_least_squares_function(2*tree_acams.size(), n_residuals, vnl_least_squares_function::use_gradient),
-      verbose_(false), cam_trans_penalty_(cam_trans_penalty),
-      track_intersect_failure_(false), tree_acams_(tree_acams),
+      cam_trans_penalty_(cam_trans_penalty), tree_acams_(tree_acams),
       trans_acams_(tree_acams), tracks_(tracks) {}
 
   //: The main function.
@@ -67,9 +66,9 @@ class acal_match_tree_lsqr : public vnl_least_squares_function
   std::map<size_t, vpgl_affine_camera<double> > trans_acams() {return trans_acams_;}
 
  protected:
-  bool verbose_;
+  bool verbose_ = false;
   double cam_trans_penalty_;
-  bool track_intersect_failure_;
+  bool track_intersect_failure_ = false;
   std::map<size_t, vpgl_affine_camera<double> > tree_acams_; //original affine cameras
   std::map<size_t, vpgl_affine_camera<double> > trans_acams_; //translated affine cameras
   std::vector< std::map<size_t, vgl_point_2d<double> > > tracks_;

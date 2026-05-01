@@ -41,7 +41,7 @@ class acal_intertile_solver_lsqr : public vnl_least_squares_function
 {
  public:
   //: Default constructor, use to define variable for assignment
-  acal_intertile_solver_lsqr() : vnl_least_squares_function(0,0){}
+  acal_intertile_solver_lsqr() : vnl_least_squares_function(0, 0) {}
   //: Constructor
   acal_intertile_solver_lsqr(
     std::map<size_t, std::map<size_t, vpgl_affine_camera<double>>> const& tile_acams,
@@ -126,7 +126,7 @@ class acal_intertile_solver_lsqr : public vnl_least_squares_function
 //
 class acal_intertile_graph_solver {
 public:
- acal_intertile_graph_solver(): verbose_(false), cam_trans_penalty_(0.05) {}
+  acal_intertile_graph_solver() = default;
 
   acal_intertile_graph_solver(
     std::map<size_t, std::map<size_t, vpgl_affine_camera<double>>>tile_acams,
@@ -166,7 +166,7 @@ public:
                                               std::vector<size_t>& tile_indices);
   //members
   bool verbose_ = false;
-  double cam_trans_penalty_;
+  double cam_trans_penalty_ = 0.05;
   double max_tile_residual_;
   //vnl_levenberg_marquardt levmarq_;
 
