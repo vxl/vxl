@@ -54,7 +54,7 @@ class vsph_unit_sphere : public vbl_ref_count
 {
  public:
   //: default constructor
- vsph_unit_sphere() : point_angle_(0.0), min_theta_(0.0), max_theta_(0.0), verbose_(false) {}
+  vsph_unit_sphere() = default;
   //: constructor, angles are in degrees
   // \p point_angle is the maximum angle between adjacent triangle vertices
   // \p min_theta and \p max_theta bound the points constructed on the sphere surface
@@ -188,14 +188,14 @@ class vsph_unit_sphere : public vbl_ref_count
   std::vector<vsph_spherical_triangle> triangles_;
   vsph_grid_index_2d index_;
  private:
-  bool verbose_; // print debug statements
+  bool verbose_ = false; // print debug statements
   //: spherical coordinate system - default is unit sphere CS
   vsph_spherical_coord coord_sys_;
-  bool neighbors_valid_;
+  bool neighbors_valid_ = false;
   //: these angles are stored in degrees for convenient interpretation
-  double point_angle_;
-  double min_theta_;
-  double max_theta_;
+  double point_angle_ = 0.0;
+  double min_theta_ = 0.0;
+  double max_theta_ = 0.0;
   //: returns true if all the angles between vertices of a triangle are smaller than \a angle.
   bool min_angle(std::vector<vgl_vector_3d<double> > list, double angle_rad);
 };

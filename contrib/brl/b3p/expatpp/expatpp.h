@@ -354,6 +354,7 @@ expatpp::operator XML_Parser() const
 inline void
 expatppNesting::OwnedChildOrphansItself(expatppNesting* callingChild)
 {
+  (void) callingChild;
   assert(callingChild==mOwnedChild);
   mOwnedChild = nullptr;
 }

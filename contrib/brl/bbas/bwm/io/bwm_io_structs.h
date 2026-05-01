@@ -50,16 +50,13 @@ class bwm_io_tab_config
 {
  public:
   bwm_io_tab_config(std::string type, std::string tab_name, bool active_or_not)
-    : name(tab_name), type_name(type), status(active_or_not) {}
-
-  bwm_io_tab_config(bwm_io_tab_config const& t)
-    : name(t.name), type_name(t.type_name), status(t.status) {}
+    : name_(tab_name), type_name_(type), status_(active_or_not) {}
 
   virtual bwm_io_tab_config* clone()=0; // {return new bwm_io_tab_config(type_name, name, status); }
   virtual ~bwm_io_tab_config() {}
-  std::string name;
-  std::string type_name;
-  bool status;
+  std::string name_;
+  std::string type_name_;
+  bool status_;
 };
 
 struct bwm_io_tab_config_img : public bwm_io_tab_config {
@@ -68,7 +65,7 @@ struct bwm_io_tab_config_img : public bwm_io_tab_config {
   bwm_io_tab_config_img(bwm_io_tab_config_img const& t)
     : bwm_io_tab_config(t), img_path(t.img_path) {}
 
-  bwm_io_tab_config_img* clone() {return new bwm_io_tab_config_img(name, status, img_path); }
+  bwm_io_tab_config_img* clone() {return new bwm_io_tab_config_img(name_, status_, img_path); }
   std::string img_path;
 };
 
@@ -83,7 +80,7 @@ struct bwm_io_tab_config_cam : public bwm_io_tab_config {
   bwm_io_tab_config_cam(bwm_io_tab_config_cam const& t)
     : bwm_io_tab_config(t), img_path(t.img_path), cam_path(t.cam_path), cam_type(t.cam_type) {}
 
-  bwm_io_tab_config_cam* clone() {return new bwm_io_tab_config_cam(name, status, img_path, cam_path, cam_type); }
+  bwm_io_tab_config_cam* clone() {return new bwm_io_tab_config_cam(name_, status_, img_path, cam_path, cam_type); }
   std::string img_path;
   std::string cam_path;
   std::string cam_type;
@@ -99,7 +96,7 @@ struct bwm_io_tab_config_fiducial : public bwm_io_tab_config {
   bwm_io_tab_config_fiducial(bwm_io_tab_config_fiducial const& t)
     : bwm_io_tab_config(t), image_path(t.image_path), fid_path(t.fid_path) {}
 
-  bwm_io_tab_config_fiducial* clone() {return new bwm_io_tab_config_fiducial(name, status, image_path, fid_path); }
+  bwm_io_tab_config_fiducial* clone() {return new bwm_io_tab_config_fiducial(name_, status_, image_path, fid_path); }
   std::string image_path;
   std::string fid_path;
 };
@@ -109,7 +106,7 @@ struct bwm_io_tab_config_coin3d: public bwm_io_tab_config {
                            std::string c_path, std::string c_type)
     : bwm_io_tab_config(COIN3D_TABLEAU_TAG, name, status), cam_path(c_path), cam_type(c_type) {}
 
-  bwm_io_tab_config_coin3d* clone() {return new bwm_io_tab_config_coin3d(name, status, cam_path, cam_type); }
+  bwm_io_tab_config_coin3d* clone() {return new bwm_io_tab_config_coin3d(name_, status_, cam_path, cam_type); }
   std::string cam_path;
   std::string cam_type;
 };
@@ -121,7 +118,7 @@ struct bwm_io_tab_config_proj2d: public bwm_io_tab_config {
     : bwm_io_tab_config(PROJ2D_TABLEAU_TAG, name, status), cam_path(c_path),
       cam_type(c_type), proj2d_type(p_type), coin3d_tab_name(coin3d) {}
 
-  bwm_io_tab_config_proj2d* clone() { return new bwm_io_tab_config_proj2d(name, status, proj2d_type, cam_path, cam_type, coin3d_tab_name); }
+  bwm_io_tab_config_proj2d* clone() { return new bwm_io_tab_config_proj2d(name_, status_, proj2d_type, cam_path, cam_type, coin3d_tab_name); }
   std::string cam_path;
   std::string cam_type;
   std::string proj2d_type;
@@ -133,7 +130,7 @@ struct bwm_io_tab_config_video: public bwm_io_tab_config {
                           std::string frames,  std::string cameras)
     : bwm_io_tab_config(VIDEO_TABLEAU_TAG, name, status), video_path(frames), camera_glob(cameras) {}
 
-  bwm_io_tab_config_video* clone() { return new bwm_io_tab_config_video(name, status, video_path, camera_glob); }
+  bwm_io_tab_config_video* clone() { return new bwm_io_tab_config_video(name_, status_, video_path, camera_glob); }
   std::string video_path;
   std::string camera_glob;
 };

@@ -459,7 +459,7 @@ operator>>(std::istream & istr, vgl_pointset_3d<Type> & ptset)
     std::stringstream isstr(buf_str);
     isstr >> std::noskipws; // accept spaces as separators
     // parse the line for point and normal values
-    Type x, y, z, nx, ny, nz, sc;
+    Type x, y, z, nx = 0, ny = 0, nz = 0, sc = 0;
     unsigned char c;
     isstr >> x >> c;
     if (!(c == ',' || c == ' '))
@@ -475,7 +475,7 @@ operator>>(std::istream & istr, vgl_pointset_3d<Type> & ptset)
     }
     if (!has_normals && !has_scalars)
       isstr >> z;
-    else if (has_normals || has_scalars)
+    else // has_normals || has_scalars
     {
       isstr >> z >> c;
       if (!(c == ',' || c == ' '))

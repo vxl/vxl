@@ -41,7 +41,7 @@ class vdgl_edgel_chain : public vbl_ref_count,
   vdgl_edgel_chain( const double x0, const double y0,
                     const double x1, const double y1);
   vdgl_edgel_chain(vdgl_edgel_chain const& x)
-    : vul_timestamp(), vbl_ref_count(), es_(x.es_) {}
+    : vbl_ref_count(), vul_timestamp(), es_(x.es_) {}
   ~vdgl_edgel_chain() override = default;
 
   // Operators----------------------------------------------------------------

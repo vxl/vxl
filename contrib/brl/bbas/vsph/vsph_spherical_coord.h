@@ -37,13 +37,6 @@ class vsph_spherical_coord : public vbl_ref_count
   vsph_spherical_coord(vgl_point_3d<double> origin, double radius = 1.0)
   : radius_(radius), origin_(origin) {}
 
-  //: Copy constructor
-  vsph_spherical_coord(vsph_spherical_coord const& rhs)
-    : vbl_ref_count(), radius_(rhs.radius_), origin_(rhs.origin_) {}
-
-  // Destructor
-  ~vsph_spherical_coord() override = default;
-
   //***************************************************************************
   // Methods
   //***************************************************************************

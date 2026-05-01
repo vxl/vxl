@@ -39,18 +39,15 @@ public:
 
   //: if scale tag is false be sure that trans_matrix[0][0] and trans_matrix[1][1] is 1.0 otherwise set it to true
   vpgl_geo_camera(vnl_matrix<double> trans_matrix, vpgl_lvcs_sptr lvcs)
-    : trans_matrix_(std::move(trans_matrix))
-    , is_utm_(false)
-    , scale_tag_(false)
-    , sx_(0.0)
-    , sy_(0.0)
+    : sx_(0.0),
+      sy_(0.0),
+      trans_matrix_(std::move(trans_matrix)),
+      is_utm_(false),
+      scale_tag_(false)
   {
     if (lvcs)
       this->set_lvcs(lvcs);
   }
-
-  // copy constructor
-  vpgl_geo_camera(const vpgl_geo_camera & rhs);
 
   vpgl_geo_camera(const vpgl_camera<double> & rhs);
 
@@ -118,7 +115,6 @@ public:
     vpgl_lvcs_sptr lvcs = nullptr;
     return init_geo_camera(tfw_name, lvcs, utm_zone, northing, camera);
   }
-  ~vpgl_geo_camera() override = default;
 
   std::string
   type_name() const override

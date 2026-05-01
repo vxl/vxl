@@ -30,6 +30,7 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <bpgl/acal/acal_match_tree_solver.h>
 #include <bpgl/acal/acal_solution_error.h>
+
 //
 // the least squares cost function for the Levenberg-Marquardt solver. the function f(x, residuals)  evaluates a vector of residuals for the
 // current estimate of camera translations, x. There are two types of residuals: 1) the difference between a projected 3-d point coordinate
@@ -40,30 +41,34 @@ class acal_intertile_solver_lsqr : public vnl_least_squares_function
 {
  public:
   //: Default constructor, use to define variable for assignment
- acal_intertile_solver_lsqr() : vnl_least_squares_function(0,0){}
+  acal_intertile_solver_lsqr() : vnl_least_squares_function(0, 0) {}
   //: Constructor
-  //                              tile id         cam_id         camera
- acal_intertile_solver_lsqr(std::map<size_t, std::map<size_t, vpgl_affine_camera<double> > > const& tile_acams,
-                            //       tile id       track            cam_id     image corr
-                            std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double> > > > const& tracks,
-                            //       tile id      track idx           cam_id   residual indx
-                            std::map<size_t, std::map<size_t, std::map<size_t, size_t> > > tile_indices_to_residual_index,
-                            // unknown translations  total residuals    num projection error vectors
-                            size_t n_unknowns, size_t n_residuals, size_t n_proj_residuals,
-                            //   trans indx  cam id
-                            std::map<size_t, size_t>& trans_indx_to_cam_id,
-                            //    cam id    trans indx                   weight for camera translation residuals
-                            std::map<size_t, size_t>& cam_id_to_trans_indx, double cam_trans_penalty)
+  acal_intertile_solver_lsqr(
+    std::map<size_t, std::map<size_t, vpgl_affine_camera<double>>> const& tile_acams,
+    //      tile id           cam_id         camera
+    std::map<size_t, std::vector<std::map<size_t, vgl_point_2d<double>>>> const& tracks,
+    //       tile id       track          cam_id        image corr
+    std::map<size_t, std::map<size_t, std::map<size_t, size_t> > > tile_indices_to_residual_index,
+    //       tile id        track idx        cam_id   residual indx
+    size_t n_unknowns, size_t n_residuals, size_t n_proj_residuals,
+    // unknown translations  total residuals    num projection error vectors
+    std::map<size_t, size_t>& trans_indx_to_cam_id,
+    //    trans indx  cam id
+    std::map<size_t, size_t>& cam_id_to_trans_indx, double cam_trans_penalty
+    //    cam id    trans indx                   weight for camera translation residuals
+  )
    : vnl_least_squares_function(n_unknowns, n_residuals, vnl_least_squares_function::no_gradient),
-     tile_acams_(tile_acams), translated_tile_acams_(tile_acams), tracks_(tracks), tile_indices_to_residual_index_(tile_indices_to_residual_index),
-     verbose_(false), track_intersect_failure_(false),n_proj_residuals_(n_proj_residuals),
-     trans_indx_to_cam_id_(trans_indx_to_cam_id), cam_id_to_trans_indx_(cam_id_to_trans_indx),
-     cam_trans_penalty_(cam_trans_penalty){}
+     cam_trans_penalty_(cam_trans_penalty), n_proj_residuals_(n_proj_residuals),
+     tile_acams_(tile_acams), translated_tile_acams_(tile_acams), tracks_(tracks),
+     tile_indices_to_residual_index_(tile_indices_to_residual_index),
+     trans_indx_to_cam_id_(trans_indx_to_cam_id), cam_id_to_trans_indx_(cam_id_to_trans_indx) {}
 
   //: The main function.
   //  Given the parameter vector translations, compute the vector of residuals, projection errors
-  virtual void f(vnl_vector<double> const& translations,  // size is 2*n_nonseed cameras
-                 vnl_vector<double>& residuals);  // size is 2*(all_cams.size()*tracks.size()) + 2*n_nonseed_cameras
+  virtual void f(
+    vnl_vector<double> const& translations,  // size is 2*n_nonseed cameras
+    vnl_vector<double>& residuals // size is 2*(all_cams.size()*tracks.size()) + 2*n_nonseed_cameras
+  );
 
   void compute_residuals(vnl_vector<double> const& x, vnl_vector<double>& residuals);
 
@@ -78,9 +83,9 @@ class acal_intertile_solver_lsqr : public vnl_least_squares_function
     return translated_tile_acams_;
   }
  protected:
-  bool verbose_;
+  bool verbose_ = false;
   double cam_trans_penalty_;
-  bool track_intersect_failure_;
+  bool track_intersect_failure_ = false;
   size_t start_indx_cam_trans_residuals_;
   size_t n_proj_residuals_;
   size_t n_residuals_;
@@ -121,22 +126,23 @@ class acal_intertile_solver_lsqr : public vnl_least_squares_function
 //
 class acal_intertile_graph_solver {
 public:
- acal_intertile_graph_solver(): verbose_(false), cam_trans_penalty_(0.05) {}
+  acal_intertile_graph_solver() = default;
 
-  //                                tile_id          cam_id       camera
- acal_intertile_graph_solver(std::map<size_t, std::map<size_t, vpgl_affine_camera<double> > >tile_acams,
-                             //       tile_id       track            cam_id        image corr
-                             std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double> > > > tracks,
-                             //       tile_id      non-seed cam_ids
-                             std::map<size_t, std::vector<size_t> >  nonseed_cam_ids,
-                             //  ids for seed cameras
-                             std::vector<size_t> seed_cam_ids, std::map<size_t, std::string> cam_inames,
-                             // residual penalty factor for cam offsets
-                             double cam_trans_penalty = 0.05,
-                             // max rms projection error for a tile
-                             double max_tile_residual = 0.5)
-   : tile_acams_(tile_acams), tracks_(tracks),seed_cam_ids_(seed_cam_ids), nonseed_cam_ids_(nonseed_cam_ids), cam_inames_(cam_inames),
-     cam_trans_penalty_(cam_trans_penalty), verbose_(false), max_tile_residual_(max_tile_residual){}
+  acal_intertile_graph_solver(
+    std::map<size_t, std::map<size_t, vpgl_affine_camera<double>>>tile_acams,
+    //       tile_id          cam_id       camera
+    std::map<size_t, std::vector< std::map<size_t, vgl_point_2d<double>>>> tracks,
+    //       tile_id       track          cam_id        image corr
+    std::map<size_t, std::vector<size_t>>  nonseed_cam_ids,
+    //       tile_id      non-seed cam_ids
+    std::vector<size_t> seed_cam_ids,         //  ids for seed cameras
+    std::map<size_t, std::string> cam_inames,
+    double cam_trans_penalty = 0.05,          // residual penalty factor for cam offsets
+    double max_tile_residual = 0.5            // max rms projection error for a tile
+  )
+   : cam_trans_penalty_(cam_trans_penalty),  max_tile_residual_(max_tile_residual),
+     cam_inames_(cam_inames), nonseed_cam_ids_(nonseed_cam_ids),
+     seed_cam_ids_(seed_cam_ids), tracks_(tracks), tile_acams_(tile_acams) {}
 
   void set_verbose(bool verbose) { verbose_ = verbose; }
   bool solve_least_squares_problem();
@@ -159,8 +165,8 @@ public:
   std::set<size_t> find_minimum_residual_set(std::vector<std::pair<double, std::pair<size_t, std::set<size_t> > > >& residual_cams,
                                               std::vector<size_t>& tile_indices);
   //members
-  bool verbose_;
-  double cam_trans_penalty_;
+  bool verbose_ = false;
+  double cam_trans_penalty_ = 0.05;
   double max_tile_residual_;
   //vnl_levenberg_marquardt levmarq_;
 

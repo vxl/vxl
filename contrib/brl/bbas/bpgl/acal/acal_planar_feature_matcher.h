@@ -26,31 +26,29 @@
 
 struct planar_feature_params
 {
-  planar_feature_params(): pt_spacing_(0.3), patch_radius_(6), coarse_search_radius_(20.0),
-                           coarse_search_increment_(2.0), fine_search_radius_(2.5),
-                           fine_search_increment_(0.25), max_n_solved_images_(10) {}
+  planar_feature_params() = default;
 
-  double pt_spacing_;
-  double patch_radius_;
-  double coarse_search_radius_;
-  double fine_search_radius_;
-  double coarse_search_increment_;
-  double fine_search_increment_;
-  size_t max_n_solved_images_;
+  double pt_spacing_ = 0.3;
+  double patch_radius_ = 6.0;
+  double coarse_search_radius_ = 20.0;
+  double fine_search_radius_ = 2.5;
+  double coarse_search_increment_ = 2.0;
+  double fine_search_increment_ = 0.25;
+  size_t max_n_solved_images_ = 10;
 };
 
 
 struct planar_match_score
 {
-  planar_match_score():mu_(0.67), sigma_(0.1), min_prob_(0.2) {}
+  planar_match_score() = default;
 
   double p(double s) {
     return 0.5*(1.0+erf((s-mu_)/(sqrt(2)*sigma_)));
   }
 
-  double mu_;
-  double sigma_;
-  double min_prob_;
+  double mu_ = 0.67;
+  double sigma_ = 0.1;
+  double min_prob_ = 0.2;
   double min_score_;
   double max_score_;
   double mean_score_;

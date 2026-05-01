@@ -26,8 +26,6 @@ class vdgl_edgel
 
   // Operators-----------------------------------------------------------------
 
-  vdgl_edgel& operator=(const vdgl_edgel& that);
-
   friend bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
   friend std::ostream& operator<<(std::ostream& s, const vdgl_edgel& p);
 

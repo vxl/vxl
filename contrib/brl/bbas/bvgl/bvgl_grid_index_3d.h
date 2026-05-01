@@ -13,6 +13,7 @@
 #include <string>
 #include <map>
 #include <algorithm>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -27,6 +28,7 @@
 #include <vgl/vgl_bounding_box.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vnl/vnl_vector.h>
+
 template <class Type>
 class bvgl_grid_index_3d{
  public:
@@ -97,6 +99,7 @@ class bvgl_grid_index_3d{
   unsigned npts_;
   Type thresh_;
 };
+
 // implementation relatively short so include in the .h file
 template <class Type>
 //: compute 3-d grid index values from point coordinates
@@ -114,10 +117,15 @@ void bvgl_grid_index_3d<Type>::index(vgl_point_3d<Type> const& p, unsigned& ix, 
   if(izi<0) iz = 0;
   if(izi>=int(nz_)) iz = nz_-1;
 }
+
 //: constructors
 template <class Type>
-bvgl_grid_index_3d<Type>::bvgl_grid_index_3d(unsigned nx, unsigned ny, unsigned nz, vgl_pointset_3d<Type> ptset, Type thresh):
-nx_(nx), ny_(ny), nz_(nz), has_normals_(ptset.has_normals()), npts_(0), thresh_(thresh), has_scalars_(ptset.has_scalars()){
+bvgl_grid_index_3d<Type>::bvgl_grid_index_3d(
+  unsigned nx, unsigned ny, unsigned nz, vgl_pointset_3d<Type> ptset, Type thresh
+)
+  : has_scalars_(ptset.has_scalars()), has_normals_(ptset.has_normals()),
+    nx_(nx), ny_(ny), nz_(nz), npts_(0), thresh_(thresh)
+{
   p_grid_ = vbl_array_3d<std::vector<vgl_point_3d<Type> > >(nx, ny, nz);
   if(has_normals_)
     n_grid_ = vbl_array_3d<std::vector<vgl_vector_3d<Type> > >(nx, ny, nz);
@@ -148,9 +156,13 @@ nx_(nx), ny_(ny), nz_(nz), has_normals_(ptset.has_normals()), npts_(0), thresh_(
 }
 
 template <class Type>
-bvgl_grid_index_3d<Type>::bvgl_grid_index_3d(unsigned nx, unsigned ny, unsigned nz,
-                                             vgl_pointset_3d<Type> ptset, std::vector<Type> scalars, Type thresh):
-  nx_(nx), ny_(ny), nz_(nz), has_normals_(ptset.has_normals()), npts_(0), thresh_(thresh), has_scalars_(true){
+bvgl_grid_index_3d<Type>::bvgl_grid_index_3d(
+  unsigned nx, unsigned ny, unsigned nz, vgl_pointset_3d<Type> ptset,
+  std::vector<Type> scalars, Type thresh
+)
+  : has_scalars_(true), has_normals_(ptset.has_normals()),
+  nx_(nx), ny_(ny), nz_(nz), npts_(0), thresh_(thresh)
+{
   p_grid_ = vbl_array_3d<std::vector<vgl_point_3d<Type> > >(nx, ny, nz);
   s_grid_ = vbl_array_3d<std::vector<Type> >(nx, ny, nz);
   idx_grid_ = vbl_array_3d<std::vector<size_t> >(nx, ny, nz);
@@ -349,22 +361,13 @@ std::vector<vgl_pointset_3d<Type> > bvgl_grid_index_3d<Type>::intersecting_cells
   unsigned ixs = ix_min, ixe = ix_max;
   unsigned iys = iy_min, iye = iy_max;
   unsigned izs = iz_min, ize = iz_max;
-  unsigned temp;
-  if(ixs>ixe){
-    temp = ixs;
-    ixs = ixe;
-    ixe = temp;
-  }
-  if(iys>iye){
-    temp = iys;
-    iys = iye;
-    iye = temp;
-  }
-  if(izs>ize){
-    temp = izs;
-    izs = ize;
-    ize = temp;
-  }
+  if(ixs > ixe)
+    std::swap(ixs, ixe);
+  if(iys > iye)
+    std::swap(iys, iye);
+  if(izs > ize)
+    std::swap(izs, ize);
+
   for(unsigned iz = izs; iz<=ize; ++iz)
     for(unsigned iy = iys; iy<=iye; ++iy)
       for(unsigned ix = ixs; ix<=ixe; ++ix){

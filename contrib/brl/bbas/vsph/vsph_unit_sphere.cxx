@@ -42,10 +42,10 @@ void vsph_unit_sphere::insert_edge(vsph_edge const&  e)
   edges_.push_back(e);
 }
 
-vsph_unit_sphere::vsph_unit_sphere(double point_angle,
-                                   double min_theta, double max_theta)
-: neighbors_valid_(false), point_angle_(point_angle),
-  min_theta_(min_theta), max_theta_(max_theta), verbose_(false)
+vsph_unit_sphere::vsph_unit_sphere(
+  double point_angle, double min_theta, double max_theta
+)
+  : point_angle_(point_angle), min_theta_(min_theta), max_theta_(max_theta)
 {
   if(verbose_)std::cout << "Start construction" << std::endl;
   add_uniform_views();

@@ -35,18 +35,6 @@ vpgl_geo_camera::vpgl_geo_camera()
   trans_matrix_.fill_diagonal(1);
 }
 
-vpgl_geo_camera::vpgl_geo_camera(const vpgl_geo_camera & rhs)
-  : vpgl_camera<double>(rhs)
-  , trans_matrix_(rhs.trans_matrix_)
-  , is_utm_(rhs.is_utm_)
-  , utm_zone_(rhs.utm_zone_)
-  , northing_(rhs.northing_)
-  , scale_tag_(rhs.scale_tag_)
-{
-  this->set_lvcs(rhs.lvcs_);
-  rhs.pixel_spacing(sx_, sy_);
-}
-
 
 // camera initialization requiring GEOTIFF capabilities
 #if HAS_GEOTIFF

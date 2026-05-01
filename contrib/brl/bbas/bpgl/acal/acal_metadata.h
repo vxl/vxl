@@ -190,7 +190,7 @@ void deserialize_tile_image_meta( Json::Value& root)
        tile_image_metadata tim;
        std::stringstream ss;
        ss << key;
-       size_t id = -1;
+       size_t id = static_cast<size_t>(-1);
        ss >> id;
        tim.image_id_ = id;
        tim.image_name_ = base_name;

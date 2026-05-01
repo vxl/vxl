@@ -63,16 +63,6 @@ public:
     , y_(other.y())
   {}
 
-#if 0 // The compiler defaults for these are doing what they should do:
-  //: Copy constructor
-  inline vgl_point_2d(vgl_point_2d<Type> const& p) : x_(p.x()), y_(p.y()) {}
-  //: Destructor
-  inline ~vgl_point_2d () {}
-  //: Assignment
-  inline vgl_point_2d<Type>& operator=(const vgl_point_2d<Type>& p)
-  { x_ = p.x(); y_ = p.y(); return *this; }
-#endif
-
   //: Test for equality
   inline bool
   operator==(const vgl_point_2d<Type> & p) const

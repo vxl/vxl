@@ -353,37 +353,37 @@ public:
 
   //: set a specific scale value
   void
-  set_scale(const coor_index coor_index, const T scale)
+  set_scale(const coor_index coor_index_, const T scale)
   {
-    scale_offsets_[coor_index].set_scale(scale);
+    scale_offsets_[coor_index_].set_scale(scale);
   }
 
   //: set a specific offset value
   void
-  set_offset(const coor_index coor_index, const T offset)
+  set_offset(const coor_index coor_index_, const T offset)
   {
-    scale_offsets_[coor_index].set_offset(offset);
+    scale_offsets_[coor_index_].set_offset(offset);
   }
 
   //: get a specific scale value
   T
-  scale(const coor_index coor_index) const
+  scale(const coor_index coor_index_) const
   {
-    return scale_offsets_[coor_index].scale();
+    return scale_offsets_[coor_index_].scale();
   }
 
   //: get a specific offset value
   T
-  offset(const coor_index coor_index) const
+  offset(const coor_index coor_index_) const
   {
-    return scale_offsets_[coor_index].offset();
+    return scale_offsets_[coor_index_].offset();
   }
 
   //: get a specific scale_offset
   vpgl_scale_offset<T>
-  scl_off(const coor_index coor_index) const
+  scl_off(const coor_index coor_index_) const
   {
-    return scale_offsets_[coor_index];
+    return scale_offsets_[coor_index_];
   }
 
   // --- Often useful for adjusting the camera ---

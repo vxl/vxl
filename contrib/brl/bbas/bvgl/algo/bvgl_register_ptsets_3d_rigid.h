@@ -29,15 +29,16 @@
 #include <vgl/vgl_quadric_3d.h>
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
 #include <vnl/vnl_random.h>
+
 // a display of progress as a moving '+' symbol
-class reg_progress{
+class reg_progress {
 public:
- reg_progress(size_t n_steps):n_(n_steps), move_(1), pos_(1){
+ reg_progress(size_t n_steps) : n_(n_steps) {
     display_ = std::string(n_+2,' ');
     display_[0]='['; display_[n_+1] = ']';
   }
   void operator ()(){
-    for(size_t i = 1; i<=n_; ++i)
+    for(int i = 1; i <= n_; ++i)
       display_[i] = ' ';
     display_[pos_]='+';
     std::cout << '\r' << display_ << std::flush;
@@ -53,8 +54,8 @@ public:
   }
 private:
   std::string display_;
-  int move_;
-  int pos_;
+  int move_ = 1;
+  int pos_ = 1;
   int n_;
 };
 template <class T>
@@ -66,13 +67,12 @@ public:
   bvgl_register_ptsets_3d_rigid() = default;
 
   //: constructor with pointsets
- bvgl_register_ptsets_3d_rigid(vgl_pointset_3d<T> const& fixed, vgl_pointset_3d<T> const& movable,
-                               size_t n_hypos = 100, double transform_fraction = 0.25) :
-  fixed_(fixed),
-    movable_(movable),
-    knn_fixed_(fixed),
-    n_hypos_(n_hypos),
-    transform_fraction_(transform_fraction)
+  bvgl_register_ptsets_3d_rigid(
+    vgl_pointset_3d<T> const& fixed, vgl_pointset_3d<T> const& movable,
+    size_t n_hypos = 100, double transform_fraction = 0.25
+  )
+    : transform_fraction_(transform_fraction), n_hypos_(n_hypos),
+      fixed_(fixed), knn_fixed_(fixed), movable_(movable)
   {
     // reduce the size of the movable pointset to reduce computation
     unsigned n = movable_.npts();
