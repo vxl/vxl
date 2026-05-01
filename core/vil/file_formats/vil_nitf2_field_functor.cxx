@@ -12,16 +12,16 @@ vil_nitf2_field_specified::operator()(vil_nitf2_field_sequence * record,
                                       const vil_nitf2_index_vector & indexes,
                                       bool & result)
 {
-  if (!record->find_field_definition(tag))
+  if (!record->find_field_definition(tag_))
   {
     // Invalid tag
     return false;
   }
-  const vil_nitf2_field * const field = record->get_field(tag);
+  const vil_nitf2_field * const field = record->get_field(tag_);
   if (field != nullptr)
   {
     std::string value;
-    const bool is_string_value = record->get_value(tag, indexes, value, true);
+    const bool is_string_value = record->get_value(tag_, indexes, value, true);
     if (is_string_value)
     {
       // a blank std::string field actually yields a valid field value (an empty
@@ -49,10 +49,10 @@ vil_nitf2_max_field_value_plus_offset_and_threshold::operator()(vil_nitf2_field_
                                                                 int & value)
 {
   int value1 = 0;
-  const bool found = record->get_value(tag, indexes, value1, true);
-  value1 *= tag_factor;
-  value1 += offset;
-  value = (value1 < min_threshold) ? min_threshold : value1;
+  const bool found = record->get_value(tag_, indexes, value1, true);
+  value1 *= tag_factor_;
+  value1 += offset_;
+  value = (value1 < min_threshold_) ? min_threshold_ : value1;
   return found;
 }
 
@@ -62,8 +62,8 @@ vil_nitf2_multiply_field_values::operator()(vil_nitf2_field_sequence * record,
                                             int & value)
 {
   int value1 = 0, value2 = 0;
-  bool found = record->get_value(tag_1, indexes, value1, true);
-  found &= record->get_value(tag_2, indexes, value2, true);
+  bool found = record->get_value(tag_1_, indexes, value1, true);
+  found &= record->get_value(tag_2_, indexes, value2, true);
   if (found)
   {
     value = value1 * value2;
@@ -72,6 +72,6 @@ vil_nitf2_multiply_field_values::operator()(vil_nitf2_field_sequence * record,
   else
   {
     value = 0;
-    return use_zero_if_tag_not_found;
+    return use_zero_if_tag_not_found_;
   }
 }

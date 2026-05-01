@@ -77,29 +77,29 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
 {
 public:
   vil_nitf2_field_value(std::string tag)
-    : tag(std::move(tag))
+    : tag_(std::move(tag))
   {}
 
   vil_nitf2_field_value(std::string tag, std::map<T, T> overrideMap)
-    : tag(std::move(tag))
-    , overrides(std::move(overrideMap))
+    : tag_(std::move(tag))
+    , overrides_(std::move(overrideMap))
   {}
 
   vil_nitf2_field_functor<T> *
   copy() const override
   {
-    return new vil_nitf2_field_value(tag, overrides);
+    return new vil_nitf2_field_value(tag_, overrides_);
   }
 
   bool
   operator()(vil_nitf2_field_sequence * record, const vil_nitf2_index_vector & indexes, T & value) override
   {
-    bool success = record->get_value(tag, indexes, value, true);
+    bool success = record->get_value(tag_, indexes, value, true);
     if (success)
     {
       // check to see if this value is overridden or not
-      typename std::map<T, T>::const_iterator it = overrides.find(value);
-      if (it != overrides.end())
+      typename std::map<T, T>::const_iterator it = overrides_.find(value);
+      if (it != overrides_.end())
       {
         // found override, use it
         value = (*it).second;
@@ -109,8 +109,8 @@ public:
   }
 
 private:
-  std::string tag;
-  std::map<T, T> overrides;
+  std::string tag_;
+  std::map<T, T> overrides_;
 };
 
 //:
@@ -123,24 +123,24 @@ class vil_nitf2_multiply_field_values : public vil_nitf2_field_functor<int>
 {
 public:
   vil_nitf2_multiply_field_values(std::string tag_1, std::string tag_2, bool use_zero_if_tag_not_found = false)
-    : tag_1(std::move(tag_1))
-    , tag_2(std::move(tag_2))
-    , use_zero_if_tag_not_found(use_zero_if_tag_not_found)
+    : tag_1_(std::move(tag_1))
+    , tag_2_(std::move(tag_2))
+    , use_zero_if_tag_not_found_(use_zero_if_tag_not_found)
   {}
 
   vil_nitf2_field_functor<int> *
   copy() const override
   {
-    return new vil_nitf2_multiply_field_values(tag_1, tag_2, use_zero_if_tag_not_found);
+    return new vil_nitf2_multiply_field_values(tag_1_, tag_2_, use_zero_if_tag_not_found_);
   }
 
   bool
   operator()(vil_nitf2_field_sequence * record, const vil_nitf2_index_vector & indexes, int & value) override;
 
 private:
-  std::string tag_1;
-  std::string tag_2;
-  bool use_zero_if_tag_not_found;
+  std::string tag_1_;
+  std::string tag_2_;
+  bool use_zero_if_tag_not_found_;
 };
 
 //:
@@ -152,30 +152,29 @@ private:
 class vil_nitf2_max_field_value_plus_offset_and_threshold : public vil_nitf2_field_functor<int>
 {
 public:
-  vil_nitf2_max_field_value_plus_offset_and_threshold(std::string tag,
-                                                      int offset,
-                                                      int min_threshold = 0,
-                                                      int tag_factor = 1)
-    : tag(std::move(tag))
-    , offset(offset)
-    , min_threshold(min_threshold)
-    , tag_factor(tag_factor)
+  vil_nitf2_max_field_value_plus_offset_and_threshold(
+    std::string tag, int offset, int min_threshold = 0, int tag_factor = 1
+  )
+    : tag_(std::move(tag))
+    , offset_(offset)
+    , min_threshold_(min_threshold)
+    , tag_factor_(tag_factor)
   {}
 
   vil_nitf2_field_functor<int> *
   copy() const override
   {
-    return new vil_nitf2_max_field_value_plus_offset_and_threshold(tag, offset, min_threshold, tag_factor);
+    return new vil_nitf2_max_field_value_plus_offset_and_threshold(tag_, offset_, min_threshold_, tag_factor_);
   }
 
   bool
   operator()(vil_nitf2_field_sequence * record, const vil_nitf2_index_vector & indexes, int & value) override;
 
 private:
-  std::string tag;
-  int offset;
-  int min_threshold;
-  int tag_factor;
+  std::string tag_;
+  int offset_;
+  int min_threshold_;
+  int tag_factor_;
 };
 
 //:
@@ -189,23 +188,23 @@ class vil_nitf2_field_value_greater_than : public vil_nitf2_field_functor<bool>
 {
 public:
   vil_nitf2_field_value_greater_than(std::string tag, T threshold)
-    : tag(std::move(tag))
-    , threshold(threshold)
+    : tag_(std::move(tag))
+    , threshold_(threshold)
   {}
 
   vil_nitf2_field_functor<bool> *
   copy() const override
   {
-    return new vil_nitf2_field_value_greater_than(tag, threshold);
+    return new vil_nitf2_field_value_greater_than(tag_, threshold_);
   }
 
   bool
   operator()(vil_nitf2_field_sequence * record, const vil_nitf2_index_vector & indexes, bool & result) override
   {
     T value;
-    if (record->get_value(tag, indexes, value, true))
+    if (record->get_value(tag_, indexes, value, true))
     {
-      result = value > threshold;
+      result = value > threshold_;
       return true;
     }
     else
@@ -215,8 +214,8 @@ public:
   }
 
 private:
-  std::string tag;
-  T threshold;
+  std::string tag_;
+  T threshold_;
 };
 
 //:
@@ -227,20 +226,20 @@ class vil_nitf2_field_specified : public vil_nitf2_field_functor<bool>
 {
 public:
   vil_nitf2_field_specified(std::string tag)
-    : tag(std::move(tag))
+    : tag_(std::move(tag))
   {}
 
   vil_nitf2_field_functor<bool> *
   copy() const override
   {
-    return new vil_nitf2_field_specified(tag);
+    return new vil_nitf2_field_specified(tag_);
   }
 
   bool
   operator()(vil_nitf2_field_sequence * record, const vil_nitf2_index_vector & indexes, bool & result) override;
 
 private:
-  std::string tag;
+  std::string tag_;
 };
 
 //:
@@ -254,20 +253,20 @@ class vil_nitf2_field_value_one_of : public vil_nitf2_field_functor<bool>
 public:
   /// Constructor to specify a std::vector of acceptable values
   vil_nitf2_field_value_one_of(std::string tag, std::vector<T> acceptable_values)
-    : tag(std::move(tag))
-    , acceptable_values(std::move(acceptable_values))
+    : tag_(std::move(tag))
+    , acceptable_values_(std::move(acceptable_values))
   {}
 
   /// Constructor to specify only one acceptable value
   vil_nitf2_field_value_one_of(std::string tag, T acceptable_value)
-    : tag(std::move(tag))
-    , acceptable_values(1, acceptable_value)
+    : tag_(std::move(tag))
+    , acceptable_values_(1, acceptable_value)
   {}
 
   vil_nitf2_field_functor<bool> *
   copy() const override
   {
-    return new vil_nitf2_field_value_one_of(tag, acceptable_values);
+    return new vil_nitf2_field_value_one_of(tag_, acceptable_values_);
   }
 
   bool
@@ -275,10 +274,10 @@ public:
   {
     result = false;
     T val;
-    if (record->get_value(tag, indexes, val, true))
+    if (record->get_value(tag_, indexes, val, true))
     {
       typename std::vector<T>::iterator it;
-      for (it = acceptable_values.begin(); it != acceptable_values.end(); ++it)
+      for (it = acceptable_values_.begin(); it != acceptable_values_.end(); ++it)
       {
         if ((*it) == val)
         {
@@ -293,8 +292,8 @@ public:
   }
 
 protected:
-  std::string tag;
-  std::vector<T> acceptable_values;
+  std::string tag_;
+  std::vector<T> acceptable_values_;
 };
 
 //:
@@ -312,42 +311,42 @@ public:
   vil_nitf2_choose_field_value(std::string tag_1,
                                std::string tag_2,
                                vil_nitf2_field_functor<bool> * choose_tag_1_predicate)
-    : tag_1(std::move(tag_1))
-    , tag_2(std::move(tag_2))
-    , choose_tag_1_predicate(choose_tag_1_predicate)
+    : tag_1_(std::move(tag_1))
+    , tag_2_(std::move(tag_2))
+    , choose_tag_1_predicate_(choose_tag_1_predicate)
   {}
 
   vil_nitf2_field_functor<T> *
   copy() const override
   {
-    return new vil_nitf2_choose_field_value(tag_1, tag_2, choose_tag_1_predicate->copy());
+    return new vil_nitf2_choose_field_value(tag_1_, tag_2_, choose_tag_1_predicate_->copy());
   }
 
   ~vil_nitf2_choose_field_value() override
   {
-    if (choose_tag_1_predicate)
-      delete choose_tag_1_predicate;
+    if (choose_tag_1_predicate_)
+      delete choose_tag_1_predicate_;
   }
 
   bool
   operator()(vil_nitf2_field_sequence * record, const vil_nitf2_index_vector & indexes, T & value) override
   {
     bool choose_tag_1;
-    if ((*choose_tag_1_predicate)(record, indexes, choose_tag_1))
+    if ((*choose_tag_1_predicate_)(record, indexes, choose_tag_1))
     {
       if (choose_tag_1)
-        return record->get_value(tag_1, indexes, value, true);
+        return record->get_value(tag_1_, indexes, value, true);
       else
-        return record->get_value(tag_2, indexes, value, true);
+        return record->get_value(tag_2_, indexes, value, true);
     }
     else
       return false;
   }
 
 private:
-  std::string tag_1;
-  std::string tag_2;
-  vil_nitf2_field_functor<bool> * choose_tag_1_predicate;
+  std::string tag_1_;
+  std::string tag_2_;
+  vil_nitf2_field_functor<bool> * choose_tag_1_predicate_;
 };
 
 // Functor vil_nitf2_constant_functor defines a function that sets its
