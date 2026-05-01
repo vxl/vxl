@@ -13,6 +13,7 @@
 #include <string>
 #include <map>
 #include <algorithm>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -27,6 +28,7 @@
 #include <vgl/vgl_bounding_box.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vnl/vnl_vector.h>
+
 template <class Type>
 class bvgl_grid_index_3d{
  public:
@@ -359,22 +361,13 @@ std::vector<vgl_pointset_3d<Type> > bvgl_grid_index_3d<Type>::intersecting_cells
   unsigned ixs = ix_min, ixe = ix_max;
   unsigned iys = iy_min, iye = iy_max;
   unsigned izs = iz_min, ize = iz_max;
-  unsigned temp;
-  if(ixs>ixe){
-    temp = ixs;
-    ixs = ixe;
-    ixe = temp;
-  }
-  if(iys>iye){
-    temp = iys;
-    iys = iye;
-    iye = temp;
-  }
-  if(izs>ize){
-    temp = izs;
-    izs = ize;
-    ize = temp;
-  }
+  if(ixs > ixe)
+    std::swap(ixs, ixe);
+  if(iys > iye)
+    std::swap(iys, iye);
+  if(izs > ize)
+    std::swap(izs, ize);
+
   for(unsigned iz = izs; iz<=ize; ++iz)
     for(unsigned iy = iys; iy<=iye; ++iy)
       for(unsigned ix = ixs; ix<=ixe; ++ix){

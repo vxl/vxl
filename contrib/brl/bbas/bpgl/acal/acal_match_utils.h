@@ -28,12 +28,11 @@
 // a simple feature structure, just id and location
 struct acal_corr
 {
-  acal_corr() : id_(-1) { pt_.set(-1, -1); }
+  acal_corr() { pt_.set(-1, -1); }
   acal_corr(size_t id, vgl_point_2d<double> const& pt)
-    : id_(id), pt_(pt)
-  {}
+    : id_(id), pt_(pt) {}
 
-  size_t id_;
+  size_t id_ = static_cast<size_t>(-1);
   vgl_point_2d<double> pt_; // correspondence point
 
   bool operator==(acal_corr const& other) const {

@@ -131,7 +131,7 @@ public:
 
  private:
   bool verbose_ = false;
-  size_t conn_comp_index_ = -1;
+  size_t conn_comp_index_ = static_cast<size_t>(-1);
   double cam_trans_penalty_ = 0.05;
   acal_match_graph match_graph_;
   std::shared_ptr<acal_match_tree> match_tree_;
