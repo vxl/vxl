@@ -14,6 +14,7 @@
 #endif
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <iostream>
+
 template <class T>
 struct nitf_tre
 {
@@ -42,12 +43,22 @@ struct nitf_tre
 
   bool
   get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, bool verbose = false);
+
   bool
   get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, T & value);
+
   bool
   get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::vector<T> & values);
+
+  bool
+  get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::map<size_t, T> & result);
+
+  bool
+  get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::map<size_t, std::vector<T>> & result);
+
   bool
   append(std::ostream & ostr);
+
   bool
   get_append(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::ostream & os, bool verbose = false)
   {
@@ -78,7 +89,10 @@ struct nitf_tre
   std::string blank_;
   T value_;
   std::vector<T> values_;
+  std::map<size_t, T> map_;
+  std::map<size_t, std::vector<T>> map_vector_;
 };
+
 class vpgl_replacement_sensor_model_tres
 {
 public:
@@ -124,6 +138,7 @@ private:
   vpgl_replacement_sensor_model_tres();
   ~vpgl_replacement_sensor_model_tres();
 };
+
 template <class T>
 bool
 nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, T & value)
@@ -133,6 +148,7 @@ nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, T 
     value = value_;
   return good;
 }
+
 template <class T>
 bool
 nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::vector<T> & values)
@@ -150,6 +166,34 @@ nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, st
 
 template <class T>
 bool
+nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::map<size_t, T> & result)
+{
+  result.clear();
+  bool good = get(tres_itr);
+  if (good)
+  {
+    result = map_;
+    return true;
+  }
+  return false;
+}
+
+template <class T>
+bool
+nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, std::map<size_t, std::vector<T>> & result)
+{
+  result.clear();
+  bool good = get(tres_itr);
+  if (good)
+  {
+    result = map_vector_;
+    return true;
+  }
+  return false;
+}
+
+template <class T>
+bool
 nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, bool verbose)
 {
   bool ret = true;
@@ -158,6 +202,14 @@ nitf_tre<T>::get(vil_nitf2_tagged_record_sequence::const_iterator & tres_itr, bo
   else if (type_ == "vector")
   {
     ret = (*tres_itr)->get_values(tag_, values_);
+  }
+  else if (type_ == "map")
+  {
+    ret = (*tres_itr)->get_map(tag_, map_);
+  }
+  else if (type_ == "map-vector")
+  {
+    ret = (*tres_itr)->get_map(tag_, map_vector_);
   }
   if (ret)
   {
@@ -198,6 +250,23 @@ nitf_tre<T>::append(std::ostream & ostr)
     size_t n = values_.size();
     for (size_t i = 0; i < n; ++i)
       ostr << tag_ + " index " << i << ' ' << values_[i] << std::endl;
+    return true;
+  }
+  else if (type_ == "map" && valid_)
+  {
+    for (const auto & item : map_)
+      ostr << tag_ << " index " << item.first << " " << item.second << std::endl;
+    return true;
+  }
+  else if (type_ == "map-vector" && valid_)
+  {
+    for (const auto & item : map_vector_)
+    {
+      ostr << tag_ << " index " << item.first << " (";
+      for (const auto & val : item.second)
+        ostr << val << " ";
+      ostr << ")" << std::endl;
+    }
     return true;
   }
   else if (type_ == "scalar" && possibly_blank_ && is_blank_)

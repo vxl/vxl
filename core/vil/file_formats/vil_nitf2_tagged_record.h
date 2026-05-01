@@ -310,6 +310,27 @@ public:
   get_values(std::string tag, std::vector<vil_nitf2_long> & out_values) const;
 #endif
 
+  // Sets out_map to a std::map of index/value for the selected tag.
+  // This is useful for conditional repeated fields that may not have a value
+  // at every index.
+  bool
+  get_map(std::string tag, std::map<size_t, int> & out_map) const;
+  bool
+  get_map(std::string tag, std::map<size_t, double> & out_map) const;
+  bool
+  get_map(std::string tag, std::map<size_t, char> & out_map) const;
+  bool
+  get_map(std::string tag, std::map<size_t, std::string> & out_map) const;
+
+  bool
+  get_map(std::string tag, std::map<size_t, std::vector<int>> & out_map) const;
+  bool
+  get_map(std::string tag, std::map<size_t, std::vector<double>> & out_map) const;
+  bool
+  get_map(std::string tag, std::map<size_t, std::vector<char>> & out_map) const;
+  bool
+  get_map(std::string tag, std::map<size_t, std::vector<std::string>> & out_map) const;
+
   virtual vil_nitf2_field::field_tree *
   get_tree() const;
 

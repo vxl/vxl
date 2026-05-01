@@ -351,20 +351,81 @@ public:
 
 private:
   // internal functions
+
   // convert a string to an integer
   void
-  ASC_int(std::string str, int & ival)
+  ASC_int(std::string str, int & ival) const
   {
-    std::stringstream ss(str);
-    ss >> ival;
+    ival = ASC_int(str);
   }
+  int
+  ASC_int(std::string str) const
+  {
+    try {
+      return std::stoi(str);
+    }
+    catch (const std::invalid_argument& e) {
+      return 0;
+    }
+    catch (const std::out_of_range& e) {
+      return 0;
+    }
+  }
+
   // convert a string to a double
   void
-  ASC_double(std::string str, double & dval)
+  ASC_double(std::string str, double & dval) const
   {
-    std::stringstream ss(str);
-    ss >> dval;
+    dval = ASC_double(str);
   }
+  double
+  ASC_double(std::string str) const
+  {
+    try {
+      return std::stod(str);
+    }
+    catch (const std::invalid_argument& e) {
+      return NAN;
+    }
+    catch (const std::out_of_range& e) {
+      return NAN;
+    }
+  }
+
+  // convert a vector of strings
+  std::vector<int>
+  ASC_vector_int(const std::vector<std::string> & src) const
+  {
+    std::vector<int> result;
+    for (const auto & item : src)
+      result.push_back(ASC_int(item));
+    return result;
+  }
+  std::vector<double>
+  ASC_vector_double(const std::vector<std::string> & src) const
+  {
+    std::vector<double> result;
+    for (const auto & item : src)
+      result.push_back(ASC_double(item));
+    return result;
+  }
+
+  // generic operations for nitf_tre<std::string>
+  int
+  TRE_string_as_int(nitf_tre<std::string> & tre, vil_nitf2_tagged_record_sequence::const_iterator & itr) const
+  {
+    std::string str;
+    tre.get(itr, str);
+    return ASC_int(str);
+  }
+  double
+  TRE_string_as_double(nitf_tre<std::string> & tre, vil_nitf2_tagged_record_sequence::const_iterator & itr) const
+  {
+    std::string str;
+    tre.get(itr, str);
+    return ASC_double(str);
+  }
+
   // parse the image header tres for required information
   bool
   determine_header_status(vil_nitf2_image_subheader * header_ptr,

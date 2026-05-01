@@ -1938,7 +1938,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
       }
 
       if (type == "RSMECB")
-      { // looking for "RSMDCB..."
+      { // looking for "RSMECB..."
         // =======================================
         const nitf_tre<std::string> nt("RSMECB", tre_str);
         // =========================================
@@ -2290,32 +2290,32 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt42.get(tres_itr, n_opg);
         }
 
-
-        std::vector<std::string> errcvg_svals;
-        nitf_tre<std::string> nt43("ERRCVG", "vector", opt, false);
+        std::map<size_t, std::vector<std::string>> ERRCVG_str;
+        nitf_tre<std::string> nt43("ERRCVG", "map-vector", opt, false);
         nt43.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          nt43.get(tres_itr, errcvg_svals);
-          size_t idx = 0;
+          nt43.get(tres_itr, ERRCVG_str);
           for (size_t ig = 0; ig < n_indpb; ++ig)
           {
-            const size_t covar_dim = n_opg[ig];
+            const size_t covar_dim = n_opg.at(ig);
             vnl_matrix<double> cvar(covar_dim, covar_dim, 0.0);
+
+            size_t idx = 0;
             for (size_t r = 0; r < covar_dim; ++r)
+            {
               for (size_t c = r; c < covar_dim; ++c)
               {
-                double val = NAN;
-                ASC_double(errcvg_svals[idx], val);
+                double val = ASC_double(ERRCVG_str.at(ig).at(idx));
                 cvar[r][c] = val;
                 if (r != c)
                   cvar[c][r] = val;
                 idx++;
-              } // r,c
+              }
+            } // r,c
             apdata.independent_covar_[ig] = cvar;
           } // ig
         } // opt
-
 
         std::vector<int> domain_flags;
         nitf_tre<int> nt44("TCDF", "vector", opt, false);
@@ -2327,139 +2327,107 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
             apdata.correlation_domain_flags_[ig] = domain_flags[ig];
         }
 
-        std::vector<std::string> acsmc;
-        std::vector<bool> use_function;
+        std::vector<std::string> ACSMC;
         nitf_tre<std::string> nt45("ACSMC", "vector", opt, false);
         nt45.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          nt45.get(tres_itr, acsmc);
-          use_function.resize(n_indpb);
-          for (size_t ig = 0; ig < n_indpb; ++ig)
-            use_function[ig] = (acsmc[ig] == "Y");
+          nt45.get(tres_itr, ACSMC);
         }
 
-
-        std::vector<int> ncsegb;
-        nitf_tre<int> nt46("NCSEG", "vector", opt, false);
-        nt46.get_append(tres_itr, tre_str, v);
+        std::map<size_t, int> NCSEG;
+        nitf_tre<int> nt46("NCSEG", "map", opt, false);
+        nt46.get_append(tres_itr, tre_str, true);
         if (!opt)
         {
-          nt46.get(tres_itr, ncsegb);
+          nt46.get(tres_itr, NCSEG);
         }
 
-        std::vector<std::string> corsegs;
-        std::vector<double> corseg_vals;
-        nitf_tre<std::string> nt47("CORSEG", "vector", opt, false);
+        std::map<size_t, std::vector<std::string>> CORSEG_str;
+        std::map<size_t, std::vector<double>> CORSEG;
+        nitf_tre<std::string> nt47("CORSEG", "map-vector", opt, false);
         nt47.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          nt47.get(tres_itr, corsegs);
-          for (const auto & corseg : corsegs)
-          {
-            double val = NAN;
-            ASC_double(corseg, val);
-            corseg_vals.push_back(val);
-          }
+          nt47.get(tres_itr, CORSEG_str);
+          for (const auto & item : CORSEG_str)
+            CORSEG[item.first] = ASC_vector_double(item.second);
         }
 
-        std::vector<std::string> tausegs;
-        std::vector<double> tauseg_vals;
-        nitf_tre<std::string> nt48("TAUSEG", "vector", opt, false);
+        std::map<size_t, std::vector<std::string>> TAUSEG_str;
+        std::map<size_t, std::vector<double>> TAUSEG;
+        nitf_tre<std::string> nt48("TAUSEG", "map-vector", opt, false);
         nt48.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          nt48.get(tres_itr, tausegs);
-          for (const auto & tauseg : tausegs)
-          {
-            double val = NAN;
-            ASC_double(tauseg, val);
-            tauseg_vals.push_back(val);
-          }
+          nt48.get(tres_itr, TAUSEG_str);
+          for (const auto & item : TAUSEG_str)
+            TAUSEG[item.first] = ASC_vector_double(item.second);
         }
-        std::vector<std::string> Acs;
-        std::vector<double> Acoef_vals;
-        nitf_tre<std::string> nt49("AC", "vector", opt, false);
+
+        std::map<size_t, std::string> AC_str;
+        std::map<size_t, double> AC;
+        nitf_tre<std::string> nt49("AC", "map", opt, false);
         nt49.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          nt49.get(tres_itr, Acs);
-          for (const auto & Ac : Acs)
-          {
-            double val = NAN;
-            ASC_double(Ac, val);
-            Acoef_vals.push_back(val);
-          }
+          nt49.get(tres_itr, AC_str);
+          for (const auto & item : AC_str)
+            AC[item.first] = ASC_double(item.second);
         }
-        std::vector<std::string> alphs;
-        std::vector<double> alpha_vals;
-        nitf_tre<std::string> nt50("ALPC", "vector", opt, false);
+
+        std::map<size_t, std::string> ALPC_str;
+        std::map<size_t, double> ALPC;
+        nitf_tre<std::string> nt50("ALPC", "map", opt, false);
         nt50.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          nt50.get(tres_itr, alphs);
-          for (const auto & alph : alphs)
-          {
-            double val = NAN;
-            ASC_double(alph, val);
-            alpha_vals.push_back(val);
-          }
+          nt50.get(tres_itr, ALPC_str);
+          for (const auto & item : ALPC_str)
+            ALPC[item.first] = ASC_double(item.second);
         }
 
-        std::vector<std::string> bets;
-        std::vector<double> beta_vals;
-        nitf_tre<std::string> nt51("BETC", "vector", opt, false);
+        std::map<size_t, std::string> BETC_str;
+        std::map<size_t, double> BETC;
+        nitf_tre<std::string> nt51("BETC", "map", opt, false);
         nt51.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          nt51.get(tres_itr, bets);
-          for (const auto & bet : bets)
-          {
-            double val = NAN;
-            ASC_double(bet, val);
-            beta_vals.push_back(val);
-          }
+          nt51.get(tres_itr, BETC_str);
+          for (const auto & item : BETC_str)
+            BETC[item.first] = ASC_double(item.second);
         }
 
-        std::vector<std::string> Tcs;
-        std::vector<double> T_vals;
-        nitf_tre<std::string> nt52("TC", "vector", opt, false);
+        std::map<size_t, std::string> TC_str;
+        std::map<size_t, double> TC;
+        nitf_tre<std::string> nt52("TC", "map", opt, false);
         nt52.get_append(tres_itr, tre_str, v);
         if (!opt)
         {
-          nt52.get(tres_itr, Tcs);
-          for (const auto & Tc : Tcs)
-          {
-            double val = NAN;
-            ASC_double(Tc, val);
-            T_vals.push_back(val);
-          }
+          nt52.get(tres_itr, TC_str);
+          for (const auto & item : TC_str)
+            TC[item.first] = ASC_double(item.second);
         }
+
         // Encode time correlation functions for each independent group
         for (size_t ig = 0; ig < n_indpb; ++ig)
         {
-          // use functional form of time correlation
-          int func_idx = 0, piecewise_idx = 0;
-          if (use_function[ig])
+          // functional form of time correlation
+          int piecewise_idx = 0;
+          if (ACSMC[ig] == "Y")
           {
-            const double Ac = Acoef_vals[func_idx];
-            const double alpha = alpha_vals[func_idx];
-            const double beta = beta_vals[func_idx];
-            const double Tc = T_vals[func_idx];
-            const std::tuple<double, double, double, double> func(Ac, alpha, beta, Tc);
-            apdata.corr_analytic_functions_[ig] = func;
-            func_idx++;
-            continue;
+            apdata.corr_analytic_functions_[ig] = std::make_tuple(AC.at(ig), ALPC.at(ig), BETC.at(ig), TC.at(ig));
           }
-          // else use piecewise linear form for correlation function
-          const int n_segments = ncsegb[piecewise_idx];
-          std::vector<std::pair<double, double>> segments;
-          segments.reserve(n_segments);
-          for (size_t s = 0; s < n_segments; ++s)
-            segments.emplace_back(corseg_vals[s], tauseg_vals[s]);
-
-          const std::tuple<size_t, std::vector<std::pair<double, double>>> temp(n_segments, segments);
-          apdata.corr_piecewise_functions_[ig] = temp;
+          // piecewise linear form for correlation function
+          else
+          {
+            int n_segments = NCSEG.at(ig);
+            std::vector<std::pair<double, double>> segments;
+            segments.reserve(n_segments);
+            for (size_t s = 0; s < n_segments; ++s)
+              segments.emplace_back(CORSEG.at(ig).at(s), TAUSEG.at(ig).at(s));
+            apdata.corr_piecewise_functions_[ig] = std::make_tuple(n_segments, segments);
+          }
         }
 
         std::vector<std::string> Mvals;
@@ -2479,35 +2447,22 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
               idx++;
             }
         }
+
         // Unmodeled Error
         opt = !UCreq;
-        double urr = NAN;
+
         nitf_tre<std::string> nt54("URR", opt, false);
         nt54.get_append(tres_itr, tre_str, v);
-        if (!opt)
-        {
-          std::string urrs;
-          nt54.get(tres_itr, urrs);
-          ASC_double(urrs, urr);
-        }
-        double ucc = NAN;
+        double urr = opt ? NAN : TRE_string_as_double(nt54, tres_itr);
+
         nitf_tre<std::string> nt55("UCC", opt, false);
         nt55.get_append(tres_itr, tre_str, v);
-        if (!opt)
-        {
-          std::string uccs;
-          nt55.get(tres_itr, uccs);
-          ASC_double(uccs, ucc);
-        }
-        double urc = NAN;
+        double ucc = opt ? NAN : TRE_string_as_double(nt55, tres_itr);
+
         nitf_tre<std::string> nt56("URC", opt, false);
         nt56.get_append(tres_itr, tre_str, v);
-        if (!opt)
-        {
-          std::string urcs;
-          nt56.get(tres_itr, urcs);
-          ASC_double(urcs, urc);
-        }
+        double urc = opt ? NAN : TRE_string_as_double(nt56, tres_itr);
+
         apdata.unmodeled_row_variance_ = urr;
         apdata.unmodeled_col_variance_ = ucc;
         apdata.unmodeled_row_col_variance_ = urc;
@@ -2521,96 +2476,56 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
           nt57.get(tres_itr, usamc);
           apdata.unmodeled_analytic_ = (usamc == "Y");
         }
+
         if (apdata.unmodeled_analytic_)
         {
-          double uA_r = NAN;
-          nitf_tre<std::string> nt58("UACR", "vector", opt, false);
+          nitf_tre<std::string> nt58("UACR", opt, false);
           nt58.get_append(tres_itr, tre_str, v);
-          if (!opt)
-          {
-            std::vector<std::string> uacrs;
-            nt58.get(tres_itr, uacrs);
-            ASC_double(uacrs[0], uA_r);
-          }
-          double alpha_r = NAN;
-          nitf_tre<std::string> nt59("UALPCR", "vector", opt, false);
+          double UACR = opt ? NAN : TRE_string_as_double(nt58, tres_itr);
+
+          nitf_tre<std::string> nt59("UALPCR", opt, false);
           nt59.get_append(tres_itr, tre_str, v);
-          if (!opt)
-          {
-            std::vector<std::string> ualpcrs;
-            nt59.get(tres_itr, ualpcrs);
-            ASC_double(ualpcrs[0], alpha_r);
-          }
-          double beta_r = NAN;
-          nitf_tre<std::string> nt60("UBETCR", "vector", opt, false);
+          double UALPCR = opt ? NAN : TRE_string_as_double(nt59, tres_itr);
+
+          nitf_tre<std::string> nt60("UBETCR", opt, false);
           nt60.get_append(tres_itr, tre_str, v);
-          if (!opt)
-          {
-            std::vector<std::string> ubetcrs;
-            nt60.get(tres_itr, ubetcrs);
-            ASC_double(ubetcrs[0], beta_r);
-          }
-          double T_r = NAN;
-          nitf_tre<std::string> nt61("UTCR", "vector", opt, false);
+          double UBETCR = opt ? NAN : TRE_string_as_double(nt60, tres_itr);
+
+          nitf_tre<std::string> nt61("UTCR", opt, false);
           nt61.get_append(tres_itr, tre_str, v);
-          if (!opt)
-          {
-            std::vector<std::string> utcrs;
-            nt61.get(tres_itr, utcrs);
-            ASC_double(utcrs[0], T_r);
-          }
-          double uA_c = NAN;
-          nitf_tre<std::string> nt62("UACC", "vector", opt, false);
+          double UTCR = opt ? NAN : TRE_string_as_double(nt61, tres_itr);
+
+          nitf_tre<std::string> nt62("UACC", opt, false);
           nt62.get_append(tres_itr, tre_str, v);
-          if (!opt)
-          {
-            std::vector<std::string> uaccs;
-            nt62.get(tres_itr, uaccs);
-            ASC_double(uaccs[0], uA_c);
-          }
-          double alpha_c = NAN;
-          nitf_tre<std::string> nt63("UALPCC", "vector", opt, false);
+          double UACC = opt ? NAN : TRE_string_as_double(nt62, tres_itr);
+
+          nitf_tre<std::string> nt63("UALPCC", opt, false);
           nt63.get_append(tres_itr, tre_str, v);
-          if (!opt)
-          {
-            std::vector<std::string> ualpccs;
-            nt63.get(tres_itr, ualpccs);
-            ASC_double(ualpccs[0], alpha_c);
-          }
-          double beta_c = NAN;
-          nitf_tre<std::string> nt64("UBETCC", "vector", opt, false);
+          double UALPCC = opt ? NAN : TRE_string_as_double(nt63, tres_itr);
+
+          nitf_tre<std::string> nt64("UBETCC", opt, false);
           nt64.get_append(tres_itr, tre_str, v);
-          if (!opt)
-          {
-            std::vector<std::string> ubetccs;
-            nt64.get(tres_itr, ubetccs);
-            ASC_double(ubetccs[0], beta_c);
-          }
-          double T_c = NAN;
-          nitf_tre<std::string> nt65("UTCC", "vector", opt, false);
+          double UBETCC = opt ? NAN : TRE_string_as_double(nt64, tres_itr);
+
+          nitf_tre<std::string> nt65("UTCC", opt, false);
           nt65.get_append(tres_itr, tre_str, v);
-          if (!opt)
-          {
-            std::vector<std::string> utccs;
-            nt65.get(tres_itr, utccs);
-            ASC_double(utccs[0], T_c);
-          }
-          const std::tuple<double, double, double, double> row_func(uA_r, alpha_r, beta_r, T_r);
-          const std::tuple<double, double, double, double> col_func(uA_c, alpha_c, beta_c, T_c);
-          apdata.unmodeled_row_analytic_function_ = row_func;
-          apdata.unmodeled_col_analytic_function_ = col_func;
+          double UTCC = opt ? NAN : TRE_string_as_double(nt65, tres_itr);
+
+          apdata.unmodeled_row_analytic_function_ = std::make_tuple(UACR, UALPCR, UBETCR, UTCR);
+          apdata.unmodeled_col_analytic_function_ = std::make_tuple(UACC, UALPCC, UBETCC, UTCC);
         }
+
+        // piecewise correlation functions
         else
-        { // piecewise correlation functions
+        {
           int n_row_seg_u = 0;
-          nitf_tre<int> nt66("UNCSR", "vector", opt, false);
+          nitf_tre<int> nt66("UNCSR", opt, false);
           nt66.get_append(tres_itr, tre_str, v);
           if (!opt)
           {
-            std::vector<int> uncsr;
-            nt66.get(tres_itr, uncsr);
-            n_row_seg_u = uncsr[0];
+            nt66.get(tres_itr, n_row_seg_u);
           }
+
           std::vector<double> ucorsr;
           std::vector<std::string> ucorsrs;
           nitf_tre<std::string> nt67("UCORSR", "vector", opt, false);
@@ -2625,6 +2540,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
               ucorsr.push_back(val);
             }
           }
+
           std::vector<double> utausr;
           std::vector<std::string> utausrs;
           nitf_tre<std::string> nt68("UTAUSR", "vector", opt, false);
@@ -2639,15 +2555,15 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
               utausr.push_back(val);
             }
           }
+
           int n_col_seg_u = 0;
-          nitf_tre<int> nt69("UNCSC", "vector", opt, false);
+          nitf_tre<int> nt69("UNCSC", opt, false);
           nt69.get_append(tres_itr, tre_str, v);
           if (!opt)
           {
-            std::vector<int> uncsc;
-            nt69.get(tres_itr, uncsc);
-            n_col_seg_u = uncsc[0];
+            nt69.get(tres_itr, n_col_seg_u);
           }
+
           std::vector<double> ucorsc;
           std::vector<std::string> ucorscs;
           nitf_tre<std::string> nt70("UCORSC", "vector", opt, false);
@@ -2662,6 +2578,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
               ucorsc.push_back(val);
             }
           }
+
           std::vector<double> utausc;
           std::vector<std::string> utauscs;
           nitf_tre<std::string> nt71("UTAUSC", "vector", opt, false);
@@ -2676,6 +2593,7 @@ vpgl_nitf_RSM_camera_extractor::scan_for_RSM_data(bool verbose)
               utausc.push_back(val);
             }
           }
+
           std::vector<std::pair<double, double>> temp_r, temp_c;
           for (size_t s = 0; s < n_row_seg_u; ++s)
             temp_r.emplace_back(ucorsr[s], utausr[s]);

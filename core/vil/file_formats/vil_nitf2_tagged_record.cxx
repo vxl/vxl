@@ -278,6 +278,23 @@ VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_date_time);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_long);
 #endif
 
+// Macro to define overloads of get_map()
+#define VIL_NITF2_TAGGED_RECORD_GET_MAP(T)                                                    \
+  bool vil_nitf2_tagged_record::get_map(std::string tag, std::map<size_t, T> & out_map) const \
+  {                                                                                           \
+    return m_field_sequence->get_map(tag, out_map);                                           \
+  }
+
+VIL_NITF2_TAGGED_RECORD_GET_MAP(int);
+VIL_NITF2_TAGGED_RECORD_GET_MAP(double);
+VIL_NITF2_TAGGED_RECORD_GET_MAP(char);
+VIL_NITF2_TAGGED_RECORD_GET_MAP(std::string);
+VIL_NITF2_TAGGED_RECORD_GET_MAP(std::vector<int>);
+VIL_NITF2_TAGGED_RECORD_GET_MAP(std::vector<double>);
+VIL_NITF2_TAGGED_RECORD_GET_MAP(std::vector<char>);
+VIL_NITF2_TAGGED_RECORD_GET_MAP(std::vector<std::string>);
+
+
 vil_nitf2_tagged_record::vil_nitf2_tagged_record()
 
   = default;

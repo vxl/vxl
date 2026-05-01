@@ -33,6 +33,18 @@ vil_nitf2_field_sequence::insert_field(const std::string & str, vil_nitf2_field 
   fields_vector.push_back(field);
 }
 
+int
+vil_nitf2_field_sequence::array_field_dimension(const std::string & tag) const
+{
+  vil_nitf2_field * field = get_field(tag);
+  vil_nitf2_array_field * array_field = field ? field->array_field() : nullptr;
+  if (!array_field)
+  {
+    return -1;
+  }
+  return array_field->next_dimension(vil_nitf2_index_vector());
+}
+
 bool
 vil_nitf2_field_sequence::create_array_fields(const vil_nitf2_field_definitions * field_defs, int num_dimensions)
 {
@@ -642,3 +654,48 @@ NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_long)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(vil_nitf2_long)
 NITF_FIELD_SEQ_GET_VALUES(vil_nitf2_long)
 #endif
+
+
+// Macro to generate overloads of get_map() for scalar and vector of type "T"
+// return true if output contains at least one entry
+#define NITF_FIELD_SEQ_GET_MAP(T)                                                                           \
+  bool vil_nitf2_field_sequence::get_map(std::string tag, std::map<size_t, T> & out_map) const              \
+  {                                                                                                         \
+    out_map.clear();                                                                                        \
+    int dimension = array_field_dimension(tag);                                                             \
+    if (dimension <= 0)                                                                                     \
+    {                                                                                                       \
+      return false;                                                                                         \
+    }                                                                                                       \
+    for (int i = 0; i < dimension; i++)                                                                     \
+    {                                                                                                       \
+      T scalar;                                                                                             \
+      bool good = get_value(tag, vil_nitf2_index_vector(i), scalar);                                        \
+      if (good)                                                                                             \
+        out_map[i] = scalar;                                                                                \
+    }                                                                                                       \
+    return !out_map.empty();                                                                                \
+  }                                                                                                         \
+                                                                                                            \
+  bool vil_nitf2_field_sequence::get_map(std::string tag, std::map<size_t, std::vector<T>> & out_map) const \
+  {                                                                                                         \
+    out_map.clear();                                                                                        \
+    int dimension = array_field_dimension(tag);                                                             \
+    if (dimension <= 0)                                                                                     \
+    {                                                                                                       \
+      return false;                                                                                         \
+    }                                                                                                       \
+    for (int i = 0; i < dimension; i++)                                                                     \
+    {                                                                                                       \
+      std::vector<T> vector;                                                                                \
+      bool good = get_values(tag, vil_nitf2_index_vector(i), vector);                                       \
+      if (good && !vector.empty())                                                                          \
+        out_map[i] = vector;                                                                                \
+    }                                                                                                       \
+    return !out_map.empty();                                                                                \
+  }
+
+NITF_FIELD_SEQ_GET_MAP(int)
+NITF_FIELD_SEQ_GET_MAP(double)
+NITF_FIELD_SEQ_GET_MAP(char)
+NITF_FIELD_SEQ_GET_MAP(std::string)
