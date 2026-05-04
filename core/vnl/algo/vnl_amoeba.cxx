@@ -5,6 +5,7 @@
 // \date   23 Oct 97
 //-----------------------------------------------------------------------------
 
+#include <array>
 #include <cassert>
 #include <climits>
 #include <cstdio>
@@ -354,9 +355,9 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorn
     // Print debugging info
     if (verbose)
     {
-      char buf[16383];
-      std::snprintf(buf, sizeof(buf), "iter %5d: %s ", cnt, how);
-      std::cerr << buf;
+      std::array<char, 16383> buf;
+      std::snprintf(buf.data(), buf.size(), "iter %5d: %s ", cnt, how);
+      std::cerr << buf.data();
       if (verbose == 2)
         std::cerr << "\nFirst corner: " << simplex[0].v;
       if (verbose > 1)
