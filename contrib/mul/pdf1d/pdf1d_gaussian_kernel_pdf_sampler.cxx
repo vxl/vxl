@@ -42,7 +42,7 @@ double pdf1d_gaussian_kernel_pdf_sampler::sample()
   int n = kpdf.centre().size();
 
   int i = 0;
-  if (n>1) i=rng_.lrand32(0,n-1);
+  if (n>1) i=rng_.next_int32(0,n-1);
 
   double x = rng_.normal();
 

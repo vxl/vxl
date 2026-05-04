@@ -70,14 +70,14 @@ void test_binary_hyperplane()
   std::cout << "Generating test data\n";
   for (unsigned int i=0; i<nSamples; i++)
   {
-    int c = rng.lrand32(0,1);
+    int c = rng.next_int32(0,1);
     labels[i] = c;
     generator[c]->sample(s);
     trainingVectors[i] = s;
   }
   for (unsigned i=0; i<nTestSamples; i++)
   {
-    int c = rng.lrand32(0, 1);
+    int c = rng.next_int32(0, 1);
     testLabels[i] = c;
     generator[c]->sample(s);
     testVectors[i] = s;

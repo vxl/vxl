@@ -91,8 +91,8 @@ main(int argc, char ** argv)
   std::cout << "removing " << num_missing << " random correspondences" << std::endl;
   for (unsigned int i = 0; i < num_missing; /* */)
   {
-    const size_t c = rnd.lrand32(static_cast<int>(cameras.size() - 1));
-    const size_t w = rnd.lrand32(static_cast<int>(world.size() - 1));
+    const size_t c = rnd.next_int32(static_cast<int>(cameras.size() - 1));
+    const size_t w = rnd.next_int32(static_cast<int>(world.size() - 1));
     if (mask[c][w])
     {
       mask[c][w] = false;

@@ -188,7 +188,7 @@ bool sdet_fit_oriented_boxes_from_geotiff_process(bprb_func_process& pro)
     std::vector<vgl_point_2d<float> > corners = orient_boxes[i].corners();
     vgl_polygon<float> single_poly(corners, 1);
     vgl_polygon_scan_iterator<float> psi(single_poly, false);
-    vil_rgb<vxl_byte> random_color = vil_rgb<vxl_byte>((char)rng.lrand32(0,255), (char)rng.lrand32(0,255), (char)rng.lrand32(0,255));
+    vil_rgb<vxl_byte> random_color = vil_rgb<vxl_byte>((char)rng.next_int32(0,255), (char)rng.next_int32(0,255), (char)rng.next_int32(0,255));
     for (psi.reset(); psi.next(); ) {
       int y = psi.scany();
       for (int x = psi.startx(); x <= psi.endx(); ++x) {
@@ -249,7 +249,7 @@ bool sdet_fit_oriented_boxes_from_geotiff_process(bprb_func_process& pro)
   for (unsigned i = 0; i < n_polys; i++)
   {
     vgl_polygon_scan_iterator<float> psi(valid_polys[i], false);
-    vil_rgb<vxl_byte> random_color = vil_rgb<vxl_byte>((char)rng.lrand32(0,255), (char)rng.lrand32(0,255), (char)rng.lrand32(0,255));
+    vil_rgb<vxl_byte> random_color = vil_rgb<vxl_byte>((char)rng.next_int32(0,255), (char)rng.next_int32(0,255), (char)rng.next_int32(0,255));
     for (psi.reset(); psi.next(); ) {
       int y = psi.scany();
       for (int x = psi.startx(); x <= psi.endx(); ++x) {

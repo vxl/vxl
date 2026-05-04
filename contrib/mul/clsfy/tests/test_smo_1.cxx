@@ -83,7 +83,7 @@ void test_smo_1()
 #endif
   for (unsigned int i=0; i<nSamples; i++)
   {
-    int c = rng.lrand32(3);
+    int c = rng.next_int32(3);
     labels[i] = c/2;
     svlabels[i] = (c/2) * 2 - 1;
     labelcount[c] ++;

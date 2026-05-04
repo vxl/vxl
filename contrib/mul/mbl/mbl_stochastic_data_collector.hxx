@@ -75,7 +75,7 @@ void mbl_stochastic_data_collector<T>::record(const T& v)
     double prob = nSamples * nSamples / (nPresented_ * (nSamples+1));
     nPresented_ ++;
     if (rand.drand64() < prob)
-      samples_[rand.lrand32(samples_.size() - 1)] = v;
+      samples_[rand.next_int32(samples_.size() - 1)] = v;
   }
 }
 
@@ -90,7 +90,7 @@ void mbl_stochastic_data_collector<T>::force_record(const T& v)
   if (nPresented_ < samples_.size())
     samples_[nPresented_-1] = v;
   else
-    samples_[rand.lrand32(samples_.size() - 1)] = v;
+    samples_[rand.next_int32(samples_.size() - 1)] = v;
 }
 
 //=======================================================================

@@ -18,7 +18,7 @@ static void test_read()
   char* tester = new char[buffSize];
   vnl_random rand;
   for (unsigned int i=0;i<buffSize;++i)
-    tester[i]=(char)rand.lrand32(-127,127);
+    tester[i]=(char)rand.next_int32(-127,127);
 
   //write to file with blocking
   std::ofstream outFile(test_file.c_str(), std::ios::out | std::ios::binary);

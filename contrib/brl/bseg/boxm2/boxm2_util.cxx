@@ -50,7 +50,7 @@ void boxm2_util::random_permutation(int* buffer, int size)
     {
         //swap current value with random one after it
         int curr = buffer[i];
-        int rInd = random.lrand32(i, size-1);
+        int rInd = random.next_int32(i, size-1);
         buffer[i] = buffer[rInd];
         buffer[rInd] = curr;
     }

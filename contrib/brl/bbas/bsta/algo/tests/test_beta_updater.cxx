@@ -28,7 +28,7 @@ void random_sampling(std::vector<float> &samples, std::vector<float> in_samples,
   std::vector<float> s;
   vnl_random rand;
   for (int i=0; i<num; ++i) {
-    int index=rand.lrand32(0,in_samples.size()-1);
+    int index=rand.next_int32(0,in_samples.size()-1);
     samples.push_back(in_samples[index]);
     s.push_back(in_samples[index]);
   }
@@ -99,8 +99,8 @@ static void test_beta_updater()
   // shuffle the samples so we get a random mix of 3 distributions
   vnl_random rand;
   for (unsigned i=0; i<samples.size(); i++) {
-    int i1=rand.lrand32(0,samples.size()-1);
-    int i2=rand.lrand32(0,samples.size()-1);
+    int i1=rand.next_int32(0,samples.size()-1);
+    int i2=rand.next_int32(0,samples.size()-1);
     float temp = samples[i1];
     samples[i1] = samples[i2];
     samples[i2] = temp;

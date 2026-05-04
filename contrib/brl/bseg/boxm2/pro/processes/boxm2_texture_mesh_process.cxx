@@ -226,7 +226,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(const std:
 #if 0
   vnl_random rand(9667566);
   for (int i=0; i<5; ++i) {
-    unsigned filenum = rand.lrand32(1, allims.size()-1);
+    unsigned filenum = rand.next_int32(1, allims.size()-1);
     imfiles.push_back(allims[filenum]);
     cameras.push_back(allcams[filenum]);
   }

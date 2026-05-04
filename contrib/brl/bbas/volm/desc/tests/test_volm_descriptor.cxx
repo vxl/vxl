@@ -94,8 +94,8 @@ static void test_volm_desc_ex()
     depth_interval.push_back(iter->first);
   vnl_random rand(9667566);
   for (unsigned i = 0; i < 1176; i++) {
-    values_dst.push_back((unsigned char)rand.lrand32(254));
-    values_combine.push_back((unsigned char)rand.lrand32(254));
+    values_dst.push_back((unsigned char)rand.next_int32(254));
+    values_combine.push_back((unsigned char)rand.next_int32(254));
   }
 
   // binary IO test

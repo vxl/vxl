@@ -46,9 +46,9 @@ bool sdet_texture_unsupervised_classifier_process(bprb_func_process& pro)
   vnl_random rng(10);  // always start with same seed to get same colors
   std::vector<vil_rgb<vxl_byte> > colors;
   for (unsigned kk = 0; kk < ntextons; kk++) {
-    unsigned char r = rng.lrand32(0,255);
-    unsigned char g = rng.lrand32(0,255);
-    unsigned char b = rng.lrand32(0,255);
+    unsigned char r = rng.next_int32(0,255);
+    unsigned char g = rng.next_int32(0,255);
+    unsigned char b = rng.next_int32(0,255);
     colors.emplace_back(r,g,b);
   }
 

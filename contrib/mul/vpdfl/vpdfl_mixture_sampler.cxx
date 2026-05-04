@@ -125,7 +125,7 @@ void vpdfl_mixture_sampler::reseed(unsigned long seed)
 {
   rng_.reseed(seed);
   for (auto & i : inst_)
-    i->reseed(rng_.lrand32());
+    i->reseed(rng_.next_uint32());
 }
 
 

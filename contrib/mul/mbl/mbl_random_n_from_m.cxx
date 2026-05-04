@@ -37,7 +37,7 @@ void mbl_random_n_from_m::choose_n_from_m(std::vector<unsigned>& choice,
   for (unsigned int i=0;i<n;i++)
   {
     // Select a random integer in a reducing range
-    int j = mz_random_.lrand32(m-i-1);
+    int j = mz_random_.next_int32(m-i-1);
     // Find the j'th un-used integer
     int k2=-1;
     for (int k1=0; k1<=j; ++k1)
@@ -89,7 +89,7 @@ void mbl_random_n_from_m::choose_n_from_m(std::vector<int>& choice,
   for (unsigned int i=0;i<n;i++)
   {
     // Select a random integer in a reducing range
-    int j = mz_random_.lrand32(m-i-1);
+    int j = mz_random_.next_int32(m-i-1);
     // Find the j'th un-used integer
     int k2=-1;
     for (int k1=0; k1<=j; ++k1)

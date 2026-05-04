@@ -20,7 +20,7 @@ static void test_image_bounds_from_histogram()
   int low = 50, high = 150;
   for(unsigned j = 0; j<nj; ++j)
     for(unsigned i = 0; i<ni; ++i){
-      int v = rand.lrand32(low, high);
+      int v = rand.next_int32(low, high);
       view(i, j) = static_cast<vxl_byte>(v);
     }
   vil_image_resource_sptr imgr = vil_new_image_resource_of_view(view);
@@ -39,7 +39,7 @@ static void test_image_bounds_from_histogram()
   for(unsigned j = 0; j<nj; ++j)
     for(unsigned i = 0; i<ni; ++i)
         for(unsigned p = 0; p<np; ++p){
-      int v = rand.lrand32(low3[p], high3[p]);
+      int v = rand.next_int32(low3[p], high3[p]);
       view3(i, j,p) = static_cast<vxl_byte>(v);
     }
          vil_image_resource_sptr imgr3 = vil_new_image_resource_of_view(view3);
