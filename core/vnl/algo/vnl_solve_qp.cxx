@@ -1,6 +1,6 @@
 #include <vector>
 #include <cassert>
-#include <climits>
+#include <limits>
 #include <iostream>
 #include "vnl_solve_qp.h"
 //:
@@ -139,7 +139,7 @@ vnl_solve_qp_update_x(vnl_vector<double> & x,
       if (alpha < min_alpha)
       {
         min_alpha = alpha;
-        assert(i <= static_cast<unsigned int>(INT_MAX));
+        assert(i <= static_cast<unsigned int>(std::numeric_limits<int>::max()));
         worst_i = static_cast<int>(i);
       }
     }

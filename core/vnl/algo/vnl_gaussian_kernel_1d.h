@@ -14,7 +14,7 @@
 // \endverbatim
 
 #include <cassert>
-#include <climits>
+#include <limits>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_algo_export.h>
 
@@ -32,7 +32,7 @@ public:
   width() const
   {
     const size_t vecSize = vec_.size();
-    assert(vecSize <= static_cast<size_t>(INT_MAX));
+    assert(vecSize <= static_cast<size_t>(std::numeric_limits<int>::max()));
     return static_cast<int>(vecSize);
   }
   double

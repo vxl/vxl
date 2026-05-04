@@ -7,7 +7,7 @@
 
 #include <array>
 #include <cassert>
-#include <climits>
+#include <limits>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -243,7 +243,7 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x)
 {
   // Set up a simplex near the initial guess.
   const size_t n = x.size();
-  assert(n <= static_cast<size_t>(INT_MAX));
+  assert(n <= static_cast<size_t>(std::numeric_limits<int>::max()));
   std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(static_cast<int>(n)));
 
   set_up_simplex_relative(simplex, x);
@@ -255,7 +255,7 @@ vnl_amoebaFit::amoeba(vnl_vector<double> & x, const vnl_vector<double> & dx)
 {
   // Set up a simplex near the initial guess.
   const size_t n = x.size();
-  assert(n <= static_cast<size_t>(INT_MAX));
+  assert(n <= static_cast<size_t>(std::numeric_limits<int>::max()));
   std::vector<vnl_amoeba_SimplexCorner> simplex(n + 1, vnl_amoeba_SimplexCorner(static_cast<int>(n)));
 
   set_up_simplex_absolute(simplex, x, dx);
@@ -267,7 +267,7 @@ void
 vnl_amoebaFit::amoeba(vnl_vector<double> & x, std::vector<vnl_amoeba_SimplexCorner> & simplex)
 {
   const size_t n = x.size();
-  assert(n <= static_cast<size_t>(INT_MAX));
+  assert(n <= static_cast<size_t>(std::numeric_limits<int>::max()));
   sort_simplex(simplex);
 
   if (verbose > 1)
