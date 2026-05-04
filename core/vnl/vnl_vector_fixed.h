@@ -93,8 +93,8 @@ protected:
   T data_[n];
 
 public:
-  typedef vnl_vector_fixed<T, n> self;
-  typedef size_t size_type;
+  using self = vnl_vector_fixed<T, n>;
+  using size_type = size_t;
   // Compile-time accessible attribute to get the dimensionality of the vector.
   enum
   {
@@ -336,9 +336,9 @@ public:
   //----------------------------------------------------------------------
 
   //: Type defs for iterators
-  typedef T element_type;
+  using element_type = T;
   //: Type defs for iterators
-  typedef T * iterator;
+  using iterator = T *;
   //: Iterator pointing to start of data
   iterator
   begin()
@@ -354,7 +354,7 @@ public:
   }
 
   //: Const iterator type
-  typedef const T * const_iterator;
+  using const_iterator = const T *;
   //: Iterator pointing to start of data
   const_iterator
   begin() const
@@ -493,7 +493,7 @@ public:
   update(const vnl_vector<T> &, unsigned int start = 0);
 
   // norms etc
-  typedef typename vnl_c_vector<T>::abs_t abs_t;
+  using abs_t = typename vnl_c_vector<T>::abs_t;
 
   //: Return sum of squares of elements
   abs_t

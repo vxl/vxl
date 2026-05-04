@@ -745,8 +745,8 @@ template <class T>
 T
 cos_angle(const vnl_matrix<T> & a, const vnl_matrix<T> & b)
 {
-  typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
-  typedef typename vnl_numeric_traits<Abs_t>::real_t abs_r;
+  using Abs_t = typename vnl_numeric_traits<T>::abs_t;
+  using abs_r = typename vnl_numeric_traits<Abs_t>::real_t;
 
   T ab = inner_product(a, b);
   const Abs_t a_b = (Abs_t)std::sqrt((abs_r)vnl_math::abs(inner_product(a, a) * inner_product(b, b)));
@@ -834,9 +834,9 @@ template <class T>
 vnl_matrix<T> &
 vnl_matrix<T>::normalize_rows()
 {
-  typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
-  typedef typename vnl_numeric_traits<T>::real_t Real_t;
-  typedef typename vnl_numeric_traits<Real_t>::abs_t abs_real_t;
+  using Abs_t = typename vnl_numeric_traits<T>::abs_t;
+  using Real_t = typename vnl_numeric_traits<T>::real_t;
+  using abs_real_t = typename vnl_numeric_traits<Real_t>::abs_t;
   for (unsigned int i = 0; i < this->num_rows; ++i)
   {                                                   // For each row in the Matrix
     Abs_t norm(0);                                    // double will not do for all types.
@@ -859,9 +859,9 @@ template <class T>
 vnl_matrix<T> &
 vnl_matrix<T>::normalize_columns()
 {
-  typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
-  typedef typename vnl_numeric_traits<T>::real_t Real_t;
-  typedef typename vnl_numeric_traits<Real_t>::abs_t abs_real_t;
+  using Abs_t = typename vnl_numeric_traits<T>::abs_t;
+  using Real_t = typename vnl_numeric_traits<T>::real_t;
+  using abs_real_t = typename vnl_numeric_traits<Real_t>::abs_t;
   for (unsigned int j = 0; j < this->num_cols; j++)
   {                // For each column in the Matrix
     Abs_t norm(0); // double will not do for all types.

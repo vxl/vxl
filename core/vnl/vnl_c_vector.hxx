@@ -32,7 +32,7 @@ template <class T>
 void
 vnl_c_vector<T>::normalize(T * v, unsigned n)
 {
-  typedef typename vnl_numeric_traits<abs_t>::real_t real_abs_t;
+  using real_abs_t = typename vnl_numeric_traits<abs_t>::real_t;
   abs_t tmp =
     std::accumulate(v, v + n, abs_t(0), [](abs_t s, const T & x) { return s + vnl_math::squared_magnitude(x); });
   if (tmp != 0)
@@ -337,7 +337,7 @@ vnl_c_vector_rms_norm(const T * p, unsigned n, S * out)
 {
   vnl_c_vector_two_norm_squared(p, n, out);
   *out /= n;
-  typedef typename vnl_numeric_traits<S>::real_t real_t;
+  using real_t = typename vnl_numeric_traits<S>::real_t;
   *out = S(std::sqrt(real_t(*out)));
 }
 
@@ -356,7 +356,7 @@ void
 vnl_c_vector_two_norm(const T * p, unsigned n, S * out)
 {
   vnl_c_vector_two_norm_squared(p, n, out);
-  typedef typename vnl_numeric_traits<S>::real_t real_t;
+  using real_t = typename vnl_numeric_traits<S>::real_t;
   *out = S(std::sqrt(real_t(*out)));
 }
 

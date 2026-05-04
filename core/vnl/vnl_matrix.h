@@ -690,7 +690,7 @@ public:
   swap(vnl_matrix<T> & that) noexcept;
 
   //: Type def for norms.
-  typedef typename vnl_c_vector<T>::abs_t abs_t;
+  using abs_t = typename vnl_c_vector<T>::abs_t;
 
   //: Return sum of absolute values of elements
   abs_t
@@ -893,10 +893,10 @@ public:
     return data;
   }
 
-  typedef T element_type;
+  using element_type = T;
 
   //: Iterators
-  typedef T * iterator;
+  using iterator = T *;
   //: Iterator pointing to start of data
   iterator
   begin()
@@ -911,7 +911,7 @@ public:
   }
 
   //: Const iterators
-  typedef const T * const_iterator;
+  using const_iterator = const T *;
   //: Iterator pointing to start of data
   const_iterator
   begin() const

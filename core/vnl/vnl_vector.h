@@ -362,11 +362,11 @@ public:
   }
 
   //: Type defs for iterators
-  typedef T element_type;
-  typedef size_t size_type;
+  using element_type = T;
+  using size_type = size_t;
 
   //: Type defs for iterators
-  typedef T * iterator;
+  using iterator = T *;
   //: Iterator pointing to start of data
   iterator
   begin()
@@ -382,7 +382,7 @@ public:
   }
 
   //: Const iterator type
-  typedef const T * const_iterator;
+  using const_iterator = const T *;
   //: Iterator pointing to start of data
   const_iterator
   begin() const
@@ -453,7 +453,7 @@ public:
   update(const vnl_vector<T> &, size_t start = 0);
 
   // norms etc
-  typedef typename vnl_c_vector<T>::abs_t abs_t;
+  using abs_t = typename vnl_c_vector<T>::abs_t;
 
   //: Return sum of squares of elements
   abs_t

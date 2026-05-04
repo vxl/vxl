@@ -110,8 +110,8 @@ private:
   T data_[num_rows][num_cols]; // Local storage
 
 public:
-  typedef vnl_matrix_fixed<T, num_rows, num_cols> self;
-  typedef size_t size_type;
+  using self = vnl_matrix_fixed<T, num_rows, num_cols>;
+  using size_type = size_t;
 
   //: Construct an empty num_rows*num_cols matrix
   vnl_matrix_fixed() = default;
@@ -652,7 +652,7 @@ public:
   swap(vnl_matrix_fixed<T, num_rows, num_cols> & that);
 
   //: Type def for norms.
-  typedef typename vnl_c_vector<T>::abs_t abs_t;
+  using abs_t = typename vnl_c_vector<T>::abs_t;
 
   //: Return sum of absolute values of elements
   abs_t
@@ -885,10 +885,10 @@ public:
 
   //----------------------------------------------------------------------
 
-  typedef T element_type;
+  using element_type = T;
 
   //: Iterators
-  typedef T * iterator;
+  using iterator = T *;
   //: Iterator pointing to start of data
   inline iterator
   begin()
@@ -903,7 +903,7 @@ public:
   }
 
   //: Const iterators
-  typedef const T * const_iterator;
+  using const_iterator = const T *;
   //: Iterator pointing to start of data
   inline const_iterator
   begin() const
