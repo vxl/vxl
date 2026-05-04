@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <new>
 #include <numeric>
 #include "vnl_c_vector.h"
@@ -32,9 +33,8 @@ void
 vnl_c_vector<T>::normalize(T * v, unsigned n)
 {
   typedef typename vnl_numeric_traits<abs_t>::real_t real_abs_t;
-  abs_t tmp = std::accumulate(v, v + n, abs_t(0), [](abs_t s, const T & x) {
-    return s + vnl_math::squared_magnitude(x);
-  });
+  abs_t tmp =
+    std::accumulate(v, v + n, abs_t(0), [](abs_t s, const T & x) { return s + vnl_math::squared_magnitude(x); });
   if (tmp != 0)
   {
     tmp = abs_t(real_abs_t(1) / std::sqrt(real_abs_t(tmp)));
@@ -242,10 +242,9 @@ template <class T>
 T
 vnl_c_vector<T>::inner_product(const T * a, const T * b, unsigned n)
 {
-  T ip(0);
-  for (unsigned i = 0; i < n; ++i)
-    ip += a[i] * vnl_complex_traits<T>::conjugate(b[i]);
-  return ip;
+  return std::inner_product(a, a + n, b, T(0), std::plus<T>{}, [](const T & x, const T & y) {
+    return x * vnl_complex_traits<T>::conjugate(y);
+  });
 }
 
 // conjugates one block of data into another block.
