@@ -7,6 +7,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <iomanip>
@@ -53,7 +54,7 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
   v3p_netlib_lbfgs_global_t lbfgs_global;
   v3p_netlib_lbfgs_init(&lbfgs_global);
 
-  long iprint[2] = { 1, 0 };
+  std::array<long, 2> iprint = { 1, 0 };
   vnl_vector<double> g(n);
 
   // Workspace
@@ -145,7 +146,7 @@ vnl_lbfgs::minimize(vnl_vector<double> & x)
                       g.data_block(),
                       &diagco,
                       diag.data_block(),
-                      iprint,
+                      iprint.data(),
                       &eps,
                       &local_xtol,
                       w.data_block(),
