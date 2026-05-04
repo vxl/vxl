@@ -27,5 +27,5 @@ void vpdfl_resample(std::vector<vnl_vector<double> >& x,
   x.resize(ns);
 
   for (int i=0;i<ns;++i)
-    x[i] = d[vpdfl_resample_mz_random.lrand32(0,n-1)];
+    x[i] = d[vpdfl_resample_mz_random.next_int32(0,n-1)];
 }

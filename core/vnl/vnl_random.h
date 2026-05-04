@@ -132,7 +132,7 @@ public:
   int
   lrand32(int b)
   {
-    return lrand32(0, b);
+    return next_int32(0, b);
   }
 
   //: Generates a random signed integer in [a, b]; \c count returns

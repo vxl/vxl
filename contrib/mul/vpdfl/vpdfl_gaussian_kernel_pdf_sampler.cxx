@@ -98,7 +98,7 @@ void vpdfl_gaussian_kernel_pdf_sampler::sample(vnl_vector<double>& x)
 
   // Select component
   int j = 0;
-  if (n>1) j=rng_.lrand32(0,n-1);
+  if (n>1) j=rng_.next_int32(0,n-1);
 
   sample_component(x,j);
 }

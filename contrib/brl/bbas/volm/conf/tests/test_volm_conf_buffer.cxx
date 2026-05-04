@@ -18,7 +18,7 @@ static void test_volm_conf_buffer()
   // randomly create a vector of volm_conf_object
   vnl_random rnd(9667566);
   std::vector<std::vector<volm_conf_object> > values;
-  unsigned data_size = rnd.lrand32(0, 5);
+  unsigned data_size = rnd.next_int32(0, 5);
   for (unsigned k = 0; k < data_size;  k++)
   {
     std::vector<volm_conf_object> value;

@@ -114,7 +114,7 @@ generate_random_indices( std::vector<bool>& to_use ) const
   unsigned num = 0;
   while( num < max_num_ ) {
 
-    unsigned index = random_.lrand32( size );
+    unsigned index = random_.next_int32( size );
     // already marked?
     if( to_use[index] )
       continue;

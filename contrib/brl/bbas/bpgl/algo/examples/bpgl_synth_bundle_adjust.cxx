@@ -86,8 +86,8 @@ int main(int argc, char** argv)
   std::cout << "removing "<<num_missing<<" random correspondences"<<std::endl;
   for (unsigned int i=0; i<num_missing; /* */)
   {
-    int c = rnd.lrand32(cameras.size()-1);
-    int w = rnd.lrand32(world.size()-1);
+    int c = rnd.next_int32(cameras.size()-1);
+    int w = rnd.next_int32(world.size()-1);
     if (mask[c][w]) {
       mask[c][w] = false;
       ++i;

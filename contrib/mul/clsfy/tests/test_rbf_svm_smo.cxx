@@ -75,7 +75,7 @@ void test_rbf_svm_smo()
   std::vector<unsigned> labelcount(4, 0u);
   for (unsigned int i=0; i<nSamples; i++)
   {
-    int c = rng.lrand32(3);
+    int c = rng.next_int32(3);
     labels[i] = c/2;
     labelcount[c] ++;
     generator[c]->sample(s);
@@ -87,7 +87,7 @@ void test_rbf_svm_smo()
   std::vector<vnl_vector<double> > testingVectors(nTestSamples);
   for (unsigned int i=0; i<nTestSamples; i++)
   {
-    int c = rng.lrand32(3);
+    int c = rng.next_int32(3);
     testLabels[i] = c/2;
     generator[c]->sample(s);
     testingVectors[i]=s;

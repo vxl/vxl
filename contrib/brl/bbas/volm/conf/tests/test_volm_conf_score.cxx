@@ -53,13 +53,13 @@ static void test_volm_conf_score()
   // randomly create a vector of volm_conf_score
   vnl_random rnd(19801231);
   std::vector<volm_conf_score> scores;
-  unsigned data_size = rnd.lrand32(0,50);
+  unsigned data_size = rnd.next_int32(0,50);
   for (unsigned k = 0; k < data_size; k++)
   {
     std::vector<volm_conf_object> landmarks;
-    unsigned size = rnd.lrand32(0,10);
+    unsigned size = rnd.next_int32(0,10);
     for (unsigned i = 0; i < size; i++)
-      landmarks.emplace_back(rnd.drand32(0.0f, vnl_math::twopi), rnd.drand32(0.0f, 200.0f), rnd.drand32(0.0f, 32.f), rnd.lrand32(0,255));
+      landmarks.emplace_back(rnd.drand32(0.0f, vnl_math::twopi), rnd.drand32(0.0f, 200.0f), rnd.drand32(0.0f, 32.f), rnd.next_int32(0,255));
     volm_conf_score value(rnd.drand32(0.0f, 1.0f), rnd.drand32(0, 2*vnl_math::twopi), landmarks);
     scores.push_back(value);
   }

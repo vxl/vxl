@@ -807,8 +807,8 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
     int * pts = new int[2 * numsamples];
     for (int i = 0; i < numsamples;)
     {
-        int x = -rad + rand.lrand32(0, 2 * rad + 1);
-        int y = -rad + rand.lrand32(0, 2 * rad + 1);
+        int x = -rad + rand.next_int32(0, 2 * rad + 1);
+        int y = -rad + rand.next_int32(0, 2 * rad + 1);
         if (x == 0 && y == 0) x = 1;
         pts[2 * i] = x;
         pts[2 * i + 1] = y;

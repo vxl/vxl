@@ -97,7 +97,7 @@ void test_k_nearest_neighbour()
 
   for (unsigned int i=0; i<nSamples; i++)
   {
-    int c = rng.lrand32(0, 3);
+    int c = rng.next_int32(0, 3);
     labels[i] = c/2;
     labelcount[c] ++;
     generator[c]->sample(s);
@@ -109,7 +109,7 @@ void test_k_nearest_neighbour()
 
   for (unsigned int i=0; i<nTestSamples; i++)
   {
-    int c = rng.lrand32(0, 3);
+    int c = rng.next_int32(0, 3);
     testLabels[i] = c/2;
     generator[c]->sample(s);
     testData[i] = s;

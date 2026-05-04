@@ -107,8 +107,8 @@ vil_image_view<float> bil_cedt_brute_force(vil_image_view<unsigned char> &im)
 bool generate_random_line(vil_image_view<unsigned char> &im, int seed)
 {
   vnl_random rnd(seed);
-  int x0 = rnd.lrand32(0, im.ni()-1);
-  int y0 = rnd.lrand32(0, im.nj()-1);
+  int x0 = rnd.next_int32(0, im.ni()-1);
+  int y0 = rnd.next_int32(0, im.nj()-1);
   double theta=rnd.drand32(0, vnl_math::pi/2);
   for (unsigned i=0; i<im.ni(); ++i)
   {
@@ -126,8 +126,8 @@ bool generate_random_line(vil_image_view<unsigned char> &im, int seed)
 bool generate_random_circle(vil_image_view<unsigned char> &im,int seed)
 {
   vnl_random rnd(seed);
-  int x0 = rnd.lrand32(0, im.ni()-1);
-  int radius=rnd.lrand32(0, (int)std::min(im.nj(),im.ni())/2);
+  int x0 = rnd.next_int32(0, im.ni()-1);
+  int radius=rnd.next_int32(0, (int)std::min(im.nj(),im.ni())/2);
 
   int imniunsigned = static_cast<int>(im.ni());
   assert(imniunsigned>=0);

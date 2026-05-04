@@ -328,7 +328,7 @@ next_sample( unsigned int taken, unsigned int num_points,
     unsigned int k=0, counter=0;
     while ( k<points_per_sample ) // This might be an infinite loop!
     {
-      int id = generator_->lrand32( 0, num_points-1 );
+      int id = generator_->next_int32( 0, num_points-1 );
       if ( id >= int(num_points) ) {   //  safety check
         std::cerr << "vrel_ran_sam_search::next_sample --- "
                  << "WARNING: random value out of range\n";

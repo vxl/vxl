@@ -100,7 +100,7 @@ bool boxm2_ocl_update_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_IDLE)
   {
     if (do_update_) {
-      int frame = random_.lrand32(0, imgs_.size()-1);
+      int frame = random_.next_int32(0, imgs_.size()-1);
       std::cout<<"updating with image: "<<imgs_[frame]<<" and "
               <<" cam: "<<cams_[frame]<<std::endl;
       //: Load an image resource object from a file.

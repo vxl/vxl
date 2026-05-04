@@ -4,6 +4,20 @@
 #include "vnl/vnl_random.h"
 #include "testlib/testlib_test.h"
 
+// This test deliberately exercises the deprecated lrand32 overloads to
+// verify that the new fixed-width API produces an identical sequence.
+// Suppress -Wdeprecated-declarations within this TU only.
+#if defined(__clang__)
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#  pragma warning(push)
+#  pragma warning(disable : 4996)
+#endif
+
 void
 test_random()
 {
@@ -28,9 +42,8 @@ test_random()
   TEST("next_int32(0,10) matches lrand32(0,10)",
        new_random.next_int32(0, 10),
        static_cast<std::int32_t>(ref_random.lrand32(0, 10)));
-  TEST("next_int32(b) matches lrand32(b)",
-       new_random.next_int32(42),
-       static_cast<std::int32_t>(ref_random.lrand32(42)));
+  TEST(
+    "next_int32(b) matches lrand32(b)", new_random.next_int32(42), static_cast<std::int32_t>(ref_random.lrand32(42)));
 
   const double d1 = mz_random.drand32(0, 1);
   TEST_NEAR("drand32(0,1)", d1, 0.6158541, 1e-7);
@@ -66,5 +79,13 @@ test_random()
   TEST_NEAR("normal64() mean near zero", mean, 0.0, 0.01);
   TEST_NEAR("normal64() var near one", var, 1.0, 0.01);
 }
+
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#  pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#  pragma warning(pop)
+#endif
 
 TESTMAIN(test_random);

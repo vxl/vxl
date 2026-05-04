@@ -20,7 +20,7 @@ static void test_write()
   char* out_tester = new char[buffSize];
   vnl_random rand;
   for (unsigned i=0;i<buffSize;++i)
-    in_tester[i]=(char)rand.lrand32(-127,127);
+    in_tester[i]=(char)rand.next_int32(-127,127);
 
   baio aio;
   aio.write(test_file,in_tester,buffSize);

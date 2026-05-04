@@ -25,5 +25,5 @@ void pdf1d_resample(vnl_vector<double>& x, const double* d, int n, int ns)
   x.set_size(ns);
 
   for (int i=0;i<ns;++i)
-    x[i] = d[pdf1d_resample_mz_random.lrand32(0,n-1)];
+    x[i] = d[pdf1d_resample_mz_random.next_int32(0,n-1)];
 }
