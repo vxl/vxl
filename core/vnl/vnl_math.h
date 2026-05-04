@@ -37,6 +37,7 @@
 #include <cmath>
 #include <algorithm>
 #include <complex>
+#include <limits>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -126,10 +127,10 @@ static constexpr double sqrt1_3 = 0.57735026918962576451;          // http://oei
 static constexpr double euler = 0.57721566490153286061;            // http://oeis.org/A001620
 
 //: IEEE double machine precision
-static constexpr double eps = 2.2204460492503131e-16;
+static constexpr double eps = std::numeric_limits<double>::epsilon();
 static constexpr double sqrteps = 1.490116119384766e-08;
 //: IEEE single machine precision
-static constexpr float float_eps = 1.192092896e-07f;
+static constexpr float float_eps = std::numeric_limits<float>::epsilon();
 static constexpr float float_sqrteps = 3.4526698300e-4f;
 
 //: Convert an angle to [0, 2Pi) range
