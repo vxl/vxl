@@ -25,6 +25,7 @@
 //   Oct.2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
+#include <algorithm>
 #include <cstring>
 #include <iosfwd>
 #include <cassert>
@@ -230,8 +231,7 @@ public:
   vnl_vector_fixed &
   copy_in(const T * ptr)
   {
-    for (size_type i = 0; i < n; ++i)
-      data_[i] = ptr[i];
+    std::copy_n(ptr, n, data_);
     return *this;
   }
 
@@ -240,8 +240,7 @@ public:
   void
   copy_out(T * ptr) const
   {
-    for (size_type i = 0; i < n; ++i)
-      ptr[i] = data_[i];
+    std::copy_n(data_, n, ptr);
   }
 
   //: Sets elements to ptr[i]

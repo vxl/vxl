@@ -1,6 +1,7 @@
 // This is core/vnl/algo/vnl_rnpoly_solve.cxx
 //:
 // \file
+#include <algorithm>
 #include <cmath>
 #include <cassert>
 #include <iostream>
@@ -467,8 +468,7 @@ lubksb(const std::vector<vnl_rnpoly_solve_cmplx> & a,
        std::vector<vnl_rnpoly_solve_cmplx> & b)
 {
   int ii = -1;
-  for (unsigned int k = 0; k < dim_; ++k)
-    b[k] = bb[k];
+  std::copy_n(bb.begin(), dim_, b.begin());
 
   for (unsigned int i = 0; i < dim_; ++i)
   {
@@ -888,7 +888,8 @@ vnl_rnpoly_solve::Read_Input(std::vector<unsigned int> & ideg,
       for (unsigned int j = 0; j < dim_; j++)
       {
         const int deg = static_cast<int>(ps_[i]->polyn_(k, j));
-        polyn[i * dim_ * max_nterms_ + k * dim_ + j] = deg ? static_cast<int>(j * static_cast<unsigned int>(max_deg_)) + deg - 1 : -1;
+        polyn[i * dim_ * max_nterms_ + k * dim_ + j] =
+          deg ? static_cast<int>(j * static_cast<unsigned int>(max_deg_)) + deg - 1 : -1;
       }
     }
   }

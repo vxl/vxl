@@ -1358,8 +1358,7 @@ loademup:
   {
     // Copy first row.  Can't use first_row_vals, as may be a vector of bool...
     T * row = vnl_c_vector<T>::allocate_T(colz);
-    for (unsigned int k = 0; k < colz; ++k)
-      row[k] = first_row_vals[k];
+    std::copy_n(first_row_vals.begin(), colz, row);
     row_vals.push_back(row);
   }
 

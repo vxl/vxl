@@ -2,6 +2,7 @@
 //:
 // \file
 
+#include <algorithm>
 #include <cstring>
 #include <cstdlib>
 #include <iostream>
@@ -178,12 +179,11 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & M,
   nvalues = n;
   vectors = new vnl_vector<double>[n];
   values = new double[n];
+  std::copy_n(temp_vals.begin(), n, values);
   for (int i = 0; i < n; ++i)
   {
-    values[i] = temp_vals[i];
     vnl_vector<double> vec(dim, 0.0);
-    for (int j = 0; j < dim; ++j)
-      vec[j] = temp_vecs[j + dim * i];
+    std::copy_n(temp_vecs.begin() + dim * i, dim, vec.begin());
     vectors[i] = vec;
   }
 

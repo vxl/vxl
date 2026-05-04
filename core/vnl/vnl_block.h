@@ -13,6 +13,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
+#include <algorithm>
 #include "vnl/vnl_export.h"
 
 VNL_EXPORT void
@@ -113,8 +114,7 @@ template <class T>
 inline void
 vnl_block_copy(const T x[], T y[], unsigned n)
 {
-  for (unsigned i = 0; i < n; ++i)
-    y[i] = x[i];
+  std::copy_n(x, n, y);
 }
 
 //: reverses sequence
