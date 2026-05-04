@@ -94,44 +94,39 @@ extern VNL_EXPORT char
 vnl_huge_val(char);
 
 //: real numerical constants
-// Strictly speaking, the static declaration of the constant variables is
-// redundant with the implicit behavior in C++ of objects declared const
-// as defined at:
-//  "C++98 7.1.1/6: ...Objects declared const and not explicitly declared
-//   extern have internal linkage."
-//
-// Explicit use of the static keyword is used to make the code easier to
-// understand.
+// Declared 'inline constexpr' so every translation unit that includes this
+// header sees the same object at the same address, rather than the per-TU
+// internal-linkage copies produced by 'static constexpr'.
 namespace vnl_math
 {
 //: pi, e and all that.  Constants are rounded to the shown precision.
-static constexpr double e = 2.71828182845904523536;                // http://oeis.org/A001113
-static constexpr double log2e = 1.44269504088896340736;            // http://oeis.org/A007525
-static constexpr double log10e = 0.43429448190325182765;           // http://oeis.org/A002285
-static constexpr double ln2 = 0.69314718055994530942;              // http://oeis.org/A002162
-static constexpr double ln10 = 2.30258509299404568402;             // http://oeis.org/A002392
-static constexpr double pi = 3.14159265358979323846;               // http://oeis.org/A000796
-static constexpr double twopi = 6.28318530717958647693;            // http://oeis.org/A019692
-static constexpr double pi_over_2 = 1.57079632679489661923;        // http://oeis.org/A019669
-static constexpr double pi_over_4 = 0.78539816339744830962;        // http://oeis.org/A003881
-static constexpr double pi_over_180 = 0.01745329251994329577;      // http://oeis.org/A019685
-static constexpr double one_over_pi = 0.31830988618379067154;      // http://oeis.org/A049541
-static constexpr double two_over_pi = 0.63661977236758134308;      // http://oeis.org/A060294
-static constexpr double deg_per_rad = 57.2957795130823208768;      // http://oeis.org/A072097
-static constexpr double sqrt2pi = 2.50662827463100050242;          // http://oeis.org/A019727
-static constexpr double two_over_sqrtpi = 1.12837916709551257390;  // http://oeis.org/A190732
-static constexpr double one_over_sqrt2pi = 0.39894228040143267794; // http://oeis.org/A231863
-static constexpr double sqrt2 = 1.41421356237309504880;            // http://oeis.org/A002193
-static constexpr double sqrt1_2 = 0.70710678118654752440;          // http://oeis.org/A010503
-static constexpr double sqrt1_3 = 0.57735026918962576451;          // http://oeis.org/A020760
-static constexpr double euler = 0.57721566490153286061;            // http://oeis.org/A001620
+inline constexpr double e = 2.71828182845904523536;                // http://oeis.org/A001113
+inline constexpr double log2e = 1.44269504088896340736;            // http://oeis.org/A007525
+inline constexpr double log10e = 0.43429448190325182765;           // http://oeis.org/A002285
+inline constexpr double ln2 = 0.69314718055994530942;              // http://oeis.org/A002162
+inline constexpr double ln10 = 2.30258509299404568402;             // http://oeis.org/A002392
+inline constexpr double pi = 3.14159265358979323846;               // http://oeis.org/A000796
+inline constexpr double twopi = 6.28318530717958647693;            // http://oeis.org/A019692
+inline constexpr double pi_over_2 = 1.57079632679489661923;        // http://oeis.org/A019669
+inline constexpr double pi_over_4 = 0.78539816339744830962;        // http://oeis.org/A003881
+inline constexpr double pi_over_180 = 0.01745329251994329577;      // http://oeis.org/A019685
+inline constexpr double one_over_pi = 0.31830988618379067154;      // http://oeis.org/A049541
+inline constexpr double two_over_pi = 0.63661977236758134308;      // http://oeis.org/A060294
+inline constexpr double deg_per_rad = 57.2957795130823208768;      // http://oeis.org/A072097
+inline constexpr double sqrt2pi = 2.50662827463100050242;          // http://oeis.org/A019727
+inline constexpr double two_over_sqrtpi = 1.12837916709551257390;  // http://oeis.org/A190732
+inline constexpr double one_over_sqrt2pi = 0.39894228040143267794; // http://oeis.org/A231863
+inline constexpr double sqrt2 = 1.41421356237309504880;            // http://oeis.org/A002193
+inline constexpr double sqrt1_2 = 0.70710678118654752440;          // http://oeis.org/A010503
+inline constexpr double sqrt1_3 = 0.57735026918962576451;          // http://oeis.org/A020760
+inline constexpr double euler = 0.57721566490153286061;            // http://oeis.org/A001620
 
 //: IEEE double machine precision
-static constexpr double eps = std::numeric_limits<double>::epsilon();
-static constexpr double sqrteps = 1.490116119384766e-08;
+inline constexpr double eps = std::numeric_limits<double>::epsilon();
+inline constexpr double sqrteps = 1.490116119384766e-08;
 //: IEEE single machine precision
-static constexpr float float_eps = std::numeric_limits<float>::epsilon();
-static constexpr float float_sqrteps = 3.4526698300e-4f;
+inline constexpr float float_eps = std::numeric_limits<float>::epsilon();
+inline constexpr float float_sqrteps = 3.4526698300e-4f;
 
 //: Convert an angle to [0, 2Pi) range
 VNL_EXPORT double
