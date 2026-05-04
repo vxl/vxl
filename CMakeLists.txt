@@ -21,7 +21,7 @@ else()
 endif()
 
 if(NOT CMAKE_CXX_STANDARD)
-   set(CMAKE_CXX_STANDARD "11")
+   set(CMAKE_CXX_STANDARD "17")
 endif()
 if(NOT CMAKE_CXX_STANDARD_REQUIRED)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -67,7 +67,7 @@ foreach(p
 endforeach()
 
 project(VXL #Project name must be all caps to have properly generated VXL_VERSION_* variables
-    VERSION 6.3.0.0 # defines #MAJOR,MINOR,PATCH,TWEAK}
+    VERSION 7.0.0.0 # defines #MAJOR,MINOR,PATCH,TWEAK}; major bump signals C++17 minimum
     DESCRIPTION "A multi-platform collection of C++ software libraries for Computer Vision and Image Understanding."
     LANGUAGES CXX C)
 
