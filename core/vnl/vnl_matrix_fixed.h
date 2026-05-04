@@ -172,14 +172,14 @@ public:
 
   //: Return the total number of elements stored by the matrix.
   // This equals rows() * cols()
-  constexpr unsigned int
+  [[nodiscard]] constexpr unsigned int
   size() const
   {
     return num_elements;
   }
 
   //: Return the number of rows.
-  constexpr unsigned int
+  [[nodiscard]] constexpr unsigned int
   rows() const
   {
     return num_rows;
@@ -187,7 +187,7 @@ public:
 
   //: Return the number of columns.
   // A synonym for columns().
-  constexpr unsigned int
+  [[nodiscard]] constexpr unsigned int
   cols() const
   {
     return num_cols;
@@ -195,7 +195,7 @@ public:
 
   //: Return the number of columns.
   // A synonym for cols().
-  constexpr unsigned int
+  [[nodiscard]] constexpr unsigned int
   columns() const
   {
     return num_cols;
@@ -756,7 +756,7 @@ public:
   // predicates
 
   //: Return true iff the size is zero.
-  bool
+  [[nodiscard]] bool
   empty() const
   {
     return num_rows == 0 && num_cols == 0;
@@ -771,11 +771,11 @@ public:
   is_identity(double tol) const;
 
   //: Return true if all elements equal to zero.
-  bool
+  [[nodiscard]] bool
   is_zero() const;
 
   //: Return true if all elements equal to zero, within given tolerance
-  bool
+  [[nodiscard]] bool
   is_zero(double tol) const;
 
   //:  Return true if all elements of both matrices are equal, within given tolerance
@@ -783,7 +783,7 @@ public:
   is_equal(const vnl_matrix_fixed<T, num_rows, num_cols> & rhs, double tol) const;
 
   //: Return true if finite
-  bool
+  [[nodiscard]] bool
   is_finite() const;
 
   //: Return true if matrix contains NaNs

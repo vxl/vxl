@@ -196,7 +196,7 @@ public:
 
   //: Length of the vector.
   // This is always \a n.
-  unsigned int
+  [[nodiscard]] unsigned int
   size() const
   {
     return n;
@@ -615,15 +615,15 @@ public:
   }
 
   //: Return true if it's finite
-  bool
+  [[nodiscard]] bool
   is_finite() const;
 
   //: Return true iff all the entries are zero.
-  bool
+  [[nodiscard]] bool
   is_zero() const;
 
   //: Return true iff the size is zero.
-  bool
+  [[nodiscard]] bool
   empty() const
   {
     return n == 0;
