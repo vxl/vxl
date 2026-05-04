@@ -3,7 +3,7 @@
 // \file
 #include <iostream>
 #include <cassert>
-#include <climits>
+#include <limits>
 #include "vnl_powell.h"
 
 #include "vnl/vnl_math.h"
@@ -45,7 +45,7 @@ public:
   vnl_powell_1dfun(size_t n, vnl_cost_function * func, vnl_powell * p)
     : vnl_powell_1dfun(static_cast<int>(n), func, p)
   {
-    assert(n <= static_cast<size_t>(INT_MAX));
+    assert(n <= static_cast<size_t>(std::numeric_limits<int>::max()));
   }
 
   void

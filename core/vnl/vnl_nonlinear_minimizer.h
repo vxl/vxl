@@ -14,7 +14,7 @@
 // \endverbatim
 
 #include <cassert>
-#include <climits>
+#include <limits>
 #include <string>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -92,7 +92,8 @@ public:
   int
   get_max_function_evals() const
   {
-    assert(maxfev >= static_cast<long>(INT_MIN) && maxfev <= static_cast<long>(INT_MAX));
+    assert(maxfev >= static_cast<long>(std::numeric_limits<int>::min()) &&
+           maxfev <= static_cast<long>(std::numeric_limits<int>::max()));
     return static_cast<int>(maxfev);
   }
 
@@ -168,7 +169,8 @@ public:
   int
   get_num_evaluations() const
   {
-    assert(num_evaluations_ >= static_cast<long>(INT_MIN) && num_evaluations_ <= static_cast<long>(INT_MAX));
+    assert(num_evaluations_ >= static_cast<long>(std::numeric_limits<int>::min()) &&
+           num_evaluations_ <= static_cast<long>(std::numeric_limits<int>::max()));
     return static_cast<int>(num_evaluations_);
   }
 
@@ -177,7 +179,7 @@ public:
   int
   get_num_iterations() const
   {
-    assert(num_iterations_ <= static_cast<unsigned>(INT_MAX));
+    assert(num_iterations_ <= static_cast<unsigned>(std::numeric_limits<int>::max()));
     return static_cast<int>(num_iterations_);
   }
 
