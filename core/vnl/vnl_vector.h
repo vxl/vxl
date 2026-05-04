@@ -145,7 +145,7 @@ public:
   virtual ~vnl_vector();
 
   //: Return the length, number of elements, dimension of this vector.
-  size_t
+  [[nodiscard]] size_t
   size() const
   {
     return this->num_elmts;
@@ -601,15 +601,15 @@ public:
   }
 
   //: Return true if it's finite
-  bool
+  [[nodiscard]] bool
   is_finite() const;
 
   //: Return true iff all the entries are zero.
-  bool
+  [[nodiscard]] bool
   is_zero() const;
 
   //: Return true iff the size is zero.
-  bool
+  [[nodiscard]] bool
   empty() const
   {
     return !data || !num_elmts;
