@@ -24,6 +24,7 @@
 //-----------------------------------------------------------------------------
 
 #include <complex>
+#include <limits>
 #include <type_traits>
 #include <vxl_config.h> // for type vxl_uint_64
 #ifdef _MSC_VER
@@ -107,16 +108,8 @@ public:
   //: Multiplicative identity
   static constexpr char one = 1;
   //: Maximum value which this type can assume.
-  //  It is 127 (and not 255) since "char" is not guaranteed to be unsigned.
-#ifdef _MSC_VER
-#  ifdef _CHAR_UNSIGNED
-  static constexpr char maxval = 255;
-#  else
-  static constexpr char maxval = 127;
-#  endif
-#else
-  static constexpr char maxval = (char(255) < char(0) ? char(127) : char(255));
-#endif
+  //  Char's signedness is implementation-defined; std::numeric_limits is authoritative.
+  static constexpr char maxval = std::numeric_limits<char>::max();
   //: Return value of abs()
   typedef unsigned char abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -142,7 +135,7 @@ public:
   //: Multiplicative identity
   static constexpr unsigned char one = 1;
   //: Maximum value which this type can assume
-  static constexpr unsigned char maxval = 255;
+  static constexpr unsigned char maxval = std::numeric_limits<unsigned char>::max();
   //: Return value of abs()
   typedef unsigned char abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -168,7 +161,7 @@ public:
   //: Multiplicative identity
   static constexpr signed char one = 1;
   //: Maximum value which this type can assume
-  static constexpr signed char maxval = 127;
+  static constexpr signed char maxval = std::numeric_limits<signed char>::max();
   //: Return value of abs()
   typedef unsigned char abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -194,7 +187,7 @@ public:
   //: Multiplicative identity
   static constexpr short one = 1;
   //: Maximum value which this type can assume
-  static constexpr short maxval = 0x7fff; // = 0x7fff;
+  static constexpr short maxval = std::numeric_limits<short>::max();
   //: Return value of abs()
   typedef unsigned short abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -220,7 +213,7 @@ public:
   //: Multiplicative identity
   static constexpr unsigned short one = 1;
   //: Maximum value which this type can assume
-  static constexpr unsigned short maxval = 0xffff; // = 0xffff;
+  static constexpr unsigned short maxval = std::numeric_limits<unsigned short>::max();
   //: Return value of abs()
   typedef unsigned short abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -246,7 +239,7 @@ public:
   //: Multiplicative identity
   static constexpr int one = 1;
   //: Maximum value which this type can assume
-  static constexpr int maxval = 0x7fffffff; // = 0x7fffffff;
+  static constexpr int maxval = std::numeric_limits<int>::max();
   //: Return value of abs()
   typedef unsigned int abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -272,7 +265,7 @@ public:
   //: Multiplicative identity
   static constexpr unsigned int one = 1;
   //: Maximum value which this type can assume
-  static constexpr unsigned int maxval = 0xffffffff; // = 0xffffffff;
+  static constexpr unsigned int maxval = std::numeric_limits<unsigned int>::max();
   //: Return value of abs()
   typedef unsigned int abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -298,8 +291,7 @@ public:
   //: Multiplicative identity
   static constexpr long one = 1;
   //: Maximum value which this type can assume
-  static constexpr long maxval =
-    sizeof(long) == 8 ? static_cast<long>((vxl_uint_64)(-1) / 2) : 0x7fffffffL; // = 0x7fffffffL or 0x7fffffffffffffffL;
+  static constexpr long maxval = std::numeric_limits<long>::max();
   //: Return value of abs()
   typedef unsigned long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -325,9 +317,7 @@ public:
   //: Multiplicative identity
   static constexpr unsigned long one = 1;
   //: Maximum value which this type can assume
-  static constexpr unsigned long maxval =
-    sizeof(unsigned long) == 8 ? static_cast<unsigned long>((vxl_uint_64)(-1)) : 0xffffffffL;
-  // = 0xffffffffL or 0xffffffffffffffffL;
+  static constexpr unsigned long maxval = std::numeric_limits<unsigned long>::max();
   //: Return value of abs()
   typedef unsigned long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -355,7 +345,7 @@ public:
   //: Multiplicative identity
   static constexpr long long one = 1;
   //: Maximum value which this type can assume
-  static constexpr long long maxval = sizeof(long long) == 8 ? ((vxl_uint_64)(-1)) / 2 : 0x7fffffffL;
+  static constexpr long long maxval = std::numeric_limits<long long>::max();
   //: Return value of abs()
   typedef unsigned long long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -381,7 +371,7 @@ public:
   //: Multiplicative identity
   static constexpr unsigned long long one = 1;
   //: Maximum value which this type can assume
-  static constexpr unsigned long long maxval = sizeof(unsigned long long) == 8 ? (vxl_uint_64)(-1) : 0xffffffffL;
+  static constexpr unsigned long long maxval = std::numeric_limits<unsigned long long>::max();
   //: Return value of abs()
   typedef unsigned long long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -408,7 +398,7 @@ public:
   //: Multiplicative identity
   static constexpr float one = 1.0F;
   //: Maximum value which this type can assume
-  static constexpr float maxval = 3.40282346638528860e+38F;
+  static constexpr float maxval = std::numeric_limits<float>::max();
   //: Return value of abs()
   typedef float abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -434,7 +424,7 @@ public:
   //: Multiplicative identity
   static constexpr double one = 1.0;
   //: Maximum value which this type can assume
-  static constexpr double maxval = 1.7976931348623157E+308;
+  static constexpr double maxval = std::numeric_limits<double>::max();
   //: Return value of abs()
   typedef double abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -460,7 +450,7 @@ public:
   //: Multiplicative identity
   static constexpr long double one = 1.0;
   //: Maximum value which this type can assume
-  static constexpr long double maxval = 1.7976931348623157E+308;
+  static constexpr long double maxval = std::numeric_limits<long double>::max();
   //: Return value of abs()
   typedef long double abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
