@@ -9,7 +9,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-template <class T>
+template <class T, class>
 struct vnl_complex_traits;
 template <class T>
 class vnl_numeric_traits;
