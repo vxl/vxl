@@ -126,8 +126,8 @@ vnl_sparse_lm::minimize(vnl_vector<double> & a,
   {
     if (verbose_)
       std::cout << "iteration " << std::setw(4) << num_iterations_ << " RMS error = " << std::setprecision(6)
-                << std::setw(12) << std::sqrt(sqr_error / static_cast<double>(e_.size())) << " mu = " << std::setprecision(6)
-                << std::setw(12) << mu << " nu = " << nu << std::endl;
+                << std::setw(12) << std::sqrt(sqr_error / static_cast<double>(e_.size()))
+                << " mu = " << std::setprecision(6) << std::setw(12) << mu << " nu = " << nu << std::endl;
     if (trace)
       f_->trace(static_cast<int>(num_iterations_), a, b, c, e_);
 
@@ -296,8 +296,8 @@ vnl_sparse_lm::minimize(vnl_vector<double> & a,
 
       if (verbose_)
         std::cout << "               RMS error = " << std::setprecision(6) << std::setw(12)
-                  << std::sqrt(sqr_error / static_cast<double>(e_.size())) << " mu = " << std::setprecision(6) << std::setw(12) << mu
-                  << " nu = " << nu << std::endl;
+                  << std::sqrt(sqr_error / static_cast<double>(e_.size())) << " mu = " << std::setprecision(6)
+                  << std::setw(12) << mu << " nu = " << nu << std::endl;
     }
   }
 
@@ -383,10 +383,8 @@ vnl_sparse_lm::allocate_matrices()
     Ma_[i].set_size(size_c_, ai_size);
 
     const vnl_crs_index::sparse_vector row = crs.sparse_row(i);
-    for (auto & r_itr : row)
+    for (auto & [k, j] : row)
     {
-      const int j = r_itr.second;
-      const int k = r_itr.first;
       const unsigned int bj_size = f_->number_of_params_b(j);
       const unsigned int eij_size = f_->number_of_residuals(k);
       A_[k].set_size(eij_size, ai_size);
@@ -440,10 +438,8 @@ vnl_sparse_lm::compute_normal_equations()
     vnl_vector_ref<double> eai(ai_size, ea_.data_block() + f_->index_a(i));
 
     const vnl_crs_index::sparse_vector row = crs.sparse_row(i);
-    for (auto & r_itr : row)
+    for (auto & [k, j] : row)
     {
-      const int j = r_itr.second;
-      const int k = r_itr.first;
       const vnl_matrix<double> & Aij = A_[k];
       const vnl_matrix<double> & Bij = B_[k];
       const vnl_matrix<double> & Cij = C_[k];
@@ -563,10 +559,8 @@ vnl_sparse_lm::compute_Z_Sa(vnl_matrix<double> & Sa)
 
     // handle the diagonal blocks separately
     vnl_matrix<double> Sii(U_[i]); // copy Ui to initialize Sii
-    for (auto & ri : row_i)
+    for (auto & [k, j] : row_i)
     {
-      const unsigned int j = ri.second;
-      const unsigned int k = ri.first;
       const vnl_matrix<double> & Yij = Y_[k];
       vnl_fastops::dec_X_by_ABt(Sii, Yij, W_[k]); // S_ii -= Y_ij * W_ij^T
       vnl_fastops::inc_X_by_ABt(Zi, R_[j], Yij);  // Z_i  += R_j * Y_ij^T
@@ -640,10 +634,8 @@ vnl_sparse_lm::compute_Mb()
     temp -= R_[j];
 
     const vnl_crs_index::sparse_vector col = crs.sparse_col(j);
-    for (auto & c_itr : col)
+    for (auto & [k, i] : col)
     {
-      const unsigned int k = c_itr.first;
-      const unsigned int i = c_itr.second;
       vnl_fastops::dec_X_by_AB(temp, Ma_[i], W_[k]);
     }
     vnl_fastops::AB(Mb_[j], temp, inv_V_[j]);
@@ -792,10 +784,8 @@ vnl_sparse_lm::backsolve_db(const vnl_vector<double> & da, const vnl_vector<doub
     {
       vnl_fastops::dec_X_by_AtB(seb, R_[j], dc);
     }
-    for (auto & c_itr : col)
+    for (auto & [k, i] : col)
     {
-      const int k = c_itr.first;
-      const int i = c_itr.second;
       const vnl_vector_ref<double> dai(f_->number_of_params_a(i),
                                        const_cast<double *>(da.data_block() + f_->index_a(i)));
       vnl_fastops::dec_X_by_AtB(seb, W_[k], dai);
