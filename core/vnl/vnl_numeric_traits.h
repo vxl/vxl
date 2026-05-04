@@ -58,16 +58,16 @@ public:
   static constexpr vnl_numeric_traits_not_a_valid_type maxval;
 
   //: Return value of abs()
-  typedef vnl_numeric_traits_not_a_valid_type abs_t;
+  using abs_t = vnl_numeric_traits_not_a_valid_type;
 
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef vnl_numeric_traits_not_a_valid_type double_t;
+  using double_t = vnl_numeric_traits_not_a_valid_type;
 
   //: Name of type which results from multiplying this type with a double
-  typedef vnl_numeric_traits_not_a_valid_type real_t;
+  using real_t = vnl_numeric_traits_not_a_valid_type;
 
   //: Name of type which results from using a unary operator-()
-  typedef vnl_numeric_traits_not_a_valid_type signed_t;
+  using signed_t = vnl_numeric_traits_not_a_valid_type;
 };
 #endif
 
@@ -83,11 +83,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr bool maxval = true;
   //: Return value of abs()
-  typedef unsigned int abs_t;
+  using abs_t = unsigned int;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef unsigned int double_t;
+  using double_t = unsigned int;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = bool;
   //: Name of type which results from using a unary operator-()
@@ -111,11 +111,11 @@ public:
   //  Char's signedness is implementation-defined; std::numeric_limits is authoritative.
   static constexpr char maxval = std::numeric_limits<char>::max();
   //: Return value of abs()
-  typedef unsigned char abs_t;
+  using abs_t = unsigned char;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef short double_t;
+  using double_t = short;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = char;
   //: Name of type which results from using a unary operator-()
@@ -137,11 +137,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr unsigned char maxval = std::numeric_limits<unsigned char>::max();
   //: Return value of abs()
-  typedef unsigned char abs_t;
+  using abs_t = unsigned char;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef unsigned short double_t;
+  using double_t = unsigned short;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = unsigned char;
   //: Name of type which results from using a unary operator-()
@@ -163,11 +163,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr signed char maxval = std::numeric_limits<signed char>::max();
   //: Return value of abs()
-  typedef unsigned char abs_t;
+  using abs_t = unsigned char;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef signed short double_t;
+  using double_t = signed short;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = signed char;
   //: Name of type which results from using a unary operator-()
@@ -189,11 +189,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr short maxval = std::numeric_limits<short>::max();
   //: Return value of abs()
-  typedef unsigned short abs_t;
+  using abs_t = unsigned short;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef int double_t;
+  using double_t = int;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = short;
   //: Name of type which results from using a unary operator-()
@@ -215,11 +215,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr unsigned short maxval = std::numeric_limits<unsigned short>::max();
   //: Return value of abs()
-  typedef unsigned short abs_t;
+  using abs_t = unsigned short;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef unsigned int double_t;
+  using double_t = unsigned int;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = unsigned short;
   //: Name of type which results from using a unary operator-()
@@ -241,11 +241,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr int maxval = std::numeric_limits<int>::max();
   //: Return value of abs()
-  typedef unsigned int abs_t;
+  using abs_t = unsigned int;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef long double_t;
+  using double_t = long;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = int;
   //: Name of type which results from using a unary operator-()
@@ -267,11 +267,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr unsigned int maxval = std::numeric_limits<unsigned int>::max();
   //: Return value of abs()
-  typedef unsigned int abs_t;
+  using abs_t = unsigned int;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef unsigned long double_t;
+  using double_t = unsigned long;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = unsigned int;
   //: Name of type which results from using a unary operator-()
@@ -293,11 +293,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr long maxval = std::numeric_limits<long>::max();
   //: Return value of abs()
-  typedef unsigned long abs_t;
+  using abs_t = unsigned long;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef vxl_sint_64 double_t;
+  using double_t = vxl_sint_64;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = long;
   //: Name of type which results from using a unary operator-()
@@ -319,11 +319,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr unsigned long maxval = std::numeric_limits<unsigned long>::max();
   //: Return value of abs()
-  typedef unsigned long abs_t;
+  using abs_t = unsigned long;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef vxl_uint_64 double_t;
+  using double_t = vxl_uint_64;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = unsigned long;
   //: Name of type which results from using a unary operator-()
@@ -347,11 +347,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr long long maxval = std::numeric_limits<long long>::max();
   //: Return value of abs()
-  typedef unsigned long long abs_t;
+  using abs_t = unsigned long long;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef long long double_t;
+  using double_t = long long;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = long long;
   //: Name of type which results from using a unary operator-()
@@ -373,11 +373,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr unsigned long long maxval = std::numeric_limits<unsigned long long>::max();
   //: Return value of abs()
-  typedef unsigned long long abs_t;
+  using abs_t = unsigned long long;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef unsigned long long double_t;
+  using double_t = unsigned long long;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = unsigned long long;
   //: Name of type which results from using a unary operator-()
@@ -400,11 +400,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr float maxval = std::numeric_limits<float>::max();
   //: Return value of abs()
-  typedef float abs_t;
+  using abs_t = float;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef double double_t;
+  using double_t = double;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = float;
   //: Name of type which results from using a unary operator-()
@@ -426,11 +426,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr double maxval = std::numeric_limits<double>::max();
   //: Return value of abs()
-  typedef double abs_t;
+  using abs_t = double;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef long double double_t;
+  using double_t = long double;
   //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
+  using real_t = double;
   //: Name of this type
   using self = double;
   //: Name of type which results from using a unary operator-()
@@ -452,11 +452,11 @@ public:
   //: Maximum value which this type can assume
   static constexpr long double maxval = std::numeric_limits<long double>::max();
   //: Return value of abs()
-  typedef long double abs_t;
+  using abs_t = long double;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef long double double_t; // ahem
+  using double_t = long double; // ahem
   //: Name of type which results from multiplying this type with a double
-  typedef long double real_t;
+  using real_t = long double;
   //: Name of this type
   using self = long double;
   //: Name of type which results from using a unary operator-()
@@ -479,11 +479,11 @@ public:
   // static const std::complex<float> maxval;
 
   //: Return value of abs()
-  typedef float abs_t;
+  using abs_t = float;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef std::complex<vnl_numeric_traits<float>::double_t> double_t;
+  using double_t = std::complex<vnl_numeric_traits<float>::double_t>;
   //: Name of type which results from multiplying this type with a double
-  typedef std::complex<float> real_t;
+  using real_t = std::complex<float>;
   //: Name of this type
   using self = std::complex<float>;
   //: Name of type which results from using a unary operator-()
@@ -506,11 +506,11 @@ public:
   // static const std::complex<double> maxval;
 
   //: Return value of abs()
-  typedef double abs_t;
+  using abs_t = double;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef std::complex<vnl_numeric_traits<double>::double_t> double_t;
+  using double_t = std::complex<vnl_numeric_traits<double>::double_t>;
   //: Name of type which results from multiplying this type with a double
-  typedef std::complex<double> real_t;
+  using real_t = std::complex<double>;
   //: Name of this type
   using self = std::complex<double>;
   //: Name of type which results from using a unary operator-()
@@ -533,11 +533,11 @@ public:
   // static const std::complex<long double> maxval;
 
   //: Return value of abs()
-  typedef long double abs_t;
+  using abs_t = long double;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef std::complex<vnl_numeric_traits<long double>::double_t> double_t;
+  using double_t = std::complex<vnl_numeric_traits<long double>::double_t>;
   //: Name of type which results from multiplying this type with a double
-  typedef std::complex<long double> real_t;
+  using real_t = std::complex<long double>;
   //: Name of this type
   using self = std::complex<long double>;
   //: Name of type which results from using a unary operator-()
