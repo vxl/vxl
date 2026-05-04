@@ -5,6 +5,7 @@
 // \date   15 Feb 99
 //
 //-----------------------------------------------------------------------------
+#include <algorithm>
 #include <iostream>
 #include "vnl_conjugate_gradient.h"
 
@@ -73,8 +74,7 @@ vnl_conjugate_gradient::preconditioner_(double * out, double * in, void * userda
   const vnl_cost_function * const f = self->f_;
 
   const int n = f->get_number_of_unknowns();
-  for (int i = 0; i < n; ++i)
-    out[i] = in[i];
+  std::copy_n(in, n, out);
 }
 
 ///////////////////////////////////////

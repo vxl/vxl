@@ -8,6 +8,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <algorithm>
 #include <cmath>
 #include <new>
 #include "vnl_c_vector.h"
@@ -61,8 +62,7 @@ template <class T>
 void
 vnl_c_vector<T>::copy(const T * src, T * dst, unsigned n)
 {
-  for (unsigned i = 0; i < n; ++i)
-    dst[i] = src[i];
+  std::copy_n(src, n, dst);
 }
 
 template <class T>

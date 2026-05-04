@@ -131,10 +131,7 @@ vnl_random::restart()
 {
   mz_array_position = 0UL;
 
-  for (unsigned int i = 0; i < vnl_random_array_size; ++i)
-  {
-    mz_array[i] = mz_seed_array[i];
-  }
+  std::copy_n(mz_seed_array.begin(), vnl_random_array_size, mz_array.begin());
 }
 
 double

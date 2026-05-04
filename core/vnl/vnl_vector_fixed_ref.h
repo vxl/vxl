@@ -77,8 +77,7 @@ public:
   void
   copy_out(T * ptr) const
   {
-    for (size_type i = 0; i < n; ++i)
-      ptr[i] = data_[i];
+    std::copy_n(data_, n, ptr);
   }
 
 
