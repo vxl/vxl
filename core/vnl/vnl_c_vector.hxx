@@ -213,9 +213,7 @@ template <class T>
 void
 vnl_c_vector<T>::fill(T * x, unsigned n, const T & v_)
 {
-  T v = v_;
-  for (unsigned i = 0; i < n; ++i)
-    x[i] = v;
+  std::fill_n(x, n, v_);
 }
 
 template <class T>

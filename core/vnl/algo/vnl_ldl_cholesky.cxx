@@ -7,6 +7,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <algorithm>
 #include <cmath>
 #include <cassert>
 #include <iostream>
@@ -70,8 +71,7 @@ vnl_ldl_cholesky::vnl_ldl_cholesky(const vnl_matrix<double> & M, Operation mode)
     for (int j = 0; j < i; ++j)
       row[j] /= sqrt_d[j];
     row[i] = 1.0;
-    for (int j = i + 1; j < n; ++j)
-      row[j] = 0.0; // Zero upper triangle
+    std::fill(row + i + 1, row + n, 0.0); // Zero upper triangle
   }
 }
 

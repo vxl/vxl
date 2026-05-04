@@ -115,8 +115,7 @@ vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double> & M,
   std::vector<double> work(work_size + 10);
 
   // Set starting vectors to zero.
-  for (int i = 0; i < dim * nblock; ++i)
-    work[i] = 0.0;
+  std::fill_n(work.begin(), dim * nblock, 0.0);
 
   std::vector<long> ind(n);
 

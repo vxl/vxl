@@ -235,8 +235,7 @@ template <class T>
 inline void
 vnl_block_fill(T x[], unsigned n, T value)
 {
-  for (unsigned i = 0; i < n; ++i)
-    x[i] = value;
+  std::fill_n(x, n, value);
 }
 
 #endif // vnl_block_h_
