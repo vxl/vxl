@@ -679,7 +679,6 @@ protected:
     , m_LetArrayManageMemory{ manage_own_memory }
   {}
 
-  // #if !VXL_LEGACY_FUTURE_REMOVE
   /*
    * This function is a work around for transitioning to data members
    * being private

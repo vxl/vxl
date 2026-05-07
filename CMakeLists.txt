@@ -171,8 +171,6 @@ endif()
 
 # Optionally use old error reporting methods, rather than exceptions.
 # The main use is in vil which often uses/used null images to imply an error.
-option( VXL_LEGACY_FUTURE_REMOVE "Disable features and cause errors for code deprecated, or listed for removal" ON)
-mark_as_advanced(VXL_LEGACY_FUTURE_REMOVE)
 option(VXL_RUN_FAILING_TESTS "Enable long-time failing tests. If tests are failing for a long time, turn them off by default." OFF)
 mark_as_advanced(VXL_RUN_FAILING_TESTS)
 # Historically VXL implicitly converts between vnl_vector_fixed and vnl_vector or vnl_vector_ref ( & matrix types too),
