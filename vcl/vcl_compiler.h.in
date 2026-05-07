@@ -197,10 +197,6 @@
 #  endif // <1900
 #endif // _MSC_VER
 
-#ifdef VNL_CONFIG_LEGACY_METHODS
-#include "vcl_legacy_aliases.h"
-#endif
-
 // Specialization for deprecation messages are needed to support various
 // compilers prior to c++14 support.  After C++14 support is mandated
 // This macro can be replaced with [[deprecated]] language features.
