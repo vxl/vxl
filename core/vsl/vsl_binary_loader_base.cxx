@@ -2,6 +2,7 @@
 //:
 // \file
 
+#include <mutex>
 #include <vector>
 #include "vsl_binary_loader_base.h"
 #ifdef _MSC_VER
@@ -9,19 +10,24 @@
 #endif
 #include "vsl/vsl_indent.h"
 
-// List of all loaders register_this()'ed
-// Create on heap so that it can be cleaned up itself
-static std::vector<vsl_binary_loader_base *> * loader_list_ = nullptr;
-
-
 using clear_func_ptr = void (*)();
-// List of all extra loaders clear funcs registered()'ed
-// Create on heap so that it can be cleaned up itself
-static std::vector<clear_func_ptr> * extra_loader_clear_list_ = nullptr;
 
-
+// Replaced the original raw "static T * = nullptr" + lazy
+// "if (p == nullptr) p = new T" pattern with a holder struct that
+// owns its mutex and registry vectors as members. Bundling the mutex
+// and the data into one Meyers singleton guarantees they share
+// lifetime: the mutex cannot be destroyed before the destructor that
+// locks it. (Two separate function-local statics would have ordered
+// their destruction by reverse-of-construction, which on this code
+// path produced a "mutex lock failed: Invalid argument" abort at
+// program exit when the mutex was constructed lazily after the
+// registry.)
 struct vsl_binary_loader_base_auto_clearup
 {
+  std::mutex mtx;
+  std::vector<vsl_binary_loader_base *> loaders;
+  std::vector<clear_func_ptr> clear_funcs;
+
   ~vsl_binary_loader_base_auto_clearup()
   {
     vsl_delete_all_loaders();
@@ -30,16 +36,26 @@ struct vsl_binary_loader_base_auto_clearup
   }
 };
 
-static vsl_binary_loader_base_auto_clearup clearup_object;
+static vsl_binary_loader_base_auto_clearup &
+vsl_loader_registry()
+{
+  static vsl_binary_loader_base_auto_clearup r;
+  return r;
+}
+
+// Force initialization at static-construction time so the program-exit
+// destructor still runs even if no loader is ever explicitly
+// registered.
+static auto & vsl_loader_registry_ref = vsl_loader_registry();
 
 //=======================================================================
 //: Register this, so it can be deleted by vsl_delete_all_loaders();
 void
 vsl_binary_loader_base::register_this()
 {
-  if (loader_list_ == nullptr)
-    loader_list_ = new std::vector<vsl_binary_loader_base *>;
-  loader_list_->push_back(this);
+  auto & registry = vsl_loader_registry();
+  std::lock_guard<std::mutex> guard(registry.mtx);
+  vsl_loader_registry().loaders.push_back(this);
 }
 
 
@@ -48,29 +64,27 @@ vsl_binary_loader_base::register_this()
 void
 vsl_register_new_loader_clear_func(clear_func_ptr func)
 {
-  if (extra_loader_clear_list_ == nullptr)
-    extra_loader_clear_list_ = new std::vector<clear_func_ptr>;
-
-  extra_loader_clear_list_->push_back(func);
+  auto & registry = vsl_loader_registry();
+  std::lock_guard<std::mutex> guard(registry.mtx);
+  vsl_loader_registry().clear_funcs.push_back(func);
 }
 
 
 //=======================================================================
 //: Deletes all the loaders
-//  Deletes every loader for which register_this() has been called
+//  Deletes every loader for which register_this() has been called.
+//  Note: clear_funcs registered via vsl_register_new_loader_clear_func
+//  are NOT invoked here; that matches the historical (pre-thread-safe)
+//  behavior of this function. Whether the clear_funcs path was meant
+//  to fire at program exit is a separate question that should be
+//  addressed independently of this thread-safety fix.
 void
 vsl_delete_all_loaders()
 {
-  //  Deletes every vsl loader for which register_this() has been called
-  if (loader_list_ != nullptr)
-  {
-    const auto n = (unsigned int)(loader_list_->size());
-    for (unsigned i = 0; i < n; ++i)
-      delete loader_list_->operator[](i);
-    loader_list_->clear();
+  auto & registry = vsl_loader_registry();
+  std::lock_guard<std::mutex> guard(registry.mtx);
 
-    // Clean up the list itself
-    delete loader_list_;
-    loader_list_ = nullptr;
-  }
+  for (auto * loader : registry.loaders)
+    delete loader;
+  registry.loaders.clear();
 }
