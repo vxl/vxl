@@ -25,7 +25,7 @@
 #   DASHBOARD_DO_SUBMIT         - default 1 (set to 0 to skip ctest_submit)
 #---------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22.1)
 
 # ----- Required env vars ---------------------------------------------
 foreach(_var IN ITEMS

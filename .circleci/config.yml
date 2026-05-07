@@ -147,6 +147,29 @@ jobs:
             # create directories
             mkdir -p "${BUILD_DIR}" "${INSTALL_DIR}"
 
+      - run:
+          name: Ensure CMake >= 3.22.1
+          command: |
+
+            # The vsiri/vxl:latest image ships CMake 3.16.9, which is
+            # below the project floor (3.22.1). Fetch a current CMake
+            # binary from Kitware's mirror and prepend it to PATH.
+            CMAKE_VERSION=3.27.9
+            CMAKE_TARBALL="cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz"
+            CMAKE_URL="https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/${CMAKE_TARBALL}"
+
+            mkdir -p /opt
+            curl -fsSL "${CMAKE_URL}" -o "/tmp/${CMAKE_TARBALL}"
+            tar -xzf "/tmp/${CMAKE_TARBALL}" -C /opt
+            rm -f "/tmp/${CMAKE_TARBALL}"
+
+            # Replace the system cmake/ctest symlinks so subsequent
+            # steps (which use bare `cmake` / `ctest`) pick up the new
+            # version regardless of PATH.
+            ln -sf "/opt/cmake-${CMAKE_VERSION}-linux-x86_64/bin/cmake" /usr/local/bin/cmake
+            ln -sf "/opt/cmake-${CMAKE_VERSION}-linux-x86_64/bin/ctest" /usr/local/bin/ctest
+            cmake --version
+
       - when:
           condition: << parameters.restore-cache >>
           steps:
