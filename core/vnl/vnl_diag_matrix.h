@@ -254,8 +254,8 @@ public:
     return diagonal_[r];
   }
 
-  VXL_DEPRECATED_MSG("Deprecated inconsistent return type.\nWARNING: .as_ref returns a vnl_matrix, not a "
-                     "vnl_matrix_ref, use .as_matrix() directly")
+  [[deprecated("Deprecated inconsistent return type.\nWARNING: .as_ref returns a vnl_matrix, not a "
+               "vnl_matrix_ref, use .as_matrix() directly")]]
   vnl_matrix<T>
   as_ref() const
   {
@@ -274,8 +274,8 @@ public:
     return this->as_matrix();
   }
 #else
-  VXL_DEPRECATED_MSG(
-    "Implicit cast conversion is dangerous.\nUSE: .as_matrix() or .as_ref() member function for clarity.")
+  [[deprecated(
+    "Implicit cast conversion is dangerous.\nUSE: .as_matrix() or .as_ref() member function for clarity.")]]
   operator vnl_matrix<T>() const { return this->as_matrix(); }
 #endif
 

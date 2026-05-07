@@ -55,8 +55,8 @@ public:
     return M_.transpose();
   }
 #else
-  VXL_DEPRECATED_MSG(
-    "Implicit cast conversion is dangerous.\nUSE: .as_matrix() or .as_ref() member function for clarity.")
+  [[deprecated(
+    "Implicit cast conversion is dangerous.\nUSE: .as_matrix() or .as_ref() member function for clarity.")]]
   operator vnl_matrix<double>() const
   {
     std::cerr << "vnl_transpose being converted to matrix -- help! I don't wanna go!\n";

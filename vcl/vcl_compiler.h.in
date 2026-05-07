@@ -197,25 +197,4 @@
 #  endif // <1900
 #endif // _MSC_VER
 
-// Specialization for deprecation messages are needed to support various
-// compilers prior to c++14 support.  After C++14 support is mandated
-// This macro can be replaced with [[deprecated]] language features.
-#  ifndef VXL_DEPRECATED
-     //MSVC does not consistently define __cplusplus
-     //https://developercommunity.visualstudio.com/content/problem/139261/msvc-incorrectly-defines-cplusplus.html
-#    if !defined(_MSC_VER) && (VXL_COMPILED_CXX_STANDARD_VERSION > 201402L)
-#      define VXL_DEPRECATED [[deprecated]]
-#      define VXL_DEPRECATED_MSG(MSG) [[deprecated(MSG)]]
-#    elif defined(__clang__) || defined(__GNUC__)
-#      define VXL_DEPRECATED __attribute__((__deprecated__))
-#      define VXL_DEPRECATED_MSG(MSG) __attribute__((__deprecated__(MSG)))
-#    elif defined(_MSC_VER)
-#      define VXL_DEPRECATED __declspec(deprecated)
-#      define VXL_DEPRECATED_MSG(MSG) __declspec(deprecated(MSG))
-#    else
-#      define VXL_DEPRECATED
-#      define VXL_DEPRECATED_MSG(MSG)
-#    endif
-#  endif
-
 #endif // vcl_compiler_h_

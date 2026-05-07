@@ -948,8 +948,8 @@ public:
     return vnl_matrix_ref<T>(num_rows, num_cols, const_cast<T *>(data_block()));
   }
 #else
-  VXL_DEPRECATED_MSG(
-    "Implicit cast conversion is dangerous.\nUSE: .as_matrix() or .as_ref() member function for clarity.")
+  [[deprecated(
+    "Implicit cast conversion is dangerous.\nUSE: .as_matrix() or .as_ref() member function for clarity.")]]
   operator const vnl_matrix_ref<T>() const
   {
     return vnl_matrix_ref<T>(num_rows, num_cols, const_cast<T *>(data_block()));

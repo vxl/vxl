@@ -146,8 +146,8 @@ public:
     return vnl_vector_ref<T>(n, const_cast<T *>(data_));
   }
 #else
-  VXL_DEPRECATED_MSG(
-    "Implicit cast conversion is dangerous.\nUSE: .as_vector() or .as_ref() member function for clarity.")
+  [[deprecated(
+    "Implicit cast conversion is dangerous.\nUSE: .as_vector() or .as_ref() member function for clarity.")]]
   operator const vnl_vector_ref<T>() const
   {
     return vnl_vector_ref<T>(n, const_cast<T *>(data_));
