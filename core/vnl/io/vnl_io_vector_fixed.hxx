@@ -6,7 +6,6 @@
 
 #include "vnl_io_vector_fixed.h"
 #include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_b_read_block_old.h>
 #include <vsl/vsl_block_binary.h>
 
 //=================================================================================

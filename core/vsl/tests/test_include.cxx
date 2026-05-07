@@ -7,7 +7,6 @@
 #include "vsl/vsl_binary_loader.h"
 #include "vsl/vsl_block_binary.h"
 #include "vsl/vsl_block_binary_rle.h"
-#include "vsl/vsl_b_read_block_old.h"
 #include "vsl/vsl_clipon_binary_loader.h"
 #include "vsl/vsl_complex_io.h"
 #include "vsl/vsl_deque_io.h"

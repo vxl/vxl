@@ -13,7 +13,6 @@ set(vsl_sources
   vsl_indent.cxx vsl_indent.h
   vsl_quick_file.h
   vsl_block_binary.h  vsl_block_binary.cxx
-  vsl_b_read_block_old.h
   vsl_stream.h
   vsl_block_binary_rle.h
 

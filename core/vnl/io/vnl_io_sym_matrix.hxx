@@ -6,7 +6,6 @@
 
 #include "vnl_io_sym_matrix.h"
 #include <vnl/vnl_sym_matrix.h>
-#include <vsl/vsl_b_read_block_old.h>
 #include <vsl/vsl_block_binary.h>
 #include <vsl/vsl_indent.h>
 
