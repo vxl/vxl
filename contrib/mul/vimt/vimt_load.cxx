@@ -13,10 +13,6 @@
 #include "vil/vil_open.h"
 #include "vimt_convert.h"
 
-#ifdef _BUILD_DCMTK
-  #include <vil/file_formats/vil_dicom_header.h>
-  #include <vil/file_formats/vil_dicom.h>
-#endif // _BUILD_DCMTK
 
 
 // Create a transform from the properties of image resource.

@@ -728,28 +728,6 @@ test_file_format_read(int argc, char * argv[])
   TEST("16-bit grey", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit.mit"), true);
   TEST("8-bit RGB", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit.mit"), true);
 
-#if HAS_DCMTK
-  std::cout << "DICOM [dcm]\n";
-  TEST("16-bit greyscale uncompressed",
-       CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt", "ff_grey16bit_uncompressed.dcm"),
-       true);
-  // These only pass if the DCMTK-based DICOM loader is available
-  TEST("16-bit greyscale uncompressed 2",
-       CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed2.dcm"),
-       true);
-  TEST("8-bit greyscale uncompressed",
-       CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_uncompressed.dcm"),
-       true);
-  TEST("8-bit greyscale uncompressed 2",
-       CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_uncompressed2.dcm"),
-       true);
-  TEST("16-bit greyscale uncompressed 3",
-       CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed3.dcm"),
-       true);
-  TEST("12-bit greyscale float uncompressed",
-       CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true_for_dicom.txt", "ff_grey_float_12bit_uncompressed.dcm"),
-       true);
-#endif // HAS_DCMTK
 }
 
 TESTMAIN_ARGS(test_file_format_read);

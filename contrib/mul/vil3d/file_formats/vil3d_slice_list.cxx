@@ -18,7 +18,6 @@
 #include "vil/vil_copy.h"
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_slice.h>
-#include <vil3d/file_formats/vil3d_dicom.h>
 
 vil3d_slice_list_format::vil3d_slice_list_format() = default;
 
@@ -134,9 +133,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
 
   // everything seems fine so create the volume
 
-  // If they are all dicom images, create an explicit dicom volume.
-  if (same && std::strcmp("dicom", images.front()->file_format())==0)
-    return new vil3d_dicom_image(images);
+  // DICOM volume support was removed in vxl 7.0 along with vil_dicom.
 
   return new vil3d_slice_list_image(images);
 }

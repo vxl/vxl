@@ -6,9 +6,13 @@ doxygen_add_library(contrib/mul/vimt
   DESCRIPTION "Polymorphic image + transform library"
   )
 
-IF (VXL_BUILD_DCMTK)
-  ADD_DEFINITIONS(-D_BUILD_DCMTK)
-ENDIF (VXL_BUILD_DCMTK)
+# vimt's vimt_load DICOM helpers thread through core/vil's DICOM
+# reader. Gate on VXL_USE_DCMTK (the option that activates system
+# DCMTK detection in core/vil), not on the retired VXL_BUILD_DCMTK
+# (which built the now-removed bundled v3p/dcmtk).
+if(VXL_USE_DCMTK AND DCMTK_FOUND)
+  add_compile_definitions(_BUILD_DCMTK)
+endif()
 
 set(vimt_sources
     vimt_image.cxx                                vimt_image.h

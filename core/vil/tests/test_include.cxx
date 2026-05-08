@@ -117,11 +117,6 @@
 #  include <vil/file_formats/vil_openjpeg.h>
 #  include <vil/file_formats/vil_openjpeg_pyramid_image_resource.h>
 #endif
-#if HAS_DCMTK
-#  include <vil/file_formats/vil_dicom.h>
-#  include <vil/file_formats/vil_dicom_header.h>
-#  include <vil/file_formats/vil_dicom_stream.h>
-#endif
 #if HAS_TIFF
 #  include <vil/file_formats/vil_tiff.h>
 #  include <vil/file_formats/vil_tiff_header.h>

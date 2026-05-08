@@ -184,22 +184,19 @@ if(TIFF_FOUND)
   endif()
 endif()
 
-# Let users decide if they should include DCMTK since we don't build against all versions.
-# VXL_USE_DCMTK is off by default, and may only work with older versions of DCMTK
-option(VXL_USE_DCMTK "Provide DCMTK support for fileio of dicom files" OFF)
-mark_as_advanced(VXL_USE_DCMTK)
+# DICOM support was removed in vxl 7.0. The vil_dicom* readers were
+# locked to a 2002-era DCMTK API that no longer compiles against
+# modern DCMTK (>=3.6.5). The HAS_DCMTK macro is kept at 0 so
+# existing #if HAS_DCMTK guards in downstream code still compile
+# out cleanly. See issues #550, #768, #769, #816.
 set( HAS_DCMTK 0 )
-if (VXL_USE_DCMTK)
-  include(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
-  if(DCMTK_FOUND)
-    include_directories(${DCMTK_INCLUDE_DIR})
-    set( HAS_DCMTK 1 )
-    set( vil_ff_sources ${vil_ff_sources}
-      file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
-      file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
-      file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
-      )
-  endif()
+if(VXL_USE_DCMTK OR VXL_BUILD_DCMTK)
+  message(WARNING
+    "VXL_USE_DCMTK / VXL_BUILD_DCMTK are no-ops in vxl 7.0; the "
+    "vil_dicom* DICOM reader and the bundled v3p/dcmtk have been "
+    "removed.")
+  unset(VXL_USE_DCMTK CACHE)
+  unset(VXL_BUILD_DCMTK CACHE)
 endif()
 
 option(VIL_CONFIG_ENABLE_SSE2_ROUNDING
@@ -372,9 +369,6 @@ if(HAS_GEOTIFF)
 endif()
 if(PNG_FOUND)
   target_link_libraries( ${VXL_LIB_PREFIX}vil ${PNG_LIBRARIES} )
-endif()
-if(DCMTK_FOUND)
-  target_link_libraries( ${VXL_LIB_PREFIX}vil ${DCMTK_LIBRARIES} )
 endif()
 if(OPENJPEG2_FOUND)
   target_link_libraries( ${VXL_LIB_PREFIX}vil ${OPENJPEG2_LIBRARIES} )
