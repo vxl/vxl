@@ -16,6 +16,7 @@ add_executable( vil_test_all
 
   # file format readers/writers
   test_file_format_read.cxx
+  test_dicom.cxx
   test_save_load_image.cxx
   test_image_loader_robustness.cxx
   test_stream.cxx
@@ -65,6 +66,9 @@ add_test( NAME vil_test_pyramid_image_view COMMAND $<TARGET_FILE:vil_test_all> t
 
 # file format readers/writers
 add_test( NAME vil_test_file_format_read COMMAND $<TARGET_FILE:vil_test_all> test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+if (VXL_USE_DCMTK)
+  add_test( NAME vil_test_dicom COMMAND $<TARGET_FILE:vil_test_all> test_dicom ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+endif ()
 add_test( NAME vil_test_save_load_image COMMAND $<TARGET_FILE:vil_test_all> test_save_load_image)
 add_test( NAME vil_test_image_loader_robustness COMMAND $<TARGET_FILE:vil_test_all> test_image_loader_robustness)
 add_test( NAME vil_test_stream COMMAND $<TARGET_FILE:vil_test_all> test_stream ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
