@@ -13,12 +13,7 @@
 #
 #   vxl-maintainers@lists.sf.net
 
-cmake_minimum_required(VERSION 3.10.2...3.31.9)
-if(CMAKE_VERSION VERSION_LESS 3.12.0)
-  cmake_policy(VERSION ${CMAKE_VERSION})
-else()
-  cmake_policy(VERSION 3.10.2...3.31.9)
-endif()
+cmake_minimum_required(VERSION 3.22.1...3.31.9)
 
 if(NOT CMAKE_CXX_STANDARD)
    set(CMAKE_CXX_STANDARD "17")
@@ -47,24 +42,6 @@ set(VALID_C_STANDARDS "90" "99" "11" "17" "23")
 if(NOT CMAKE_C_STANDARD IN_LIST VALID_C_STANDARDS )
    MESSAGE(FATAL_ERROR "CMAKE_C_STANDARD:STRING=${CMAKE_C_STANDARD} not in known standards list\n ${VALID_C_STANDARDS}.")
 endif()
-
-# Set policies consistent with newer versions of cmake
-# to ease integration with projects that require newer
-# cmake versions.
-foreach(p
-    ## Only policies introduced after the cmake_minimum_required
-    ## version need to explicitly be set to NEW.
-
-    CMP0070  #: Define file(GENERATE) behavior for relative paths.
-    CMP0071  #: Let AUTOMOC and AUTOUIC process GENERATED files.
-    CMP0075  #: Include file check macros honor CMAKE_REQUIRED_LIBRARIES.
-    CMP0083  #: Add PIE options when linking executable.
-    CMP0120  #: The WriteCompilerDetectionHeader module is removed.
-    )
-  if(POLICY ${p})
-    cmake_policy(SET ${p} NEW)
-  endif()
-endforeach()
 
 project(VXL #Project name must be all caps to have properly generated VXL_VERSION_* variables
     VERSION 7.0.0.0 # defines #MAJOR,MINOR,PATCH,TWEAK}; major bump signals C++17 minimum
