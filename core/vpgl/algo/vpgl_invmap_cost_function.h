@@ -29,17 +29,9 @@ public:
   //: set the parameter values from the 3-d point
   void
   set_params(const vnl_vector_fixed<double, 3> & xyz, vnl_vector_fixed<double, 2> & x);
-  //: set the parameter values from the 3-d point
-  //  (Deprecated interface)
-  void
-  set_params(const vnl_vector_fixed<double, 3> & xyz, vnl_vector<double> & x);
   //: get the 3-d point defined by the parameters (and the plane).
   void
   point_3d(const vnl_vector_fixed<double, 2> & x, vnl_vector_fixed<double, 3> & xyz);
-  //: get the 3-d point defined by the parameters (and the plane).
-  //  (Deprecated interface)
-  void
-  point_3d(const vnl_vector<double> & x, vnl_vector_fixed<double, 3> & xyz);
 
 protected:
   //: image point

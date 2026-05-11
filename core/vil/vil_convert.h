@@ -750,56 +750,6 @@ vil_convert_cast(outP /*dummy*/, const vil_image_view_base_sptr & src)
   return dest;
 }
 
-#if 0 // deprecated
-//: Cast the unknown pixel type to the known one, if possible.
-//
-// Will call the other vil_convert_cast to do the actual
-// conversion. For template instantiation reasons, this will only
-// convert to a scalar type, not a RGB or RGBA type. If you need a
-// multi-component view, then call this to get the corresponding
-// multi-planar view, and do a second (cheap) conversion.
-//
-// \deprecated Use other vil_convert_cast()
-// Can be removed after VXL 1.1.1
-template <class outP>
-inline void vil_convert_cast(const vil_image_view_base_sptr& src,
-                             vil_image_view<outP >&dest)
-{
-  VXL_DEPRECATED_MACRO( "void vil_convert_cast(const vil_image_view_base_sptr&,"
-                  " vil_image_view<outP>&)" );
-
-  switch ( src->pixel_format() )
-  {
-#  ifndef DOXYGEN_SHOULD_SKIP_THIS
-#    define macro(F, T)                                 \
-      case F:                                           \
-        vil_convert_cast(vil_image_view<T>(src), dest); \
-        break;
-
-#    if VXL_HAS_INT_64
-    macro( VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64 )
-    macro( VIL_PIXEL_FORMAT_INT_64, vxl_int_64 )
-#    endif
-    macro( VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 )
-    macro( VIL_PIXEL_FORMAT_INT_32, vxl_int_32 )
-    macro( VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 )
-    macro( VIL_PIXEL_FORMAT_INT_16, vxl_int_16 )
-    macro( VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-    macro( VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte )
-    macro( VIL_PIXEL_FORMAT_FLOAT, float )
-    macro( VIL_PIXEL_FORMAT_DOUBLE, double )
-    macro( VIL_PIXEL_FORMAT_BOOL, bool )
-#    undef macro
-#  endif // DOXYGEN_SHOULD_SKIP_THIS
-
-    // Skip the RGB type conversions because the vil_convert_cast are
-    // not complete. For example, a cast from vxl_uint_16 to
-    // vil_rgb<vxl_uint_32> is not defined.
-    default:
-      dest.clear();
-  }
-}
-#endif   // 0
 
 //: Convert an image of any pixel type to another with rounding.
 // This should only be used to convert to scalar
@@ -907,69 +857,6 @@ vil_convert_to_component_order(const vil_image_view_base_sptr & src)
   return dest;
 }
 
-#if 0 // deprecated
-//: Create a greyscale image from any image src.
-// This function is designed to be used with vil_load or
-// vil_image_resource::get_view()
-// where you do not know the pixel type in advance. e.g.
-// \code
-// vil_image_view<float> input =
-//   vil_convert_to_grey_using_average(vil_load(filename), float());
-// \endcode
-// If you have an image_view of known pixel_type then you should use one of
-// the other vil_convert functions.
-// The output may be a reconfigured view of the input.
-// \deprecated Use other vil_convert_to_grey_using_average()
-template <class outP>
-inline vil_image_view<outP> vil_convert_to_grey_using_average(
-  const vil_image_view_base_sptr &src, outP /*dummy*/)
-{
-  VXL_DEPRECATED_MACRO( "vil_convert_to_grey_using_average<outP>("
-                  "const vil_image_view_base_sptr &, outP)" );
-
-  // Check output is scalar component image.
-  assert (vil_pixel_format_num_components(vil_pixel_format_of(outP())) == 1);
-
-  if (!src) return vil_image_view<outP>();
-
-  // try to do it quickly
-  if (vil_pixel_format_of(outP()) == src->pixel_format() && src->nplanes() == 1)
-    return vil_image_view<outP>(src);
-
-  // create output view
-  vil_image_view<outP> dest;
-
-  // convert via vil_image_view<double>
-  switch (vil_pixel_format_component_format(src->pixel_format()))
-  {
-#  ifndef DOXYGEN_SHOULD_SKIP_THIS
-#    define macro(F, T)                                  \
-      case F:                                            \
-      {                                                  \
-        vil_image_view<T> src1 = *src;                   \
-        vil_math_mean_over_planes(src1, dest, double()); \
-        break;                                           \
-      }
-   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#    if VXL_HAS_INT_64
-   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
-#    endif
-   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-   macro(VIL_PIXEL_FORMAT_FLOAT , float )
-   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-#    undef macro
-#  endif // DOXYGEN_SHOULD_SKIP_THIS
-   default:
-    dest.clear();
-  }
-  return dest;
-}
-#endif   // 0
 
 //: Create a greyscale image of specified pixel type from any image src.
 // This function is designed to be used with vil_load or
@@ -1082,74 +969,6 @@ vil_convert_to_grey_using_rgb_weighting(const vil_image_view_base_sptr & src)
   return vil_convert_to_grey_using_rgb_weighting(0.2125, 0.7154, 0.0721, src);
 }
 
-#if 0 // deprecated version of this function now commented out
-//: Create a greyscale image of specified pixel type from any image src.
-// This function is designed to be used with vil_load or
-// vil_image_resource::get_view()
-// where you do not know the pixel type in advance.
-// The output may be a reconfigured view of the input.
-//
-// Default weights convert from linear RGB to CIE luminance assuming a
-// modern monitor.  See Charles Poynton's Colour FAQ
-// http://www.poynton.com/ColorFAQ.html
-// \deprecated Use other version of vil_convert_to_grey_using_rgb_weighting
-template <class outP>
-inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
-                          const vil_image_view_base_sptr &src,
-                          outP /*dummy*/,
-                          double rw=0.2125,
-                          double gw=0.7154,
-                          double bw=0.0721)
-{
-  VXL_DEPRECATED_MACRO( "vil_convert_to_grey_using_rgb_weighting<outP>("
-                  "const vil_image_view_base_sptr &, outP)" );
-
-  // Check output is scalar component image.
-  assert (vil_pixel_format_num_components(vil_pixel_format_of(outP())) == 1);
-
-  if (!src) return vil_image_view<outP>();
-
-  // try to do it quickly
-  if (vil_pixel_format_of(outP()) == src->pixel_format() && src->nplanes() == 1)
-    return vil_image_view<outP>(src);
-
-  // create output view
-  vil_image_view<outP> dest;
-
-  // convert via vil_image_view<double>
-  switch (vil_pixel_format_component_format(src->pixel_format()))
-  {
-#  ifndef DOXYGEN_SHOULD_SKIP_THIS
-#    define macro(F, T)                                      \
-      case F:                                                \
-      {                                                      \
-        vil_image_view<T> src1 = src;                        \
-        vil_image_view<double> dest1;                        \
-        vil_convert_planes_to_grey(src1, dest1, rw, gw, bw); \
-        vil_convert_round(dest1, dest);                      \
-        break;                                               \
-      }
-   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#    if VXL_HAS_INT_64
-   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
-#    endif
-   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-   macro(VIL_PIXEL_FORMAT_FLOAT , float )
-   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-   // Don't even want to think about rgb<complex<float> >
-#    undef macro
-#  endif // DOXYGEN_SHOULD_SKIP_THIS
-   default:
-    dest.clear();
-  }
-  return dest;
-}
-#endif   // 0
 
 //: Create an n plane image from any image src.
 // This function is designed to be used with vil_load or

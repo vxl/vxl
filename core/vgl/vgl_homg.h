@@ -43,16 +43,6 @@ public:
     return std::isinf(v);
   }
 
-#ifndef VXL_LEGACY_REMOVE
-  // Never used or properly implemented
-  //: The tolerance used in "near zero" tests in the vgl_homg subclasses.
-  static T infinitesimal_tol;
-
-  //: Static method to set the default tolerance used for infinitesimal checks.
-  // The default is 1e-12.
-  static void
-  set_infinitesimal_tol(T tol);
-#endif
 };
 
 #endif // vgl_homg_h_

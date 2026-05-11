@@ -10,7 +10,6 @@
 #include "vsl_vector_io.h"
 #include "vsl_binary_io.h"
 #include "vsl_block_binary.h"
-#include "vsl_b_read_block_old.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -87,28 +86,16 @@ vsl_b_read(vsl_b_istream & is, std::vector<T> & v)
   switch (ver)
   {
     case 1:
-#if !VXL_LEGACY_FUTURE_REMOVE
-      if (n != 0)
-      {
-        vsl_b_read_block_old(is, &v.front(), n);
-      }
-#else
       std::cerr << "I/O ERROR: Old version 1 file formats are no longer supported since deprecation of required "
                    "function vsl_b_read_block_old in 2006\n";
-#endif
       break;
     case 2:
       if (n != 0)
       {
         if (vsl_is_char(v.front())) // signed char or unsigned char
         {
-#if !VXL_LEGACY_FUTURE_REMOVE
-          vsl_block_binary_read_confirm_specialisation(is, false);
-          vsl_b_read_block_old(is, &v.front(), n);
-#else
           std::cerr << "I/O ERROR: Old version 1 file formats are no longer supported since deprecation of required "
                        "function vsl_b_read_block_old in 2006\n";
-#endif
         }
         else
           vsl_block_binary_read(is, &v.front(), n);

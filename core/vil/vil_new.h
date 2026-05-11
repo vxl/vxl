@@ -168,23 +168,6 @@ vil_new_pyramid_image_list_from_base(const char * directory,
                                      const char * level_file_format,
                                      const char * filename);
 
-#if 0  // deprecated
-//: Create a new image view whose plane step is 1.
-//  Pixel data type is the type of the last (dummy) argument.
-//  i_step will be nplanes, j_step will be nplanes x ni.
-//  \relatesalso vil_image_view
-// \deprecated in favour of vil_image_view constructor
-template <class T>
-vil_image_view<T> vil_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
-{
-  VXL_DEPRECATED_MACRO("vil_new_image_view_j_i_plane");
-  vil_pixel_format fmt = vil_pixel_format_of(T());
-  vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni*nj*nplanes*sizeof(T),
-                                                     vil_pixel_format_component_format(fmt));
-  return vil_image_view<T>(chunk, reinterpret_cast<T*>(chunk->data()), ni, nj, nplanes, nplanes, nplanes*ni, 1);
-}
-#endif // 0
-
 //: Create a new image view whose j_step is 1.
 //  Pixel data type is the type of the last (dummy) argument.
 //  i_step will be nj, planestep will be ni x nj.
