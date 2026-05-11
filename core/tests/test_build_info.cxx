@@ -100,7 +100,6 @@ test_build_info()
                            vxl_BUILD_DIR "/vcl/vcl_compiler.h",
                            vxl_BUILD_DIR "/core/vil/vil_config.h",
                            vxl_BUILD_DIR "/core/vnl/vnl_config.h",
-                           vxl_BUILD_DIR "/v3p/dcmtk/osconfig.h",
                            vxl_BUILD_DIR "/v3p/mpeg2/include/config.h",
                            nullptr
   };
