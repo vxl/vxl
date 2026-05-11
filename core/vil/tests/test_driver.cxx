@@ -2,6 +2,7 @@
 
 DECLARE(test_convert);
 DECLARE(test_file_format_read);
+DECLARE(test_dicom);
 DECLARE(test_pixel_format);
 DECLARE(test_save_load_image);
 DECLARE(test_image_loader_robustness);
@@ -44,6 +45,7 @@ register_tests()
   REGISTER(test_pixel_format);
   REGISTER(test_save_load_image);
   REGISTER(test_file_format_read);
+  REGISTER(test_dicom);
   REGISTER(test_image_loader_robustness);
   REGISTER(test_stream);
   REGISTER(test_image_view);
