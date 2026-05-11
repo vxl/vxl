@@ -245,7 +245,7 @@ void vsph_unit_sphere::add_uniform_views()
       }
     }
 
-    if (verbose_&&i%1000 ==0)
+    if (verbose_ && i % 1000 == 0)
       std::cout << '.' << std::flush;
 
     int idx0 = triangles[i][0];
@@ -268,9 +268,8 @@ void vsph_unit_sphere::add_uniform_views()
     else
       triangles_.emplace_back(sv2, sv1, sv0, coord_sys_);
   }
-  std::cout << '\n' << std::flush;
   if(verbose_)
-    std::cout << "finished refine\n"
+    std::cout << "\nfinished refine\n"
               << "start constructing edges from " << ntri << " triangles"
               << std::endl;
   delete verts;
@@ -307,7 +306,7 @@ void vsph_unit_sphere::add_uniform_views()
       if (!find_edge(e))
         this->insert_edge(e);
     }
-    if (i%1000 ==0)
+    if (verbose_ && i % 1000 == 0)
       std::cout << '+' << std::flush;
   }
   if(verbose_)
