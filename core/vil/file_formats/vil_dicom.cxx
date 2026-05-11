@@ -12,6 +12,7 @@
 
 #  include "vil_dicom.h"
 
+#  include <unistd.h>
 #  include <cassert>
 #  ifdef _MSC_VER
 #    include "vcl_msvc_warnings.h"
@@ -27,15 +28,16 @@
 #  include "vil/vil_pixel_format.h"
 #  include "vil/vil_exception.h"
 
-#  include <dcfilefo.h>
-#  include <dcmetinf.h>
-#  include <dcdatset.h>
-#  include <dctagkey.h>
-#  include <dcdeftag.h>
-#  include <dcstack.h>
-#  include <diinpxt.h>
+#  include <dcmtk/dcmdata/dcfilefo.h>
+#  include <dcmtk/dcmdata/dcmetinf.h>
+#  include <dcmtk/dcmdata/dcdatset.h>
+#  include <dcmtk/dcmdata/dctagkey.h>
+#  include <dcmtk/dcmdata/dcdeftag.h>
+#  include <dcmtk/dcmdata/dcstack.h>
+#  include <dcmtk/dcmdata/dcfcache.h>
+#  include <dcmtk/dcmimgle/didocu.h>
+#  include <dcmtk/dcmimgle/diinpxt.h>
 
-#  include "vil_dicom_stream.h"
 //
 // Believe it or not some dicom images have a mixed endian encoding.
 // e.g. mixed (7fe0,0010) OW 30f8 vs unmixed (7fe0,0010) OW f830
@@ -108,7 +110,8 @@ static void
 read_header(DcmObject * dataset, vil_dicom_header_info & i);
 
 static void
-read_pixels_into_buffer(DcmPixelData * pixels,
+read_pixels_into_buffer(const DiDocument * document,
+                        DcmPixelData * pixels,
                         unsigned num_samples,
                         Uint16 alloc,
                         Uint16 stored,
@@ -125,12 +128,40 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
 {
   vil_dicom_header_info_clear(header_);
 
-  vil_dicom_stream_input dcis(vs);
+  // Slurp the entire vil_stream to a temp file and hand the path to
+  // DCMTK's own loadFile(). Plumbing a DcmInputStream from the consumer
+  // side has shown a hard-to-reproduce ABI skew with DCMTK static libs
+  // (visibility / feature-macro differences pull the input-stream vtable
+  // out of agreement with DCMTK's view), so prefer the path-based API
+  // that is fully contained inside libdcmdata.a.
+  vs->seek(0);
+  const vil_streampos buflen = vs->file_size();
+  std::vector<unsigned char> buf(static_cast<std::size_t>(buflen));
+  if (buflen > 0 && vs->read(buf.data(), buflen) != buflen)
+  {
+    std::cerr << "vil_dicom ERROR: short read of " << buflen << " bytes\n";
+    return;
+  }
+
+  char tmpl[] = "/tmp/vil_dicomXXXXXX";
+  const int fd = ::mkstemp(tmpl);
+  if (fd < 0)
+  {
+    std::cerr << "vil_dicom ERROR: could not create temp file\n";
+    return;
+  }
+  const ssize_t written = ::write(fd, buf.data(), static_cast<std::size_t>(buflen));
+  ::close(fd);
+  if (written != static_cast<ssize_t>(buflen))
+  {
+    ::unlink(tmpl);
+    std::cerr << "vil_dicom ERROR: short write of " << buflen << " bytes to temp\n";
+    return;
+  }
 
   DcmFileFormat ffmt;
-  ffmt.transferInit();
-  OFCondition cond = ffmt.read(dcis);
-  ffmt.transferEnd();
+  OFCondition cond = ffmt.loadFile(tmpl);
+  ::unlink(tmpl);
 
   if (cond != EC_Normal)
   {
@@ -213,8 +244,21 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
       }
     }
     unsigned num_samples = ni() * nj() * nplanes();
-    read_pixels_into_buffer(
-      pixels, num_samples, bits_alloc, bits_stored, high_bit, pixel_rep, slope, intercept, pixel_buf, pixel_format);
+    // DCMTK 3.6+ requires DiInputPixelTemplate to be constructed from a
+    // DiDocument rather than a raw DcmPixelData; build one wrapping the
+    // already-loaded DcmFileFormat.
+    DiDocument document(&ffmt, ffmt.getDataset()->getOriginalXfer());
+    read_pixels_into_buffer(&document,
+                            pixels,
+                            num_samples,
+                            bits_alloc,
+                            bits_stored,
+                            high_bit,
+                            pixel_rep,
+                            slope,
+                            intercept,
+                            pixel_buf,
+                            pixel_format);
   }
 
   // Create an image resource to manage the pixel buffer
@@ -1036,7 +1080,7 @@ namespace
 template <class InT>
 void
 convert_src_type(const InT *,
-                 DcmPixelData * pixels,
+                 const DiDocument * document,
                  unsigned num_samples,
                  Uint16 alloc,
                  Uint16 stored,
@@ -1045,25 +1089,36 @@ convert_src_type(const InT *,
                  DiInputPixel *& pixel_data,
                  vil_pixel_format & act_format)
 {
+  // DCMTK 3.6+ DiInputPixelTemplate signature:
+  //   (document, alloc, stored, high, first_frame, frame_count, frame_size,
+  //    file_cache, fragment_index)
+  // vil_dicom only ever loads a single 2D slice, so frame_count = 1 and
+  // frame_size = num_samples.
+  DcmFileCache fileCache;
+  Uint32 fragment = 0;
   if (rep == 0 && stored <= 8)
   {
     act_format = VIL_PIXEL_FORMAT_BYTE;
-    pixel_data = new DiInputPixelTemplate<InT, Uint8>(pixels, alloc, stored, high, 0, num_samples);
+    pixel_data =
+      new DiInputPixelTemplate<InT, Uint8>(document, alloc, stored, high, 0, 1, num_samples, &fileCache, fragment);
   }
   else if (rep == 0 && stored <= 16)
   {
     act_format = VIL_PIXEL_FORMAT_UINT_16;
-    pixel_data = new DiInputPixelTemplate<InT, Uint16>(pixels, alloc, stored, high, 0, num_samples);
+    pixel_data =
+      new DiInputPixelTemplate<InT, Uint16>(document, alloc, stored, high, 0, 1, num_samples, &fileCache, fragment);
   }
   else if (rep == 1 && stored <= 8)
   {
     act_format = VIL_PIXEL_FORMAT_SBYTE;
-    pixel_data = new DiInputPixelTemplate<InT, Sint8>(pixels, alloc, stored, high, 0, num_samples);
+    pixel_data =
+      new DiInputPixelTemplate<InT, Sint8>(document, alloc, stored, high, 0, 1, num_samples, &fileCache, fragment);
   }
   else if (rep == 1 && stored <= 16)
   {
     act_format = VIL_PIXEL_FORMAT_INT_16;
-    pixel_data = new DiInputPixelTemplate<InT, Sint16>(pixels, alloc, stored, high, 0, num_samples);
+    pixel_data =
+      new DiInputPixelTemplate<InT, Sint16>(document, alloc, stored, high, 0, 1, num_samples, &fileCache, fragment);
   }
 }
 
@@ -1096,7 +1151,8 @@ swap_shorts(unsigned short * ip, unsigned short * op, int count)
 }
 #  endif // MIXED_ENDIAN
 static void
-read_pixels_into_buffer(DcmPixelData * pixels,
+read_pixels_into_buffer(const DiDocument * document,
+                        DcmPixelData * pixels,
                         unsigned num_samples,
                         Uint16 alloc,
                         Uint16 stored,
@@ -1120,11 +1176,11 @@ read_pixels_into_buffer(DcmPixelData * pixels,
   DiInputPixel * pixel_data = 0;
   if (pixels->getVR() == EVR_OW)
   {
-    convert_src_type((Uint16 *)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format);
+    convert_src_type((Uint16 *)0, document, num_samples, alloc, stored, high, rep, pixel_data, act_format);
   }
   else
   {
-    convert_src_type((Uint8 *)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format);
+    convert_src_type((Uint8 *)0, document, num_samples, alloc, stored, high, rep, pixel_data, act_format);
   }
 #  ifdef MIXED_ENDIAN
 #    ifdef NO_OFFSET
