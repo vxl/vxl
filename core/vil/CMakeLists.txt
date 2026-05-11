@@ -184,22 +184,20 @@ if(TIFF_FOUND)
   endif()
 endif()
 
-# Let users decide if they should include DCMTK since we don't build against all versions.
-# VXL_USE_DCMTK is off by default, and may only work with older versions of DCMTK
+# DICOM support via an externally-installed DCMTK (>= 3.6.5). The bundled
+# v3p/dcmtk was removed; consumers must point DCMTK_DIR at an installed
+# DCMTKConfig.cmake (or have DCMTK discoverable on CMAKE_PREFIX_PATH).
 option(VXL_USE_DCMTK "Provide DCMTK support for fileio of dicom files" OFF)
 mark_as_advanced(VXL_USE_DCMTK)
 set( HAS_DCMTK 0 )
 if (VXL_USE_DCMTK)
-  include(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
-  if(DCMTK_FOUND)
-    include_directories(${DCMTK_INCLUDE_DIR})
-    set( HAS_DCMTK 1 )
-    set( vil_ff_sources ${vil_ff_sources}
-      file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
-      file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
-      file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
-      )
-  endif()
+  find_package(DCMTK CONFIG REQUIRED)
+  set( HAS_DCMTK 1 )
+  set( vil_ff_sources ${vil_ff_sources}
+    file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
+    file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
+    file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
+    )
 endif()
 
 option(VIL_CONFIG_ENABLE_SSE2_ROUNDING
@@ -373,8 +371,8 @@ endif()
 if(PNG_FOUND)
   target_link_libraries( ${VXL_LIB_PREFIX}vil ${PNG_LIBRARIES} )
 endif()
-if(DCMTK_FOUND)
-  target_link_libraries( ${VXL_LIB_PREFIX}vil ${DCMTK_LIBRARIES} )
+if(HAS_DCMTK)
+  target_link_libraries( ${VXL_LIB_PREFIX}vil DCMTK::dcmimgle DCMTK::dcmdata DCMTK::ofstd )
 endif()
 if(OPENJPEG2_FOUND)
   target_link_libraries( ${VXL_LIB_PREFIX}vil ${OPENJPEG2_LIBRARIES} )
