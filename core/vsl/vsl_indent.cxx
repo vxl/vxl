@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <map>
+#include <mutex>
 #include <utility>
 #include "vsl_indent.h"
 #ifdef _MSC_VER
@@ -13,23 +14,51 @@
 constexpr int default_tab = 2;
 
 using indent_data_type = std::pair<int, int>;
+using maps2i_type = std::map<void *, indent_data_type, std::less<void *>>;
 
-// Get pointer to tab and indent data for os
+// Holder bundling the indent map with the mutex that guards it.
+// Bundling the mutex with the data in one Meyers singleton guarantees
+// they share lifetime, side-stepping the destruction-order fiasco
+// that two separate function-local statics would risk.
+struct vsl_indent_storage
+{
+  std::mutex mtx;
+  maps2i_type indent_data_map;
+};
+
+static vsl_indent_storage &
+vsl_indent_state()
+{
+  static vsl_indent_storage s;
+  return s;
+}
+
+// Get pointer to tab and indent data for os.
+//
+// CAVEAT: callers must use the returned pointer only while no other
+// thread is invoking any vsl_indent_* helper on the SAME ostream.
+// The internal map is mutex-guarded for insertion, but the returned
+// indent_data_type* aliases storage inside the map, and concurrent
+// indent_data() calls on the same ostream would race on that data.
+// In practice every vsl_b_* operator threads through these helpers
+// against a single per-thread vsl_b_*stream, so the per-stream
+// access pattern is naturally single-threaded. The mutex protects
+// against concurrent insertion of new ostream entries, which is the
+// race that previously could corrupt the map's internal red-black
+// tree.
 indent_data_type *
 indent_data(std::ostream & os)
 {
-  using maps2i_type = std::map<void *, indent_data_type, std::less<void *>>;
-  // Global record of tab information for streams.
-  // Allows data to persist beyond the lifetime of the indent object itself,
-  // which may be mercifully brief
-  static maps2i_type indent_data_map;
+  auto & state = vsl_indent_state();
+  std::lock_guard<std::mutex> guard(state.mtx);
 
-  auto entry = indent_data_map.find(&os);
-  if (entry == indent_data_map.end())
+  auto & m = state.indent_data_map;
+  auto entry = m.find(&os);
+  if (entry == m.end())
   {
     // Create a new entry
-    indent_data_map[&os] = indent_data_type(0, default_tab);
-    entry = indent_data_map.find(&os);
+    m[&os] = indent_data_type(0, default_tab);
+    entry = m.find(&os);
   }
 
   return &((*entry).second);

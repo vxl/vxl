@@ -2,6 +2,7 @@
 //:
 // \file
 #include <cstdlib>
+#include <mutex>
 #include "vil_file_format.h"
 
 vil_file_format::~vil_file_format() = default;
@@ -159,10 +160,26 @@ struct vil_file_format_storage
   }
 };
 
+//: Mutex guarding mutations of the shared format list.
+//  The list itself is initialized once via the Meyers-singleton in
+//  all() (C++11 guarantees thread-safe initialization of function-
+//  local statics). This mutex serializes concurrent add_file_format
+//  calls from multiple threads. Iteration via all() after the
+//  registration phase is unsynchronized; callers that register
+//  formats from multiple threads must serialize their iteration
+//  externally.
+static std::mutex &
+vil_file_format_list_mutex()
+{
+  static std::mutex m;
+  return m;
+}
+
 //: The function will take ownership of ff;
 void
 vil_file_format::add_file_format(vil_file_format * ff)
 {
+  std::lock_guard<std::mutex> guard(vil_file_format_list_mutex());
   std::list<vil_file_format *> & l = all();
 
   // Always add runtime-loaded formats to the front to allow them to replace
