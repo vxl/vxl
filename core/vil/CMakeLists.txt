@@ -195,7 +195,6 @@ if (VXL_USE_DCMTK)
   set( HAS_DCMTK 1 )
   set( vil_ff_sources ${vil_ff_sources}
     file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
-    file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
     file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
     )
 endif()
