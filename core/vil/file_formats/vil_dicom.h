@@ -13,7 +13,6 @@
 #include <vil/file_formats/vil_dicom_header.h>
 
 class DicomImage;
-class vil_dicom_stream_input;
 class DcmFileFormat;
 
 class vil_image_view_base;
