@@ -210,10 +210,11 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
 #  define MustRead(func, key, var)                                                                             \
     do                                                                                                         \
     {                                                                                                          \
-      if (dset.func(key, var) != EC_Normal)                                                                    \
+      const OFCondition mustReadCond_ = dset.func(key, var);                                                   \
+      if (mustReadCond_ != EC_Normal)                                                                          \
       {                                                                                                        \
-        std::cerr << "vil_dicom ERROR: couldn't read " Stringify(var) " from: " Stringify(key) " error code: " \
-                  << dset.func(key, var).text() << "; can't handle\n";                                         \
+        std::cerr << "vil_dicom ERROR: couldn't read " Stringify(var) " from " Stringify(key) ": "             \
+                  << mustReadCond_.text() << "; can't handle\n";                                               \
         return;                                                                                                \
       }                                                                                                        \
     } while (false)
