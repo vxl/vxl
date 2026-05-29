@@ -253,6 +253,11 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
         pixels = static_cast<DcmPixelData *>(stack.top());
       }
     }
+    if (pixels == nullptr)
+    {
+      std::cerr << "vil_dicom ERROR: dataset has no DCM_PixelData element\n";
+      return;
+    }
     unsigned num_samples = ni() * nj() * nplanes();
 
     // Register codecs only for compressed transfer syntaxes that need them.
