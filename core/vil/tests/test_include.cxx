@@ -120,7 +120,6 @@
 #if HAS_DCMTK
 #  include <vil/file_formats/vil_dicom.h>
 #  include <vil/file_formats/vil_dicom_header.h>
-// #  include <vil/file_formats/vil_dicom_stream.h>
 #endif
 #if HAS_TIFF
 #  include <vil/file_formats/vil_tiff.h>
