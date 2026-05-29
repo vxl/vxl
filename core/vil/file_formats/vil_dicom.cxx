@@ -168,7 +168,7 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
   // subsequent partial-read or decompression call would try to reopen
   // the (already unlinked) temp file and fail.
   if (cond == EC_Normal)
-    ffmt.loadAllDataIntoMemory();
+    cond = ffmt.loadAllDataIntoMemory();
   ::unlink(tmpl);
 
   if (cond != EC_Normal)
