@@ -35,6 +35,7 @@
 #  include <dcmtk/dcmdata/dcdeftag.h>
 #  include <dcmtk/dcmdata/dcstack.h>
 #  include <dcmtk/dcmdata/dcfcache.h>
+#  include <dcmtk/dcmdata/dcrledrg.h>
 #  include <dcmtk/dcmimgle/didocu.h>
 #  include <dcmtk/dcmimgle/diinpxt.h>
 #  include <dcmtk/dcmjpeg/djdecode.h>
@@ -53,6 +54,25 @@
 // #define NO_OFFSET
 
 const char * vil_dicom_format_tag = "dicom";
+
+namespace
+{
+// Register DCMTK's decompression codecs once per process. registerCodecs()
+// mutates global tables, so doing it per-image churns shared state and races
+// with other DCMTK consumers; doing it once at first use is safe and matches
+// DCMTK's intended usage.
+void
+ensure_dcmtk_codecs_registered()
+{
+  static const bool once = [] {
+    DcmRLEDecoderRegistration::registerCodecs();
+    DJDecoderRegistration::registerCodecs();
+    DJLSDecoderRegistration::registerCodecs();
+    return true;
+  }();
+  (void)once;
+}
+} // namespace
 
 
 vil_image_resource_sptr
@@ -207,16 +227,16 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
   // Gather the storage format info
 
 #  define Stringify(v) #v
-#  define MustRead(func, key, var)                                                                             \
-    do                                                                                                         \
-    {                                                                                                          \
-      const OFCondition mustReadCond_ = dset.func(key, var);                                                   \
-      if (mustReadCond_ != EC_Normal)                                                                          \
-      {                                                                                                        \
-        std::cerr << "vil_dicom ERROR: couldn't read " Stringify(var) " from " Stringify(key) ": "             \
-                  << mustReadCond_.text() << "; can't handle\n";                                               \
-        return;                                                                                                \
-      }                                                                                                        \
+#  define MustRead(func, key, var)                                                                 \
+    do                                                                                             \
+    {                                                                                              \
+      const OFCondition mustReadCond_ = dset.func(key, var);                                       \
+      if (mustReadCond_ != EC_Normal)                                                              \
+      {                                                                                            \
+        std::cerr << "vil_dicom ERROR: couldn't read " Stringify(var) " from " Stringify(key) ": " \
+                  << mustReadCond_.text() << "; can't handle\n";                                   \
+        return;                                                                                    \
+      }                                                                                            \
     } while (false)
 
   Uint16 bits_alloc, bits_stored, high_bit, pixel_rep;
@@ -260,20 +280,8 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
     }
     unsigned num_samples = ni() * nj() * nplanes();
 
-    // Register codecs only for compressed transfer syntaxes that need them.
-    E_TransferSyntax xfer = ffmt.getDataset()->getOriginalXfer();
-    bool jpeg_registered = false;
-    bool jpegls_registered = false;
-    if (xfer == EXS_JPEGLSLossless || xfer == EXS_JPEGLSLossy)
-    {
-      DJLSDecoderRegistration::registerCodecs();
-      jpegls_registered = true;
-    }
-    else if (DcmXfer(xfer).usesEncapsulatedFormat())
-    {
-      DJDecoderRegistration::registerCodecs();
-      jpeg_registered = true;
-    }
+    ensure_dcmtk_codecs_registered();
+    const E_TransferSyntax xfer = ffmt.getDataset()->getOriginalXfer();
 
     // DCMTK 3.6+ requires DiInputPixelTemplate to be constructed from a
     // DiDocument rather than a raw DcmPixelData; build one wrapping the
@@ -290,11 +298,6 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
                             intercept,
                             pixel_buf,
                             pixel_format);
-
-    if (jpeg_registered)
-      DJDecoderRegistration::cleanup();
-    if (jpegls_registered)
-      DJLSDecoderRegistration::cleanup();
   }
 
   // Create an image resource to manage the pixel buffer
