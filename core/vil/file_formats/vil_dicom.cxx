@@ -37,6 +37,8 @@
 #  include <dcmtk/dcmdata/dcfcache.h>
 #  include <dcmtk/dcmimgle/didocu.h>
 #  include <dcmtk/dcmimgle/diinpxt.h>
+#  include <dcmtk/dcmjpeg/djdecode.h>
+#  include <dcmtk/dcmjpls/djdecode.h>
 
 //
 // Believe it or not some dicom images have a mixed endian encoding.
@@ -161,6 +163,12 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
 
   DcmFileFormat ffmt;
   OFCondition cond = ffmt.loadFile(tmpl);
+  // Force all pixel data into memory before the temp file is deleted.
+  // loadFile() lazy-loads pixel data by default; without this, any
+  // subsequent partial-read or decompression call would try to reopen
+  // the (already unlinked) temp file and fail.
+  if (cond == EC_Normal)
+    ffmt.loadAllDataIntoMemory();
   ::unlink(tmpl);
 
   if (cond != EC_Normal)
@@ -199,14 +207,15 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
   // Gather the storage format info
 
 #  define Stringify(v) #v
-#  define MustRead(func, key, var)                                                        \
-    do                                                                                    \
-    {                                                                                     \
-      if (dset.func(key, var) != EC_Normal)                                               \
-      {                                                                                   \
-        std::cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n"; \
-        return;                                                                           \
-      }                                                                                   \
+#  define MustRead(func, key, var)                                                                             \
+    do                                                                                                         \
+    {                                                                                                          \
+      if (dset.func(key, var) != EC_Normal)                                                                    \
+      {                                                                                                        \
+        std::cerr << "vil_dicom ERROR: couldn't read " Stringify(var) " from: " Stringify(key) " error code: " \
+                  << dset.func(key, var).text() << "; can't handle\n";                                         \
+        return;                                                                                                \
+      }                                                                                                        \
     } while (false)
 
   Uint16 bits_alloc, bits_stored, high_bit, pixel_rep;
@@ -244,10 +253,26 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
       }
     }
     unsigned num_samples = ni() * nj() * nplanes();
+
+    // Register codecs only for compressed transfer syntaxes that need them.
+    E_TransferSyntax xfer = ffmt.getDataset()->getOriginalXfer();
+    bool jpeg_registered = false;
+    bool jpegls_registered = false;
+    if (xfer == EXS_JPEGLSLossless || xfer == EXS_JPEGLSLossy)
+    {
+      DJLSDecoderRegistration::registerCodecs();
+      jpegls_registered = true;
+    }
+    else if (DcmXfer(xfer).usesEncapsulatedFormat())
+    {
+      DJDecoderRegistration::registerCodecs();
+      jpeg_registered = true;
+    }
+
     // DCMTK 3.6+ requires DiInputPixelTemplate to be constructed from a
     // DiDocument rather than a raw DcmPixelData; build one wrapping the
     // already-loaded DcmFileFormat.
-    DiDocument document(&ffmt, ffmt.getDataset()->getOriginalXfer());
+    DiDocument document(&ffmt, xfer);
     read_pixels_into_buffer(&document,
                             pixels,
                             num_samples,
@@ -259,6 +284,11 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
                             intercept,
                             pixel_buf,
                             pixel_format);
+
+    if (jpeg_registered)
+      DJDecoderRegistration::cleanup();
+    if (jpegls_registered)
+      DJLSDecoderRegistration::cleanup();
   }
 
   // Create an image resource to manage the pixel buffer
@@ -280,7 +310,7 @@ vil_dicom_image::vil_dicom_image(vil_stream * vs)
     DOCASE(VIL_PIXEL_FORMAT_SBYTE);
     DOCASE(VIL_PIXEL_FORMAT_FLOAT);
     default:
-      std::cerr << "vil_dicom ERROR: unexpected pixel format\n";
+      std::cerr << "vil_dicom ERROR: unexpected pixel format: " << pixel_format << std::endl;
   }
 #  undef DOCASE
 }
@@ -1198,7 +1228,7 @@ read_pixels_into_buffer(const DiDocument * document,
   vxl_byte * temp3 = reinterpret_cast<vxl_byte *>(temp1);
 #  endif // MIXED_ENDIAN
   // On error, return without doing anything
-  if (pixel_data == 0)
+  if (pixel_data == 0 || pixel_data->getData() == nullptr)
   {
     return;
   }
