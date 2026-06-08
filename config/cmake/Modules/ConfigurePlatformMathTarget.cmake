@@ -2,14 +2,14 @@
 add_library(vxl_platform_math INTERFACE)
 # Ensure the interface target participates in the export set so that
 # exported libraries depending on it do not trigger CMake export errors.
-# INTERFACE libraries have no artifacts, but can and must be exported
-# if referenced by other exported targets.
-if(NOT VXL_NO_EXPORT)
-    # Participate in build-tree export
-    set_property(GLOBAL APPEND PROPERTY VXLTargets_MODULES vxl_platform_math)
-    # Participate in install-tree export
-    install(TARGETS vxl_platform_math EXPORT ${VXL_INSTALL_EXPORT_NAME})
-endif()
+# INTERFACE libraries have no artifacts, but can and must be exported if
+# referenced by other exported targets -- including when VXL_NO_EXPORT is ON.
+# In that mode VXL is embedded in a host project (e.g. ITK) that exports its
+# own targets; itkvcl/itkv3p_netlib link vxl_platform_math while being part of
+# the host's export set, so the interface target must join that set or
+# install(EXPORT ...) fails to generate.
+set_property(GLOBAL APPEND PROPERTY VXLTargets_MODULES vxl_platform_math)
+install(TARGETS vxl_platform_math EXPORT ${VXL_INSTALL_EXPORT_NAME})
 if(CMAKE_VERSION VERSION_LESS 3.14.0)
   # Revert to previous behavior of requiring libm
   target_link_libraries(vxl_platform_math INTERFACE m)
