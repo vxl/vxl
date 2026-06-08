@@ -29,9 +29,12 @@ endif()
 if(NOT CMAKE_CXX_EXTENSIONS)
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
-set(VALID_CXX_STANDARDS "11" "14" "17" "20" "23")
+# VXL 7 requires C++17 or newer (inline constexpr variables, structured
+# bindings, ...), so reject the older standards rather than letting an
+# explicit CMAKE_CXX_STANDARD=11/14 pass validation and then fail to compile.
+set(VALID_CXX_STANDARDS "17" "20" "23")
 if(NOT CMAKE_CXX_STANDARD IN_LIST VALID_CXX_STANDARDS )
-   MESSAGE(FATAL_ERROR "CMAKE_CXX_STANDARD:STRING=${CMAKE_CXX_STANDARD} not in known standards list\n ${VALID_CXX_STANDARDS}.")
+   MESSAGE(FATAL_ERROR "CMAKE_CXX_STANDARD:STRING=${CMAKE_CXX_STANDARD} is not a supported C++ standard; VXL requires one of: ${VALID_CXX_STANDARDS}.")
 endif()
 
 if(NOT CMAKE_C_STANDARD)
