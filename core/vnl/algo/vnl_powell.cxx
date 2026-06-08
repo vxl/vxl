@@ -24,6 +24,20 @@
 #  endif
 #endif
 
+namespace
+{
+//: Validate that a size_t fits in an int before narrowing, so the guard
+// runs before the conversion is used. A delegating constructor evaluates
+// its target's argument in the member-initializer, before its own body, so
+// the check cannot be written as an assert in the constructor body.
+inline int
+vnl_powell_checked_int(size_t n)
+{
+  assert(n <= static_cast<size_t>(std::numeric_limits<int>::max()));
+  return static_cast<int>(n);
+}
+} // namespace
+
 class vnl_powell_1dfun : public vnl_cost_function
 {
 public:
@@ -43,10 +57,8 @@ public:
     , tmpx_(n)
   {}
   vnl_powell_1dfun(size_t n, vnl_cost_function * func, vnl_powell * p)
-    : vnl_powell_1dfun(static_cast<int>(n), func, p)
-  {
-    assert(n <= static_cast<size_t>(std::numeric_limits<int>::max()));
-  }
+    : vnl_powell_1dfun(vnl_powell_checked_int(n), func, p)
+  {}
 
   void
   init(const vnl_vector<double> & x0, const vnl_vector<double> & dx)
