@@ -195,8 +195,8 @@ initr(const std::vector<unsigned int> & ideg,
   r.resize(dim_);
   for (unsigned int j = 0; j < dim_; j++)
   {
-    pdg[j] = powr(static_cast<int>(ideg[j]), p[j]);
-    qdg[j] = powr(static_cast<int>(ideg[j]), q[j]);
+    pdg[j] = powr(ideg[j], p[j]);
+    qdg[j] = powr(ideg[j], q[j]);
     r[j] = q[j] / p[j];
   }
 }
