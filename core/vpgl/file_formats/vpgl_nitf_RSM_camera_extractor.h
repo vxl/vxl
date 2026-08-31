@@ -361,13 +361,16 @@ private:
   int
   ASC_int(std::string str) const
   {
-    try {
+    try
+    {
       return std::stoi(str);
     }
-    catch (const std::invalid_argument& e) {
+    catch (const std::invalid_argument & e)
+    {
       return 0;
     }
-    catch (const std::out_of_range& e) {
+    catch (const std::out_of_range & e)
+    {
       return 0;
     }
   }
@@ -381,13 +384,16 @@ private:
   double
   ASC_double(std::string str) const
   {
-    try {
+    try
+    {
       return std::stod(str);
     }
-    catch (const std::invalid_argument& e) {
+    catch (const std::invalid_argument & e)
+    {
       return NAN;
     }
-    catch (const std::out_of_range& e) {
+    catch (const std::out_of_range & e)
+    {
       return NAN;
     }
   }

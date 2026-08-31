@@ -56,7 +56,8 @@ vnl_real_polynomial::evaluate(double x) const
 std::complex<double>
 vnl_real_polynomial::evaluate(const std::complex<double> & x) const
 {
-  return vnl_real_polynomial_evaluate SELECT(std::complex<double>)(coeffs_.data_block(), static_cast<int>(coeffs_.size()), x);
+  return vnl_real_polynomial_evaluate SELECT(std::complex<double>)(
+    coeffs_.data_block(), static_cast<int>(coeffs_.size()), x);
 }
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 

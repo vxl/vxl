@@ -133,21 +133,38 @@ template <class T>
 class vpgl_region_selector
 {
 public:
-  vpgl_region_selector() {
+  vpgl_region_selector()
+  {
     row_coefs_.resize(10);
     col_coefs_.resize(10);
   }
 
-  vpgl_region_selector(
-    std::vector<T> row_coefs, std::vector<T> col_coefs,
-    size_t minr, size_t maxr, size_t minc, size_t maxc,
-    size_t rnis, size_t cnis, size_t tnis, size_t rssiz, size_t cssiz
-  )
-    : row_coefs_(row_coefs), col_coefs_(col_coefs), minr_(minr), maxr_(maxr)
-    , minc_(minc), maxc_(maxc), rnis_(rnis), cnis_(cnis), tnis_(tnis)
-    , rssiz_(rssiz), cssiz_(cssiz) {}
+  vpgl_region_selector(std::vector<T> row_coefs,
+                       std::vector<T> col_coefs,
+                       size_t minr,
+                       size_t maxr,
+                       size_t minc,
+                       size_t maxc,
+                       size_t rnis,
+                       size_t cnis,
+                       size_t tnis,
+                       size_t rssiz,
+                       size_t cssiz)
+    : row_coefs_(row_coefs)
+    , col_coefs_(col_coefs)
+    , minr_(minr)
+    , maxr_(maxr)
+    , minc_(minc)
+    , maxc_(maxc)
+    , rnis_(rnis)
+    , cnis_(cnis)
+    , tnis_(tnis)
+    , rssiz_(rssiz)
+    , cssiz_(cssiz)
+  {}
 
-  void select(T X, T Y, T Z, size_t & region_row, size_t & region_col) const;
+  void
+  select(T X, T Y, T Z, size_t & region_row, size_t & region_col) const;
 
   std::vector<T> row_coefs_;
   std::vector<T> col_coefs_;

@@ -152,9 +152,10 @@ private:
 class vil_nitf2_max_field_value_plus_offset_and_threshold : public vil_nitf2_field_functor<int>
 {
 public:
-  vil_nitf2_max_field_value_plus_offset_and_threshold(
-    std::string tag, int offset, int min_threshold = 0, int tag_factor = 1
-  )
+  vil_nitf2_max_field_value_plus_offset_and_threshold(std::string tag,
+                                                      int offset,
+                                                      int min_threshold = 0,
+                                                      int tag_factor = 1)
     : tag_(std::move(tag))
     , offset_(offset)
     , min_threshold_(min_threshold)
