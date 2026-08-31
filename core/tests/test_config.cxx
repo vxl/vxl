@@ -25,14 +25,6 @@ test_config()
 
   std::cout << "All macro definitions are shown inside parentheses\n";
 
-  std::cout << "template <> ";
-#ifdef template < >
-  std::cout << "is set to " << quote(template <>);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VXL_LITTLE_ENDIAN ";
 #ifdef VXL_LITTLE_ENDIAN
   std::cout << "is set to " << quote(VXL_LITTLE_ENDIAN);
