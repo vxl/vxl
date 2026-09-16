@@ -364,10 +364,10 @@ private:
     try {
       return std::stoi(str);
     }
-    catch (const std::invalid_argument& e) {
+    catch (const std::invalid_argument&) {
       return 0;
     }
-    catch (const std::out_of_range& e) {
+    catch (const std::out_of_range&) {
       return 0;
     }
   }
@@ -384,10 +384,10 @@ private:
     try {
       return std::stod(str);
     }
-    catch (const std::invalid_argument& e) {
+    catch (const std::invalid_argument&) {
       return NAN;
     }
-    catch (const std::out_of_range& e) {
+    catch (const std::out_of_range&) {
       return NAN;
     }
   }
