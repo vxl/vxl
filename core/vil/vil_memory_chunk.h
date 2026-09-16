@@ -59,7 +59,7 @@ public:
   }
 
   //: Decrement reference count
-  void
+  virtual void
   unref();
 
   //: Number of objects referring to this data
