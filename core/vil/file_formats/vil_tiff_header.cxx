@@ -826,7 +826,7 @@ vil_tiff_header::vil_tiff_header(TIFF * tif,
   , format_supported(this->set_header(ni, nj, nplanes, fmt, size_block_i, size_block_j))
 {
 
-  
+
   if (!format_supported)
     return;
   write_short_tag(tif_, TIFFTAG_PHOTOMETRIC, photometric);
